@@ -1,0 +1,102 @@
+<?php
+
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
+
+/*
+ * Clean query strings and protocols from urls
+ * Returns only hostname
+ */
+    function countElement($value, $table)
+    {
+      $nb = 0;
+      foreach ($table as $tvalue) {
+        if($value==$tvalue)
+        {
+          $nb++;
+        }
+      }
+      return $nb;
+    }
+
+function isset_value($name)
+{
+  if(isset($_POST[$name]))
+  {
+    echo $_POST[$name];
+  }
+}
+
+function test_inputValide($data)
+{
+   $data = trim($data);
+   $data = stripslashes($data);
+   $data = htmlspecialchars($data);
+  // $data = mysqli_real_escape_string($data);
+   return $data;
+}
+
+if ( !function_exists('defineLanguage'))
+{
+  function defineLanguage($lang)
+  {
+    $CI =&  get_instance();
+    if ($lang == '') { 
+      $CI->session->set_userdata('language' , 'fr');
+    }else{
+      $CI->session->set_userdata('language' , $lang);
+    }
+
+    return $CI->session->userdata('language');
+  }
+}
+if(!function_exists('get_phrase'))
+{
+  function get_phrase($phrase = '')
+  {
+    $phrase = trim($phrase);
+    $CI  =&  get_instance();
+    $CI->load->database();
+    $CI->load->library('session');
+    if(empty($CI->session->userdata('language')))
+    {
+       $language  = 'en';
+       $current_language  = 'english';
+    }else
+    {
+      $language = $CI->session->userdata('language');
+      $query  = $CI->db->get_where('language_list' , array('form' => $language));
+      if($query->num_rows() > 0)
+      {
+        $language = $query->row()->form;
+        $current_language = $query->row()->name;
+      }else
+      {
+        $language  = 'en';
+        $current_language  = 'english';
+      }
+    }
+
+    $CI->session->set_userdata('current_language' , $current_language);
+    $CI->session->set_userdata('language' , $language);
+    /** insert blank phrases initially and populating the language db ***/
+    $check_phrase = $CI->db->get_where('language' , array('phrase' => $phrase))->num_rows();
+    if($check_phrase == 0){
+      $CI->db->insert('language' , array('phrase' => $phrase));
+    }
+    // query for finding the phrase from `language` table
+    $query  = $CI->db->get_where('language' , array('phrase' => $phrase));
+    $row    = $query->row_array();
+
+
+    $current_language = trim($current_language);
+
+    //var_dump($row[$current_language], $current_language);die;
+    // return the current sessioned language field of according phrase, else return uppercase spaced word
+    if(isset($row[$current_language]) && $row[$current_language] !="")
+      return str_replace('`',"'",$row[$current_language]);
+    else
+      return str_replace('_',' ',$phrase);
+  }
+}

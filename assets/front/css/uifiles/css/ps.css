@@ -1,0 +1,99 @@
+@font-face {
+  font-family: 'ps';
+  src:  url('assets/front/css/uifiles/fonts/ps.eot?9uc0h2a');
+  src:  url('assets/front/css/uifiles/fonts/ps.eot?9uc0h2a#iefix') format('embedded-opentype'),
+    url('assets/front/css/uifiles/fonts/ps.ttf?9uc0h2a') format('truetype'),
+    url('assets/front/css/uifiles/fonts/ps.woff?9uc0h2a') format('woff'),
+    url('assets/front/css/uifiles/fonts/ps.svg?9uc0h2a#ps') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="ps-"], [class*=" ps-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'ps' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ps-advcash:before {
+  content: "\e900";
+}
+.color-advcash {
+  color: #02bc62 !important;
+}
+.ps-payeer:before {
+  content: "\e901";
+}
+.color-payeer {
+  color: #0099de !important;
+}
+.ps-perfectmoney:before {
+  content: "\e902";
+}
+.color-perfectmoney {
+  color: #d61612 !important;
+}
+.ps-bsv:before {
+  content: "\e903";
+}
+.color-bsv {
+  color: #a67f1a;
+}
+.ps-ltc:before {
+  content: "\e904";
+}
+.color-ltc {
+  color: #838383 !important;
+}
+
+.ps-doge:before {
+  content: "\e905";
+}
+.color-doge {
+  color: #BA9F33 !important;
+}
+.ps-bch:before {
+  content: "\e906";
+}
+.color-bch {
+  color: #8dc351 !important;
+}
+.ps-dash:before {
+  content: "\e907";
+}
+.color-dash {
+  color: #1c75bc !important;
+}
+.ps-btc:before {
+  content: "\e908";
+}
+.color-btc {
+  color: #F7931A !important;
+}
+.ps-internaltransfer:before {
+  content: "\e909";
+}
+.color-internaltransfer {
+  color: #00abc9 !important;
+}
+.ps-eth:before {
+  content: "\e910";
+}
+.color-eth {
+  color: #3c3c3d !important;
+}
+.ps-etc:before {
+  content: "\e911";
+}
+.color-etc {
+  color: #007d33 !important;
+}

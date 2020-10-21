@@ -1,0 +1,743 @@
+  <?php 
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Principal extends Admin_Controller
+{
+
+  function __construct()
+  {
+    parent::__construct();
+    $this->load->model('UserModel');
+    $this->load->model('MesFilleulsModel');
+    $this->load->model('MesBonsModel');
+    $this->load->model('admin/MembresModel','MembresModel');
+    $this->load->library('ion_auth');  
+    $this->load->library('grocery_CRUD');
+    $this->load->model('FronteModel', 'fm');
+      
+    $this->data['pseudo'] = $this->session->userdata('identity');
+    $noms_membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    $this->data['nom_membre'] = $noms_membre['nom'];
+    $this->data['prenom_membre'] = $noms_membre['prenoms'];
+    $this->data['dateInscription'] = date("d-m-Y à H:i:s", $noms_membre['created_on']);
+      
+        if ($this->ion_auth->in_group(1))
+    {
+      $this->data['monType'] = "Administrateur";
+    } 
+        elseif ($this->ion_auth->in_group(7))
+    {
+      $this->data['monType'] = "Comptable";
+    } 
+        else $this->data['monType'] = "";
+    
+          
+  }
+
+  public function index()
+  {
+      
+      if (!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
+		{
+			// redirect them to the home page because they must be an administrator to view this
+			return show_error('Vous devez être administrateur pour voir cette page.');
+		}
+      $this->data['titre'] = 'Administration';
+      $this->data['page_title'] = 'Tableau de bord | Administration';
+      $this->data['lien'] = 'Tableau de bord';
+      $this->data['TousLesMembres'] = $this->UserModel->NombreDeMembres();
+      $this->data['MontantRecolte'] = $this->UserModel->MontantTotalRecolte();
+      $this->data['MargeBeneficiaire'] = $this->MesFilleulsModel->MontantBeneficiaire();
+      $this->data['MontantCoutSms'] = $this->MesFilleulsModel->MontantDepenceSms();
+      $this->data['MontantDuFondMlm'] = $this->MesFilleulsModel->MontantDuRoulementMlm();
+      $this->data['NombreDeMembresDuJour'] = $this->UserModel->MembreInscritAuJourdHui();
+      $this->data['NombreDeMembresDeLaSemaine'] = $this->UserModel->MembreInscritCetteSemaine();
+      $this->data['NombreDeMembresDeCeMois'] = $this->UserModel->MembreInscritDeCeMois();
+      
+      $this->data['StockActuel'] = $this->UserModel->MembreInscritDeCeMois();
+      
+      $this->render('admin/dashboard_view');
+
+  }
+    
+  //Tout le fonction contenu de la page de gestion des membres
+  public function gestion_membres()
+  {
+      
+      $this->data['titre'] = 'Gestion des membres du réseau MLM';
+      $this->data['page_title'] = 'Gestion membres | Administration';
+      $this->data['lien'] = 'Gestion des membres';
+      
+      $this->render('admin/gestion_membres_view');    
+
+  } 
+  
+        
+    
+  public function gestion_membres_data()
+  {
+
+        $pseudo = $this->input->post('pseudo');
+        $nom = $this->input->post('nom');
+        $prenoms = $this->input->post('prenoms');
+        $bon = $this->input->post('bon');
+        $niveau = $this->input->post('niveau');
+        $startDate = $this->input->post('start_date');
+        $endDate = $this->input->post('end_date'); 
+        
+        if(!empty($orderID)){
+            $this->MembresModel->setOrderID($orderID);
+        }        
+        if(!empty($pseudo)){
+            $this->MembresModel->setPseudo($pseudo);
+        }
+        if(!empty($nom)){
+            $this->MembresModel->setNom($nom);
+        }
+        if(!empty($prenoms)){
+            $this->MembresModel->setPrenoms($prenoms);
+        }
+        if(!empty($bon)){
+            $this->MembresModel->setMesBons($bon);
+        }
+        if(!empty($niveau)){
+            $this->MembresModel->setMonNiveau($niveau);
+        }                
+        if(!empty($startDate) && !empty($endDate)) {
+            $this->MembresModel->setStartDate(strtotime($startDate));
+            $this->MembresModel->setEndDate(strtotime($endDate));
+        }        
+        $getUserInfo = $this->MembresModel->getUsers();
+        $dataArray = array();
+        foreach ($getUserInfo as $element) {            
+            $dataArray[] = array(
+                $element['created_on'],
+                $element['pseudo'],
+                $element['nom'],
+                $element['prenoms'],
+                $element['telephone'],
+                $element['gains'],
+                $element['mon_niveau'],
+                date("d-m-Y à H:i:s", $element['created_on'])
+            );
+        }
+
+        echo json_encode(array("data" => $dataArray));
+
+  }   
+     
+    
+  function generateSerialNo() {
+        if($this->session->userdata('lastSerial') == '') {
+            $this->session->set_userdata('lastSerial', 0);
+            $this->session->set_userdata('lastPage', 1);
+            $lastSerial = 0;
+        } else {
+            $lastSerial = $this->session->userdata('lastSerial');
+        }
+        $lastSerial++;
+        $page = $this->input->post('page');
+        if($page != '') {
+            $this->session->set_userdata('lastPage', $page);
+        } else {
+            $this->session->set_userdata('lastPage', 1);
+        }
+        $this->session->set_userdata('lastSerial', $lastSerial);
+
+        return $lastSerial;
+    }
+    
+  function mon_bon_achat($value, $row){
+      return $this->MesBonsModel->mesbons($row->pseudo);
+  }
+  function mon_niveau($value, $row){
+      return $this->MesFilleulsModel->monNiveau($row->pseudo);
+  }
+    
+    
+    
+    
+  //Tout le fonction contenu de la page de gestion des SMS
+ /* public function gestion_sms()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('administrator~shappinvest/connexion');
+      }
+      
+      $crud = new grocery_CRUD();
+
+        //$crud->set_theme('datatables');
+        $crud->set_table('paiements_sms');
+        $crud->set_subject('Paiement SMS');
+
+        //$crud->required_fields('lastName');
+
+        $output = $crud->render();
+
+        $this->load->view('admin/gestion_sms_view.php',(array)$output);
+  } */
+    
+    
+    
+
+  //Tout le fonction contenu de la page de gestion des retraits
+  public function gestion_retraits()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('administrator~shappinvest/connexion');
+      }
+      
+      $crud = new grocery_CRUD();
+
+        //$crud->set_theme('datatables');
+        $crud->set_table('users22');
+        $crud->set_subject('Retraits');
+
+        //$crud->required_fields('lastName');
+
+        $output = $crud->render();
+
+        $this->load->view('admin/gestion_retraits_view.php',(array)$output);
+  } 
+    
+    
+  //Tout le fonction contenu de la page de gestion des retraits
+  public function statistiques()
+  {
+      
+      $this->data['titre'] = 'Statistiques';
+      $this->data['page_title'] = 'Statistiques | Administration';
+      $this->data['lien'] = 'Statistiques';
+      $this->render('admin/statistiques_view','admin_master');
+      
+      
+      
+  } 
+    
+
+  //Tout le fonction contenu de la page du bilan
+  public function bilan()
+  {
+      
+      $this->data['titre'] = 'Bilan';
+      $this->data['page_title'] = 'Bilan | Administration';
+      $this->data['lien'] = 'Affichage des bilan';
+      $this->render('admin/bilan_view','admin_master');
+  }
+ 
+  //Tout le fonction contenu de la page de gestion fauture
+  public function gestion_facture()
+  {
+      
+      $this->data['titre'] = 'Gestion Facture';
+      $this->data['page_title'] = 'Gestion Facture | Administration';
+      $this->data['lien'] = 'Menu facture';
+      $this->render('admin/gestion_facture_view','admin_master');
+  } 
+
+  //Tout le fonction contenu de la page de gestion des facture des client
+  public function gestion_facture_client()
+  {
+      
+      $this->data['titre'] = 'Gestion Facture Client';
+      $this->data['page_title'] = 'Gestion facture client | Administration';
+      $this->data['lien'] = 'Gestion de la facture client';
+      $this->render('admin/gestion_facture_client_view','admin_master');
+  } 
+
+  //Tout le fonction contenu de la page entrée en stock
+  public function gestion_facture_entree_stock()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['titre'] = 'Gestion facture Entrée en Stock';
+      $this->data['page_title'] = 'Gestion facture Entrée en Stock | Administration';
+      $this->data['lien'] = 'Gestion de la facture entrée en stock';
+      $this->render('admin/gestion_facture_entree_stock_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page facture sortie de stock 
+  public function gestion_facture_sortie_stock()
+  {
+      
+      $this->data['titre'] = 'Gestion facture Sortie de Stock';
+      $this->data['page_title'] = 'Gestion facture sortie de Stock | Administration';
+      $this->data['lien'] = 'Gestion de la facture sortie de stock';
+      $this->render('admin/gestion_facture_sortie_stock_view','admin_master');
+  } 
+
+  //Tout le fonction contenu de la page du journal caisse
+  public function gestion_journal_casse()
+  {
+      
+      $this->data['titre'] = 'Le Journal Compte Caisse';
+      $this->data['page_title'] = 'Journal Caisse | Administration';
+      $this->data['lien'] = 'Le Journal Compte Caisse';
+      $this->render('admin/journal_caisse_view','admin_master');
+      
+  } 
+
+  //Tout le fonction contenu de la page du journal caisse
+  public function gestion_journal_vente()
+  {
+      
+      $this->data['titre'] = 'Le Journal compte Vente';
+      $this->data['page_title'] = 'Journal Vente | Administration';
+      $this->data['lien'] = 'Le Journal Compte vente';
+      $this->render('admin/journal_vente_view','admin_master');
+  }  
+
+  //Tout le fonction contenu de la page du journal caisse
+  public function gestion_journal_achat()
+  {
+      
+      $this->data['titre'] = 'Le Journal Compte Achat';
+      $this->data['page_title'] = 'Journal Achat | Administration';
+      $this->data['lien'] = 'Le Journal Compte Achat';
+      $this->render('admin/journal_achat_view','admin_master');
+  } 
+
+  //Tout le fonction contenu de la page du journal caisse
+  public function gestion_journal_banque()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['titre'] = 'Le Journal compte Banque';
+      $this->data['page_title'] = 'Journal Banque | Administration';
+      $this->data['lien'] = 'Le Journal Compte Banque';
+      $this->render('admin/journal_banque_view','admin_master');
+  }  
+   
+  //Tout le fonction contenu de la page de balance
+  public function balance()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Balance | Administration';
+      $this->data['titre'] = 'Balance';
+      $this->data['lien'] = 'Affichage de la Balance';
+      $this->render('admin/balance_view','admin_master');
+  } 
+
+  //Tout le fonction contenu de la page de gestion compte resultat
+  public function gestion_compte_de_resultat()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Compte De Resultat | Administration';
+      $this->data['titre'] = 'Compte De Resultat';
+      $this->data['lien'] = 'Gestion du Compte de Resultat';
+      $this->render('admin/gestion_compte_de_resultat_view','admin_master');
+  } 
+  //Tout le fonction contenu de la page de gestion compte resultat
+  public function gestion_stock()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Gestion de Stock | Administration';
+      $this->data['titre'] = 'Gestion de Stock';
+      $this->data['lien'] = 'Gestion du compte resultat';
+      $this->render('admin/gestion_stock_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page de gestion compte resultat
+  public function facture_enrgister()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Gestion de Stock | Administration';
+      $this->data['titre'] = 'Gestion de Stock';
+      $this->data['lien'] = 'Gestion du compte resultat';
+      $this->render('admin/gestion_stock_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page des archive
+  public function gestion_archive()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Archive | Administration';
+      $this->data['titre'] = 'Archive';
+      $this->data['lien'] = 'Gestion des archives de facture';
+      $this->render('admin/gestion_archive_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page de gestion de la comptabilité
+  public function gestion_comptabilite()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'comptabilite | Administration';
+      $this->data['titre'] = 'Comptabilité';
+      $this->data['lien'] = 'Gestion de la comptabilite';
+      $this->render('admin/gestion_comptabilite_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page gestion des pages CMS
+  public function gestion_pages()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Gestion Pages | Administration';
+      $this->data['titre'] = 'Gestion des Pages CMS';
+      $this->data['lien'] = 'Gestion des Pages CMS';
+      $this->render('admin/gestion_pages_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page gestion des pages blog
+  public function blog()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Gestion blog | Administration';
+      $this->data['titre'] = 'Gestion du blog CMS';
+      $this->data['lien'] = 'Gestion du blog CMS';
+      $this->render('admin/gestion_page_blog_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page gestion employes
+  public function gestion_employes()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Gestion Des Employes | Administration';
+      $this->data['titre'] = 'Gestion Des Employes';
+      $this->data['lien'] = 'Gestion Des Employes';
+      $this->render('admin/gestion_employes_view','admin_master');
+  }
+  //Tout le fonction contenu de la page role employes
+  public function role_employes()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Role Des Employes | Administration';
+      $this->data['titre'] = 'Role Des Employes';
+      $this->data['lien'] = 'Role Des Employes';
+      $this->render('admin/role_employes_view','admin_master');
+  }
+  //Tout le fonction contenu de la page d'affichage d'information sur l'utilisateur
+  public function profil()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Profil | Administration';
+      $this->data['titre'] = 'Profil';
+      $this->data['lien'] = 'Profil';
+      $this->render('admin/profil_view','admin_master');
+  }
+
+  //Tout le fonction contenu de la page de gestion du mot de pass de utilisateur
+  public function modifier_mdp()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Modifier Mdp | Administration';
+      $this->data['titre'] = 'Modifier votre Mot de Pass';
+      $this->data['lien'] = 'modifier mdp';
+      $this->render('admin/modifier_mdp_view','admin_master');
+  }
+  /* public function mon_reseau()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Mon réseau';
+      $this->data['titre'] = 'reseau';
+        
+      $users = $this->MesFilleulsModel->MesFilleuls($this->session->userdata('identity'));
+      $this->data['users'] = $users;
+
+      $this->render('backoffice/monreseau_view','backoffice_master');
+      
+  }
+    
+   public function mon_arbre()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Mon arbre généalogique';
+      $this->data['titre'] = 'arbre';
+        
+      $users = $this->MesFilleulsModel->MesFilleuls($this->session->userdata('identity'));
+      $this->data['users'] = $users;
+
+      $this->render('backoffice/monarbre_view','backoffice_master');
+      
+  }
+    
+  public function mes_commissions()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Mes commissions';
+      $this->data['titre'] = 'commissions';
+        
+      $mesbons = $this->MesBonsModel->mesbons($this->session->userdata('identity'));
+      $this->data['mesbons'] = $mesbons;
+
+      $this->render('backoffice/mescommissions_view','backoffice_master');
+      
+  }
+    
+  public function mon_parrain()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+        redirect('connexion');
+      }
+      $this->data['page_title'] = 'Mon parrain';
+      $this->data['titre'] = 'parrain';
+        
+      $monparrain = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+      $pseudo_parrain = $monparrain['pseudo_parrain'];
+      $infoparrain = $this->UserModel->GetUserDataByPseudo($pseudo_parrain);
+      $this->data['monparain'] = $infoparrain;
+
+      $this->render('backoffice/monparrain_view','backoffice_master');
+      
+  }*/
+
+    public function gestion_langues()
+      {
+          if(!$this->ion_auth->logged_mlm_in())
+          {
+            redirect('connexion');
+          }
+          
+          /*$this->data['page_title'] = 'Gestion des langues du site | Administration';
+          $this->data['titre'] = 'Gestion des langues du site';
+          $this->data['lien'] = 'Gestion des langues';*/
+          /*$this->data['before_head'] = '<?php foreach($output["css_files"] as $file): ?>
+                                            <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
+                                        <?php endforeach; ?>';*/
+         /* $this->data['before_body'] = '<?php foreach($output["js_files"] as $file): ?>
+                                            <script src="<?php echo $file; ?>"></script>
+                                        <?php endforeach; ?>';*/
+
+            $crud = new grocery_CRUD();
+
+			//$crud->set_theme('datatables');
+			$crud->set_table("users22");
+			$crud->set_subject('Membre');
+
+			//$crud->required_fields('lastName');
+
+			$output = $crud->render();
+            
+			$this->load->view('admin/gestion_langues_view.php',(array)$output);
+      }
+    
+    public function gestion_langues_bon()
+      {
+          if(!$this->ion_auth->logged_mlm_in())
+          {
+            redirect('connexion');
+          }
+          
+          /*$this->data['page_title'] = 'Gestion des langues du site | Administration';
+          $this->data['titre'] = 'Gestion des langues du site';
+          $this->data['lien'] = 'Gestion des langues';*/
+          /*$this->data['before_head'] = '<?php foreach($output["css_files"] as $file): ?>
+                                            <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
+                                        <?php endforeach; ?>';*/
+         /* $this->data['before_body'] = '<?php foreach($output["js_files"] as $file): ?>
+                                            <script src="<?php echo $file; ?>"></script>
+                                        <?php endforeach; ?>';*/
+
+            $crud = new grocery_CRUD();
+
+			//$crud->set_theme('datatables');
+			$crud->set_table('langues');
+			$crud->set_subject('Langue');
+
+			//$crud->required_fields('lastName');
+
+			$output = $crud->render();
+            
+			$this->load->view('admin/gestion_langues_view.php',(array)$output);
+      }
+
+
+
+
+
+      public function gestion_newletter()
+      {
+          if(!$this->ion_auth->logged_mlm_in())
+          {
+            redirect('connexion');
+          }
+            $crud = new grocery_CRUD();
+
+          //$crud->set_theme('datatables');
+          $crud->set_table('newletters');
+          $crud->set_subject('Email des visiteurs');
+          $crud->unset_add();
+          $crud->unset_edit();
+          $crud->display_as('email','Adresse email');
+          $crud->display_as('date_create',"Date d'Ajout");
+          $crud->callback_read_field('date_create', function ($value, $primary_key) {
+            return date("d/m/Y H:i", $value);
+          });
+          $crud->callback_column('date_create',array($this,'_callback_format_date'));
+          $output = $crud->render();
+          $this->load->view('admin/newletters_visiteur_view.php',(array)$output);
+      }
+
+      public function gestion_contacts()
+      {
+          if(!$this->ion_auth->logged_mlm_in())
+          {
+            redirect('connexion');
+          }
+            $crud = new grocery_CRUD();
+
+          //$crud->set_theme('datatables');
+          $crud->set_table('contact_visiteurs');
+          $crud->set_subject('Contacts des visiteurs');
+          $crud->unset_add();
+          $crud->unset_edit();
+          $crud->display_as('email','Adresse email');
+          $crud->display_as('date_create',"Date d'Ajout");
+          $crud->callback_read_field('date_create', function ($value, $primary_key) {
+            return date("d/m/Y H:i", $value);
+          });
+          $crud->callback_column('date_create',array($this,'_callback_format_date'));
+          $output = $crud->render();
+          $this->load->view('admin/contact_visiteur_view.php',(array)$output);
+      }
+
+      public function gestion_blogs()
+      {
+          if(!$this->ion_auth->logged_mlm_in())
+          {
+            redirect('connexion');
+          }
+            $crud = new grocery_CRUD();
+
+          $crud->set_table('article_blog');
+          $crud->set_subject('Articles du blog');
+
+          $crud->display_as("date_create", "Dernière modification");
+          $crud->display_as("titre_article", "Titre de l'article");
+          $crud->display_as("description_article", "Description de l'article");
+          $crud->display_as("img_article", "Image de l'article");
+          $crud->display_as("id_categorie", "Catégories");
+          $crud->field_type('date_create','hidden', time());
+          $crud->field_type('poster_par','hidden', $this->session->userdata('identity'));
+
+          //Formatage des affichages
+          $crud->callback_column('date_create',array($this,'_callback_format_date'));
+          $crud->callback_column('description_article',array($this,'_callback_format_des'));
+          $crud->callback_read_field('id_categorie', function($value, $primary_key){
+            $value = explode(',', $value);
+            $cate = '[';
+            foreach ($value as $values){
+               $namecate = $this->fm->lescategoriesArticle($values);
+               $cate .= $namecate->lib_cate.' , ';
+            }
+
+            $cate .= ']';
+
+            return $cate;
+          });
+
+          //GESTION IMAGES
+          $this->load->config('grocery_crud');
+          $this->config->set_item('grocery_crud_file_upload_allow_file_types','jpeg|jpg|png');
+          $crud->set_field_upload('img_article','assets/uploads/files/article_blogs/');
+
+          $crud->required_fields('img_article', 'titre_article', 'description_article');
+
+          $crud->callback_read_field('img_article', function ($value, $primary_key){
+            if (!empty($value)) {
+              return '<img src="'.site_url('assets/uploads/files/article_blogs/').$value.'" width="100" height="70" />';
+            }else
+              return "Pas d'image";
+          });
+
+          //LES CATEGORIES 
+          $results = $this->fm->selectAllCategories();
+          $multiselect = array();
+
+          foreach ($results as $result) {
+              $multiselect[$result->id] = $result->lib_cate;
+          }
+
+          $crud->set_relation('type_blog','type_blog','lib_type');           
+
+          $crud->callback_before_delete(array($this,'delete_before_'));
+
+          $crud->field_type('id_categorie', 'multiselect', $multiselect);
+
+          //$crud->callback_before_insert(array($this,'encrypt_password_callback'));
+          //SUPPRIMER DES ACTIONS
+          $crud->unset_clone();
+
+          $output = $crud->render();
+          $this->load->view('admin/gestion_blog_view.php',(array)$output);
+      }
+
+      function _callback_format_date($value, $row)
+      {
+        return strftime("%d/%m/%Y",$row->date_create);
+      }
+
+
+      function _callback_format_des($value, $row)
+      {
+        if(strlen($row->description_article) > 30) {
+          return substr($row->description_article, 0, 30).'...';
+        }else
+           return $row->description_article;
+         
+      }
+
+      public function delete_before_($primary_key)
+      {
+         $article = $this->db->where('id_article',$primary_key)->get('article_blog')->row();
+         $url = 'assets/uploads/files/article_blogs/'.$article->img_article;
+         unlink($url);
+         //var_dump($article);die;
+         return true;
+      }
+
+
+
+}
