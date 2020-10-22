@@ -11,21 +11,17 @@ class Membre extends MY_Controller
       
     $this->load->library('ion_auth');
     $this->load->model('UserModel');
-    $this->load->model('MesFilleulsModel');
-    $this->load->model('MesBonsModel');
-    $this->load->model('MessenkaModel');
-    $this->load->model('AgenceModel');
       
-    /*$this->data['pseudo'] = $this->session->userdata('identity');
-    $noms_membre = $this->UserModel->GetUserDataByPseudo('admin');*/
-    /*$this->data['nom_membre'] = $noms_membre['nom'];
-    $this->data['prenom_membre'] = $noms_membre['prenoms'];
-    $this->data['dateInscription'] = $noms_membre['creele'];
-    $this->data['email_membre'] = $noms_membre['email'];
-    $this->data['img_membre'] = $noms_membre['img_profil'];
+    $this->data['pseudo'] = $this->session->userdata('identity');
+    $membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    $this->data['nom_membre'] = $membre['first_name'];
+    $this->data['prenom_membre'] = $membre['last_name'];
+    $this->data['dateInscription'] = $membre['created_on'];
+    $this->data['email_membre'] = $membre['email'];
+    $this->data['img_membre'] = $membre['img_profil'];
   
-      $this->data['membrereseauperso'] = $this->MesFilleulsModel->membresreseauperso($this->session->userdata('identity'));
-      $this->data['mesbons'] = $this->MesBonsModel->mesbons($this->session->userdata('identity'));
+      $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
+      /*$this->data['mesbons'] = $this->MesBonsModel->mesbons($this->session->userdata('identity'));
       $this->data['monNiveau'] = $this->MesFilleulsModel->monNiveau($this->session->userdata('identity'));
       $this->data['inscritoday'] = $this->MesFilleulsModel->inscritoday($this->session->userdata('identity'));
 
@@ -36,46 +32,6 @@ class Membre extends MY_Controller
   {
   }
 
-  public function connexion()
-  {
-      $this->data['titre'] = 'Login / Sign Up';
-      $this->data['meta_keywords'] = 'SHAPP INVEST, investment on rentals, source of happiness';
-      $this->data['page_title'] = 'LOGIN / SIGN UP';
-      $this->data['meta_description'] = 'SHAPP INVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
-      if($this->input->post())
-      {
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('identity', '', 'trim|required');
-        $this->form_validation->set_rules('password', '', 'required');
-        if($this->form_validation->run()===TRUE)
-        {
-          $souvenir = (bool) 1;
-          if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $souvenir))
-          {
-              
-              if($this->ion_auth->in_group('membres'))
-                {
-                  redirect('backoffice','refresh');
-                }
-              else {
-                $this->session->unset_userdata(array('identity','password'));
-                $this->session->set_flashdata('message','Vous n\'êtes pas sur le bon espace de connexion Monsieur l\'administrateur');}
-          }
-          else
-          {
-            $this->session->set_flashdata('message',$this->ion_auth->errors());
-            redirect('login-signup','refresh');
-          }
-        }
-      }
-      
-      if ($this->input->is_ajax_request()) {
-            $ajax->alert("Server Says....\n\t\t".print_r($form_fields,1));
-      }
-      $this->load->helper('form');
-      $this->render('public/login_signup_view','front_master');
-  }
-  
   
   public function deconnexion()
   {
@@ -87,422 +43,87 @@ class Membre extends MY_Controller
   {
       $this->render('backoffice/mdp_oublie_view', null);
   }
-  
-  public function inscription()
-  {
-      $this->data['titre'] = 'registration';
-      $this->data['meta_keywords'] = 'SHAPPINVEST, investment on rentals, source of happiness';
-      $this->data['page_title'] = 'REGISTRATION';
-      $this->data['meta_description'] = 'SHAPPINVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
-      
-        /*if ($this->uri->segment(2) !== null)
-        {
-            if ($this->UserModel->PseudoExiste($this->uri->segment(2))){
-                $this->data['pseudo_parrain'] = $this->uri->segment(2);
-                $noms_parrain =   $this->UserModel->GetUserDataByPseudo($this->uri->segment(2));
-                $this->data['nom_parrain'] = $noms_parrain['nom'].'&nbsp;'.$noms_parrain['prenoms'];
-                $this->load->helper('form');
-                $this->render('backoffice/inscription_view',null);
-            }
-            else{
-                $message_erreur = 'Désolé! Il n\'existe aucun membre ayant ce pseudo dans Global Industries Espoir. Toutefois vous pouvez vous inscrire sans renseigner le champ pseudo parrain. ';
-                $this->session->set_flashdata('message_erreur',$message_erreur);
-                $this->load->helper('form');
-                $this->render('backoffice/inscription_view',null);
-            }
-        }*/
-        /*if(isset($_POST['inscription'])) */
-        
-      $this->load->library('form_validation'); 
-       if ($this->input->post()) {    
-
-          $_SESSION['message_erreur']='';
-          $this->form_validation->set_rules('parrain','Your sponsor','trim|required');
-          $this->form_validation->set_rules('userfirstname','Your first name','trim|required');
-          $this->form_validation->set_rules('userlastname','Your last name','trim|required');
-          $this->form_validation->set_rules('userage','Your user age','trim|required');
-          $this->form_validation->set_rules('username','Name user','trim|required|is_unique[users.pseudo]');
-          $this->form_validation->set_rules('userpass','Your password','required');
-          $this->form_validation->set_rules('usercontry','Your contry','trim|required');
-          $this->form_validation->set_rules('usermail','Your Email','trim|required|valid_email|is_unique[users.email]');
-          
-          $age=date('Y')-$this->input->post('userage');
-          $datenaiss='01/01/'.$age;
-          if(!$this->UserModel->PseudoExiste($this->input->post('parrain'))){
-            $_SESSION['message_erreur'] = 'Sorry! There is no member with this nickname in Global Industries Espoir. However, you can register without entering the pseudo sponsor field.';
-            redirect('registration','refresh'); 
-          }
-          elseif($this->UserModel->PseudoExiste($this->input->post('username'))){
-            $_SESSION['message_erreur'] = 'Sorry! This username is already taken.';
-            redirect('registration','refresh'); 
-          }
-          elseif($this->UserModel->EmailExiste($this->input->post('usermail'))){
-            $_SESSION['message_erreur'] = 'Sorry! This email is already in use.';
-            redirect('registration','refresh'); 
-          }
-          elseif(!$this->input->post('userpass')===$this->input->post('userconfpass')){
-            $_SESSION['message_erreur'] = 'Sorry! the two passwords do not match.';
-            $this->load->helper('form');
-            $this->render('public/inscription_view','front_master');
-          }else{
-            if($this->UserModel->NomExiste($this->input->post('userfirstname')) and $this->UserModel->PrenomsExiste($this->input->post('userlastname')) and $this->UserModel->DateNaissanceExiste($age)){
-              $_SESSION['message_erreur'] = 'Sorry! You cannot register twice with SHAPPINVEST.';
-              redirect('registration','refresh'); 
-            }
-          }
-    
-          if($this->form_validation->run() == FALSE)
-          {
-            $_SESSION['message_erreur'] = 'One of your information is not correct';
-            redirect('registration','refresh'); 
-          }
-          else
-          {
-             $group_ids = [3];
-              $groupe = 3;
-              $creele = date("d/m/Y-h:i:s");
-
-                $additional_data = array(
-                    'pseudo_parrain' => $this->input->post('parrain'),
-                    'nom' => $this->input->post('userfirstname'),
-                    'prenoms' => $this->input->post('userlastname'),
-                    'date_naissance' => $age,
-                    'Lieu_naissance' => "",
-                    'pays' => $this->input->post('usercontry'),
-                    'telephone' => "",
-                    'ville' => "",
-                    'adresse' => "",
-                    'side' => 'd',
-                    'groupe' => $groupe,
-                    'creele' => $creele
-                );
-              if($this->ion_auth->register($this->input->post('username'), $this->input->post('userpass'), $this->input->post('usermail'), $additional_data, $group_ids)){
-                $souvenir = (bool) 1;
-                if ($this->ion_auth->login($this->input->post('username'), $this->input->post('userpass'), $souvenir))
-                {
-                  if($this->ion_auth->in_group('membres'))
-                    {
-                      redirect('backoffice','refresh');
-                    }
-                }
-              }
-          }
-          
-       }
-       else{
-           $this->load->helper('form');
-           $this->render('public/inscription_view','front_master'); 
-       }
-  }
-
-  
-    
-  public function confirmation_inscription()
-  {
-      $this->data['page_title'] = 'Confirmation de l\'inscription';
-      
-      if($this->input->post('confirmation') === 'True')
-      {
-        $pseudo = $this->session->userdata('pseudo');
-        $email = $this->session->userdata('email');
-        $password = $this->session->userdata('password');
-        if($this->UserModel->SiParrainAUnMembre($this->session->userdata('pseudo_parrain'))){
-            $side = 'd';
-        }
-        else $side = 'g';
-        
-        //$reference = $this->session->userdata('reference');
-        $group_ids = [3];
-        $groupe = 3;
-        $creele = date("d/m/Y-h:i:s");
-          
-          $data = array(
-              'pseudo_parrain' => $this->session->userdata('pseudo_parrain'),
-              'pseudo' => $this->session->userdata('pseudo'),
-              'nom' => $this->session->userdata('nom'),
-              'prenoms' => $this->session->userdata('prenoms'),
-              'date_naissance' => $this->session->userdata('date'),
-              'Lieu_naissance' => $this->session->userdata('lieu'),
-              'pays' => $this->session->userdata('pays'),
-              'telephone' => $this->session->userdata('telephone'),
-              'ville' => $this->session->userdata('ville'),
-              'adresse' => $this->session->userdata('adresse'),
-              'side' => $side,
-              'groupe' => $groupe,
-              'creele' => $creele
-          );
-          
-          
- 
-          $prix = 12700;
-          $telephone_money = $this->session->userdata('num_money');
-          $telephone_marchand = 56151518;
-          $description = $pseudo;
-          
-          $reponseMessenka = $this->MessenkaModel->doMessenka($telephone_marchand,$prix,$description);
-        
-        if($reponseMessenka->erreur == ""){
-            $this->session->set_userdata('codeM',$reponseMessenka->code);
-            $this->session->set_userdata('logoM',$reponseMessenka->logo);
-            $this->session->set_userdata('lienM',$reponseMessenka->lien);
-            $this->session->set_userdata('idM',$reponseMessenka->id);
-            if($this->UserModel->enregistrerMembreTemp($data)){
-                redirect('inscription/paiement-messenka');
-            }
-            else{
-                $message_erreur = 'Une erreur est survenue lors de la procédure de payement veuillez réessayer svp';
-                $this->session->set_flashdata('message_erreur',$message_erreur);
-
-                // $this->render('backoffice/inscription_messenka_view',null);
-                redirect('inscription/paiement-messenka');
-            }
-            
-        } 
-        else{
-            $message_erreur = 'Une erreur est survenue lors de la procédure de payement veuillez réessayer svp';
-            $this->session->set_flashdata('message_erreur',$message_erreur);
-            
-            // $this->render('backoffice/inscription_messenka_view',null);
-            redirect('inscription/paiement-messenka');
-        }  
-    } 
- 
- else {
-          $this->load->helper('form');
-          $this->render('backoffice/confirmation_inscription_view',null);
-      }
-}
-
-  
-  public function paiement_messenka()
-  {      
-      $this->render('backoffice/inscription_messenka_view',null);
-  }
-    
-/*
-  public function ipn()
-  {
-     
-    $post = php_compat_file_get_contents('php://input');
-      
-      $data = json_decode($post); 
-      $idM=$data->id;
-      $Code=$data->Code;
-      $Reference=$data->Reference;
-      $Client=$data->Client;
-      $Telephone=$data->Telephone;
-      $Montant=$data->Montant;
-      $Solde=$data->Solde;
-      $Date=$data->Date;
-      
-      
-      
-         
-              
-              $sauvegarder = $this->MessenkaModel->savelast($idM,$Code,$Reference,$Client,$Telephone,$Montant,$Solde,$Date);
-              if($sauvegarder){
-                  $pseudo=$this->MessenkaModel->GetUserPseudoByCode($Code);
-                  $user = $this->UserModel->GetUserDataByPseudo($pseudo);
-                  
-                  
-                  
-                    $group_ids = [3];
-                    $groupe = 3;
-                    $creele = date("d/m/Y-h:i:s");
-
-                      $additional_data = array(
-                          'pseudo_parrain' => $user['pseudo_parrain'],
-                          'nom' => $user['nom'],
-                          'prenoms' => $user['prenoms'],
-                          'date' => $user['date'],
-                          'lieu' => $user['lieu'],
-                          'pays' => $user['pays'],
-                          'telephone' => $user['telephone'],
-                          'ville' => $user['ville'],
-                          'adresse' => $user['adresse'],
-                          'side' => $side,
-                          'groupe' => $groupe,
-                          'creele' => $creele
-                      );
-                  
-                  
-                  if($this->ion_auth->register($pseudo, $password, $email, $additional_data, $group_ids)) {
-        
-                    $this->MesFilleulsModel->AjouterFilleulEtGains($this->session->userdata('pseudo_parrain'),$pseudo,$side);
-
-                     
-                    $this->MesBonsModel->AjouterLigne($pseudo);
-                      
-                      
-                    $username = 'NdougaSA';
-                    $password = '96192721';
-                    
-                    $message = ", Bienvenue chez GIE. Connectez-vous à votre compte au lien: globalindustriespoir.com/connexion";
-                    $prenomss=$user['prenoms'];
-                    $tel=$user['telephone'];
-                      
-                
-                    
-                    redirect("https://api.infobip.com/sms/1/text/query?username=$username&password=$password&to=$tel&from=GIE&text=$prenomss $message");
-                    
-                    http_response_code(200);
-                      
-                  
-                   
-
-                 }
-              }
-          
-      
-      
-  }
-  
 
     
-    public function inscription_effective() 
-    {
-          //put some vars back into $_GET.
-          parse_str(substr(strrchr($_SERVER['REQUEST_URI'], "?"), 1), $_GET);
-          
-          // grab values as you would from an ordinary $_GET superglobal array associative index.
-          $Code = $_GET['code']; 
-        
-          if  ( $Code  ==  0 ) 
-          { 
-                  $this->render('backoffice/inscription_effective_view',null);
-          } 
-          else 
-          { 
-                  $Code = $_GET['code']; 
-                  $Numero_marchand = 56151518;
-
-                $pseudo=$this->MessenkaModel->GetUserPseudoByCode($Code);
-
-                
-                $user = $this->UserModel->GetUserDataTempByPseudo($pseudo);
-    
-                
-                $password=$user['password'];
-                $email=$user['email'];
-                
-                  $group_ids = [3];
-                  $groupe = 3;
-                  $creele = date("d/m/Y-h:i:s");
-
-                    $additional_data = array(
-                        'pseudo_parrain' => $user['pseudo_parrain'],
-                        'nom' => $user['nom'],
-                        'prenoms' => $user['prenoms'],
-                        'date_naissance' => $user['date_naissance'],
-                        'Lieu_naissance' => $user['Lieu_naissance'],
-                        'pays' => $user['pays'],
-                        'telephone' => $user['telephone'],
-                        'ville' => $user['ville'],
-                        'adresse' => $user['adresse'],
-                        'side' => $user['side'],
-                        'groupe' => $groupe,
-                        'creele' => $creele
-                    );
-                
-                
-                if($this->ion_auth->register($pseudo, $password, $email, $additional_data, $group_ids))
-                {
-      
-                  $this->MesFilleulsModel->AjouterFilleulEtGains($user['pseudo_parrain'],$pseudo,$side);
-
-                  $this->MesBonsModel->AjouterLigne($pseudo);
-                    
-                    
-                  $username = 'NdougaSA';
-                  $password = '96192721';
-                  
-                  $message = ", Bienvenue chez GIE. Connectez-vous à votre compte au lien: globalindustriespoir.com/connexion";
-                  $prenomss=$user['prenoms'];
-                  $tel=$user['telephone'];
-                   */ 
-         
-              /*
-              $url='https://api.infobip.com/sms/1/text/query?username='.$username.'&password='.$password.'&to='.$tel.'&from=GIE&text='.$prenomss.''.$message.'';
-              
-              
-              
-              $this->render('backoffice/inscription_effective_view',null);*/
-              
-            /*  var_dump(redirect('https://api.infobip.com/sms/1/text/query?username='.$username.'&password='.$password.'&to='.$tel.'&from=GIE&text='.$prenomss.''.$message.'')); 
-              }
-                    
-                    
-          }
-          
-         
-  }*/
-
-
-    
-  public function profil()
+  public function profil($lang='')
   {
       if(!$this->ion_auth->logged_mlm_in())
       {
         redirect('connexion');
       }
-      $this->data['page_title'] = 'My profile';
-      $this->data['page_description'] = 'information in member';
+      defineLanguage($lang);
+      $this->data['page_title'] = get_phrase('My profile');
+      $this->data['page_description'] = get_phrase('information in member');
       $this->data['titre'] = 'My profile';
       $user = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
       $this->data['user'] = $user;
-
       $this->render('backoffice/profil_view','backoffice_master');
       
   }
   
     
-   public function modifier_profil()
+  public function modifier_profil($lang='')
   {
-       
-      $this->data['page_title'] = 'Modifier mon profil';
-      $this->data['titre'] = 'profil';
-      $user = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-      $this->data['user'] = $user;
-       
+      defineLanguage($lang);
       if(!$this->ion_auth->logged_mlm_in())
       {
         redirect('connexion');
       }
-       elseif($this->ion_auth->in_group('admin'))
-          {
-            redirect('admin');
+      $this->data['page_title'] = get_phrase('Modifier mon profil');
+      $this->data['titre'] = get_phrase('profil');
+      $this->data['page_description'] = get_phrase('Modifier mon profil');
+      $this->data['page_author'] = get_phrase('Modifier mon profil');
+      $user = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+      $this->data['user'] = $user;
+      if ($user['social_reseau']==""){$user['social_reseau']='{"facebook": "" ,"skype": "" ,"twitter": ""}'; }
+      $socials = json_decode($user['social_reseau']);
+      $this->data['user'] = $user;
+      $this->data['social_reseau'] = $socials;
 
-          }
-      elseif($this->input->post('modifier-profil') !== null) {
-        $new_data = array(
-                  'email' => $this->input->post('email'),
-                  'nom' => $this->input->post('nom'),
-                  'prenoms' => $this->input->post('prenoms'),
-                  'date_naissance' => $this->input->post('date'),
-                  'Lieu_naissance' => $this->input->post('lieu'),
-                  'pays' => $this->input->post('pays'),
-                  'telephone' => $this->input->post('telephone'),
-                  'ville' => $this->input->post('ville'),
-                  'adresse' => $this->input->post('adresse'),
-                  'apropos' => $this->input->post('apropos')
-        );
-        
-        if($this->UserModel->MajProfil($new_data,$user['id'])){
-            $this->session->set_flashdata('message', 'Profil mis à jour');
-            redirect('backoffice/profil','refresh');
+      if($this->input->post('modifier-profil') !== null)
+      {
+        $socials = '{"facebook": "'.$this->input->post('facebook').'" ,';
+        $socials.='"skype": "'.$this->input->post('skype').'" ,';
+        $socials.='"twitter": "'.$this->input->post('twitter').'"}';
+        $date_n = formtageDate22($this->input->post('date'));
+
+        if($this->UserModel->EmailExiste2($this->input->post('email'), $user['id']))
+        {
+           $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet adresse email est déjà utilisée.'));
+        }elseif($this->UserModel->PhoneExiste2($this->input->post('telephone'), $user['id']))
+        {
+          $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet numéro de téléphone est déjà utilisée.'));
+        }elseif($this->UserModel->NomExiste($this->input->post('nom'), $user['id']) && $this->UserModel->PrenomsExiste($this->input->post('prenoms'), $user['id']) && $this->UserModel->DateNaissanceExiste($date_n, $user['id']) && $this->UserModel->LieuNaissanceExiste($this->input->post('lieu_naissance'), $user['id']))
+        {
+          $this->session->set_flashdata('message_erreur', get_phrase('Les informations saisie sont déjà utilisée par un autre utilisateur'));
+        }else
+        {
+          $new_data = array(
+                    'social_reseau' => $socials,
+                    'email' => test_inputValide($this->input->post('email')),
+                    'first_name' => test_inputValide($this->input->post('nom')),
+                    'last_name' => test_inputValide($this->input->post('prenoms')),
+                    'genre' => test_inputValide($this->input->post('genre')),
+                    'Lieu_naissance' => test_inputValide($this->input->post('lieu_naissance')),
+                    'date_naissance' => test_inputValide($date_n),
+                    'pays' => test_inputValide(1),
+                    'phone' => test_inputValide($this->input->post('telephone')),
+                    'ville' => test_inputValide($this->input->post('ville')),
+                    'region' => test_inputValide($this->input->post('region')),
+                    'code_postal' => test_inputValide($this->input->post('code_postal')),
+              );
+              if($this->UserModel->MajProfil($new_data, $user['id'])){
+                  $this->session->set_flashdata('message', 'Profil mis à jour');
+                  redirect(trim($_SESSION['language']).'/backoffice/my-profile','refresh');
+              }else
+              {
+                $this->session->set_flashdata('message_erreur', $this->ion_auth->messages());
+              } 
         }
-        else{
-            $this->session->set_flashdata('message', $this->ion_auth->messages());
-            $this->load->helper('form');
-            $this->render('backoffice/modifier_profil_view','backoffice_master');
-        }  
-      
+  
       }
-      else{
-         $this->load->helper('form');
-         $this->render('backoffice/modifier_profil_view','backoffice_master');
-      }
-      
+
+      $this->render('backoffice/modif_informations','backoffice_master');
   }
     
     

@@ -16,7 +16,8 @@
             </div>
             
             <div class="row">
-                <div class="col-xl-12 col-12">
+                <?php if(empty($membre['first_name']) || empty($membre['last_name']) || empty($membre['genre']) || empty($membre['Lieu_naissance']) || empty($membre['date_naissance']) || empty($membre['pays']) || empty($membre['phone']) || empty($membre['ville']) || empty($membre['region']) || empty($membre['code_postal'])){ ?>
+                   <div class="col-xl-12 col-12">
                     <div class="row">
                             <div class="col-md-12 col-12">
                                 <div class="alert alert-danger alert-dismissible">
@@ -24,12 +25,12 @@
                                     <h4>
                                     <i class="icon fa fa-check"></i><?=get_phrase('Information')?>
                                     </h4>
-                                    <a href="" style="text-decoration: none;"><?=get_phrase('Pour bénéficier entièrement des avantages du réseau merci de compléter vos informations');?></a>
+                                    <a href="<?=site_url(trim($_SESSION['language']).'/backoffice/my-info')?>" style="text-decoration: none;"><?=get_phrase('Pour bénéficier entièrement des avantages du réseau merci de compléter vos informations');?></a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+                <?php } ?>
                 <div class="col-xl-6 col-12">
                     <div class="row">
                         <div class="col-md-12 col-12">

@@ -22,16 +22,16 @@
                     <div class="box-body box-profile">
 
 
-                        <img class="profile-user-img img-responsive img-circle profileImgUrl" src="<?php echo site_url('assets/membre/dist/img/user2-160x160.jpg');?>" alt="<?=$user['nom'];?>">
+                        <img class="profile-user-img img-responsive img-circle profileImgUrl" src="<?php echo site_url('assets/membre/dist/img/user2-160x160.jpg');?>" alt="<?=$user['first_name'];?>">
 
 
 
                         <h3 class="profile-username text-center NameEdt">
-                            <?=$user['nom'];?>
+                            <?=$user['first_name'];?>
                         </h3>
 
-                        <p class="text-muted text-center">Membre depuis
-                            <?=$user['creele'];date("m/d/y h:i:s a", $user['created_on']);//date('M. Y',strtotime() );?>
+                        <p class="text-muted text-center"><?=get_phrase('Membre depuis')?>
+                            <?=date("m/d/y h:i:s a", $user['created_on']);?>
                         </p>
 
 
@@ -45,7 +45,7 @@
             <div class="col-md-9">
                 <div class="nav-tabs-custom" id="element_overlap1">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#activity" data-toggle="tab">Informations générales</a></li>
+                        <li class="active"><a href="#activity" data-toggle="tab"><?=get_phrase('Informations générales')?></a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="active tab-pane" id="activity">
@@ -62,49 +62,50 @@
                             echo form_open('backoffice/membre/modifier_profil',array('class' => 'form-horizontal UpdateDetails'));?>
                                
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Pseudo</label>
+                                    <label for="" class="col-sm-2 control-label"><?=get_phrase('Pseudo')?></label>
 
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" value="<?=$user['pseudo']?>" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Nom</label>
+                                    <label for="" class="col-sm-2 control-label"><?=get_phrase('Nom')?></label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" name="prenoms" value="<?=$user['prenoms']?>" placeholder="Prénoms">
+                                        <input type="text" class="form-control" name="prenoms" value="<?=$user['last_name']?>" placeholder="Prénoms">
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" name="nom" value="<?=$user['nom']?>" placeholder="Nom">
+                                        <input type="text" class="form-control" name="nom" value="<?=$user['first_name']?>" placeholder="<?=get_phrase('Nom')?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Date de naissance</label>
+                                    <label for="" class="col-sm-2 control-label"><?= get_phrase("Date de naissance"); ?></label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" name="date" value="<?=$user['date_naissance']?>" placeholder="Date de naissance (exple: 11/07/1972)">
+                                        <input type="date" class="form-control" name="date" value="<?=$user['date_naissance']?>">
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" name="lieu" value="<?=$user['Lieu_naissance']?>" placeholder="Lieu de naissance">
+                                        <label for="" class="col-sm-2 control-label"><?= get_phrase("Lieu de naissance"); ?></label>
+                                        <input type="text" class="form-control" name="lieu_naissance" value="<?=$user['Lieu_naissance']?>" placeholder="Lieu de naissance">
                                     </div>
                                 </div>
 
 
                                 <div class="form-group">
-                                    <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                                    <label for="inputEmail" class="col-sm-2 control-label"><?= get_phrase("Email") ?></label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" name="email" value="<?=$user['email']?>" placeholder="Email">
+                                        <input type="email" class="form-control" name="email" value="<?=$user['email']?>" placeholder="<?= get_phrase("Email") ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Téléphone</label>
+                                    <label for="" class="col-sm-2 control-label"><?= get_phrase("Telephone avec l'indicatif de votre pays"); ?></label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="telephone" value="<?=$user['telephone']?>" placeholder="Numéro de téléphone (exple: 22509847556)">
+                                        <input type="text" class="form-control" name="telephone" value="<?=$user['phone']?>" placeholder="<?= get_phrase("Téléphone (Ex: +22500000000)"); ?>">
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="inputExperience" class="col-sm-2 control-label">Pays</label>
+                                    <label for="inputExperience" class="col-sm-2 control-label"><?= get_phrase("Pays actuel"); ?></label>
 
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="pays" value="<?=$user['pays']?>" placeholder="Pays">
@@ -112,35 +113,17 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="inputExperience" class="col-sm-2 control-label">Ville</label>
+                                    <label for="inputExperience" class="col-sm-2 control-label"><?= get_phrase("Ville")?></label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="ville" value="<?=$user['ville']?>" placeholder="Ville">
+                                        <input type="text" class="form-control" name="ville" value="<?=$user['ville']?>" placeholder="<?= get_phrase("Ville")?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="inputExperience" class="col-sm-2 control-label">Quartier</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="adresse" value="<?=$user['adresse']?>" placeholder="Quartier">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Parrain</label>
+                                    <label for="" class="col-sm-2 control-label"><?= get_phrase("Parrain") ?></label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="pseudo_parrain" value="<?=$user['pseudo_parrain']?>" placeholder="Parrain" readonly>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="form-group">
-                                    <label for="inputExperience" class="col-sm-2 control-label">A propos de moi</label>
-
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" name="apropos" placeholder="A propos de moi"><?=$user['apropos']?></textarea>
                                     </div>
                                 </div>
 

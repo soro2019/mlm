@@ -58,6 +58,33 @@ class UserModel extends CI_Model {
 			 return false;
 		 }
 	}
+
+
+    public function EmailExiste2($email, $id){
+         
+         $this->db->select('email'); 
+         $this->db->from($this->Table);
+         $this->db->where(array('email' => $email, 'id!=' => $id));
+         $query = $this->db->get();
+         if($query->num_rows() != 0){
+              return true;
+         }else{
+             return false;
+         }
+    }
+
+    public function PhoneExiste2($phone, $id){
+         
+         $this->db->select('phone'); 
+         $this->db->from($this->Table);
+         $this->db->where(array('phone' => $phone, 'id!=' => $id));
+         $query = $this->db->get();
+         if ($query->num_rows() != 0) {
+              return true;
+         } else {
+             return false;
+         }
+    }
     
     public function PhoneExiste($phone){
          
@@ -72,11 +99,11 @@ class UserModel extends CI_Model {
          }
     }
 	
-	public function NomExiste($nom){
+	public function NomExiste($nom, $id){
 		 
-		 $this->db->select('nom'); 
+		 $this->db->select('first_name'); 
 		 $this->db->from($this->Table);
-		 $this->db->where('nom', $nom);
+         $this->db->where(array('first_name' => $nom, 'id!=' => $id));
 		 $query = $this->db->get();
 		 if ($query->num_rows() != 0) {
 			  return true;
@@ -85,11 +112,11 @@ class UserModel extends CI_Model {
 		 }
 	}
     
-    public function PrenomsExiste($prenoms){
+    public function PrenomsExiste($prenoms, $id){
 		 
-		 $this->db->select('prenoms'); 
+		 $this->db->select('last_name'); 
 		 $this->db->from($this->Table);
-		 $this->db->where('prenoms', $prenoms);
+         $this->db->where(array('last_name' => $prenoms, 'id!=' => $id));
 		 $query = $this->db->get();
 		 if ($query->num_rows() != 0) {
 			  return true;
@@ -98,11 +125,11 @@ class UserModel extends CI_Model {
 		 }
 	}
     
-    public function DateNaissanceExiste($date){
+    public function DateNaissanceExiste($date, $id){
 		 
 		 $this->db->select('date_naissance'); 
 		 $this->db->from($this->Table);
-		 $this->db->where('date_naissance', $date);
+         $this->db->where(array('date_naissance' => $date, 'id!=' => $id));
 		 $query = $this->db->get();
 		 if ($query->num_rows() != 0) {
 			  return true;
@@ -110,6 +137,19 @@ class UserModel extends CI_Model {
 			 return false;
 		 }
 	}
+
+    public function LieuNaissanceExiste($lieu, $id){
+         
+         $this->db->select('Lieu_naissance'); 
+         $this->db->from($this->Table);
+         $this->db->where(array('Lieu_naissance' => $lieu, 'id!=' => $id));
+         $query = $this->db->get();
+         if ($query->num_rows() != 0) {
+              return true;
+         } else {
+             return false;
+         }
+    }
 	
 
     public function GetUserDataByPseudo($pseudo)

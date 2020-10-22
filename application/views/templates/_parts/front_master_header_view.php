@@ -66,10 +66,10 @@
                                 <div id="site-navigation" class="site-navigation">
                                     <?php if (!$this->session->userdata('identity')) {?>
                                     <div class="header-btn">
-                                        <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-border" href="<?php echo site_url('connexion');?>"><?=get_phrase('LOG IN')?></a>
+                                        <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-border" href="<?php echo site_url(trim($_SESSION['language']).'/connexion');?>"><?=get_phrase('LOG IN')?></a>
                                     </div>
                                     <div class="header-btn">
-                                        <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-border" href="<?php echo site_url('registration');?>"><?=get_phrase('SIGN UP')?> </a>
+                                        <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-border" href="<?php echo site_url(trim($_SESSION['language']).'/registration');?>"><?=get_phrase('SIGN UP')?> </a>
                                     </div>
                                     <?php } else {
                                     if ($this->ion_auth->in_group('admin')) {?>
@@ -98,7 +98,7 @@
                                     </div>
                                     <nav id="menu" class="menu">
                                         <ul class="dropdown">
-                                            <li <?php if ($titre=='home') {?>class="active"<?php }?>><a href="<?php echo site_url();?>">Home</a></li>
+                                            <li <?php if ($titre=='home') {?>class="active"<?php }?>><a href="<?php echo site_url($_SESSION['language']);?>"><?=get_phrase('Home')?></a></li>
                                             <li <?php if ($titre=='About Us' or $titre=='Our Mission' or $titre=='Our History' or $titre=='Our White Paper') {?>class="active"<?php }?>><a href="#">Company</a>
                                             <ul>
                                                 <li ><a href="<?php echo site_url('about-us');?>">About Us</a></li>

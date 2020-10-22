@@ -44,7 +44,7 @@
     </style>
   </head>
 
-<body class="light-skin sidebar-mini onlywave theme-purple">
+<body class="light-skin sidebar-mini onlywave theme-purple" onload="createCaptcha();">
 	
 <div class="wrapper">
 	
@@ -109,18 +109,18 @@
 		              </li>
 						<!-- Menu Body -->
 						<li class="user-body">
-						    <a class="dropdown-item" href="<?php echo site_url('backoffice/my-profile');?>"><i class="ion ion-person"></i>
-						    	<?=get_phrase('My Profile')?>
+						    <a class="dropdown-item" href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/my-profile');?>"><i class="ion ion-person"></i>
+						    	<?=ucwords(get_phrase('my profile'))?>
 						    </a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="javascript:void(0)">
 								<i class="ion ion-settings"></i> 
-								<?=get_phrase('Account Setting')?>
+								<?=ucwords(get_phrase('account setting'))?>
 							</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="<?php echo site_url('backoffice/logout');?>">
+							<a class="dropdown-item" href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/logout');?>">
 								<i class="ion-log-out"></i>
-								<?=get_phrase('Logout')?>
+								<?=ucwords(get_phrase('logout'))?>
 							</a>
 							
 		              </li>
@@ -142,12 +142,12 @@
 			  <!-- sidebar menu-->
 			  <ul class="sidebar-menu" data-widget="tree">
 
-				<li class="header nav-small-cap"><?=get_phrase('MENU PRINCIPAL')?></li>
+				<li class="header nav-small-cap"><?=strtoupper(get_phrase('menu principal'))?></li>
 
 					<li <?php if($titre == 'dashboard') echo 'class="active"';?>>
-						<a href="<?php echo site_url('backoffice/dashboard');?>">
+						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/dashboard');?>">
 							<i class="fa fa-dashboard"></i>
-							<span>Dashboard</span>
+							<span><?=get_phrase('dashboard')?></span>
 						</a>
 					</li> 
 

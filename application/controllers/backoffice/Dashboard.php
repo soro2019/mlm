@@ -27,7 +27,7 @@ class Dashboard extends Backoffice_Controller
       {
         redirect('connexion');
       }
-      //$lang = $this->uri->segment(1);
+      $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
       
       $this->data['titre'] = get_phrase('dashboard');
 

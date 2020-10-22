@@ -8,17 +8,27 @@ if (!defined('BASEPATH')) {
  * Clean query strings and protocols from urls
  * Returns only hostname
  */
-    function countElement($value, $table)
+function countElement($value, $table)
+{
+  $nb = 0;
+  foreach ($table as $tvalue) {
+    if($value==$tvalue)
     {
-      $nb = 0;
-      foreach ($table as $tvalue) {
-        if($value==$tvalue)
-        {
-          $nb++;
-        }
-      }
-      return $nb;
+      $nb++;
     }
+  }
+  return $nb;
+}
+
+function formtageDate22($data)
+{
+  if(stripos($data, '-') && strlen($data) == 10)
+  {
+    $date = explode('-', $data);
+    $data = $date[2].'/'.$date[1].'/'.$date[0];
+  }
+  return $data;
+}
 
 function isset_value($name)
 {
@@ -48,7 +58,7 @@ if ( !function_exists('defineLanguage'))
       $CI->session->set_userdata('language' , $lang);
     }
 
-    return $CI->session->userdata('language');
+    return trim($CI->session->userdata('language'));
   }
 }
 if(!function_exists('get_phrase'))
@@ -95,8 +105,8 @@ if(!function_exists('get_phrase'))
     //var_dump($row[$current_language], $current_language);die;
     // return the current sessioned language field of according phrase, else return uppercase spaced word
     if(isset($row[$current_language]) && $row[$current_language] !="")
-      return str_replace('`',"'",$row[$current_language]);
+      return trim(str_replace('`',"'",$row[$current_language]));
     else
-      return str_replace('_',' ',$phrase);
+      return trim(str_replace('_',' ',$phrase));
   }
 }

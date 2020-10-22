@@ -86,26 +86,10 @@ $route['backoffice/modifier-mot-de-passe'] = 'backoffice/membre/modifier_mdp';
  * Frontoffice Controllers Routes
  */
 
-$route['registration/:any'] = 'pages/inscription';
-$route['(fr|en)/registration'] = 'pages/inscription';
-$route['(fr|en)/connexion'] = 'pages/connexion';
-
-
-
-
-
-
-
-
-
-
-
-
-$route['login-signup'] = 'backoffice/membre/connexion';
 $route['backoffice/logout'] = 'backoffice/membre/deconnexion';
 
 
-$route['backoffice/my-profile'] = 'backoffice/membre/profil';
+
 $route['backoffice/buy-investment-package'] = 'backoffice/membre/buy_investment_package';
 $route['backoffice/my-investment-package'] = 'backoffice/membre/my_investment_package';
 $route['backoffice/internal-transactions'] = 'backoffice/membre/internal_transactions';
@@ -222,8 +206,38 @@ $route['administrator~shappinvest/deconnexion'] = 'administrator~shappinvest/Aut
 $route['default_controller'] = 'pages/home';
 $route["(fr|en)"] = "{$route['default_controller']}/$1";
 
+///FRONTE ROUTE
+$route['(fr|en)/registration/(:any)'] = 'pages/inscription/$1';
+$route['registration/(:any)'] = 'pages/inscription/en';
+
+$route['(fr|en)/registration'] = 'pages/inscription/$1';
+$route['registration'] = 'pages/inscription/en';
+
+$route['(fr|en)/connexion'] = 'pages/connexion/$1';
+$route['connexion'] = 'pages/connexion/en';
+
+
+
+///BACKOFFICE ROUTE
 $route['(fr|en)/backoffice'] = 'backoffice/dashboard/index/$1';
 $route['backoffice'] = 'backoffice/dashboard/index/en';
+
+$route['(fr|en)/backoffice/my-info'] = 'backoffice/membre/modifier_profil/$1';
+$route['backoffice/my-info'] = 'backoffice/membre/modifier_profil/en';
+
+$route['(fr|en)/backoffice/my-profile'] = 'backoffice/membre/profil/$1';
+$route['(fr|en)/backoffice/my-profile'] = 'backoffice/membre/profil/en';
+
+
+
+
+///ADMIN ROUTE
+
+
+
+
+
+
 
 $route['404_override'] = 'errors/error404';
 $route['translate_uri_dashes'] = FALSE;

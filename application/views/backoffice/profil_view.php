@@ -1,5 +1,3 @@
-
-
             <!-- Content Header (Page header) -->     
             <div class="content-header">
                 <div class="d-flex align-items-center justify-content-between">
@@ -18,10 +16,10 @@
                       <div class="box-body text-center pb-50">
                         <a href="#">
                           <img class="avatar avatar-xxl avatar-bordered" src="<?php if($user['img_profil'] ==""){ echo site_url('assets/member/images/avatar/img_user_member.jpg');}else{
-                            echo site_url('assets/member/images/avatar/'.$user['img_profil']);}?>" alt="<?=$user['nom'];?>">
+                            echo site_url('assets/member/images/avatar/'.$user['img_profil']);}?>" alt="<?=$user['first_name'];?>">
                         </a>
                         <h4 class="mt-2 mb-0"><a class="hover-primary text-white" href="#"><?php echo strtoupper($nom_membre); ?>&nbsp;<?php echo strtoupper($prenom_membre); ?></a></h4>
-                        <span><i class="fa fa-map-marker w-20"></i> Miami</span>
+                        <span><i class="fa fa-map-marker w-20"></i> <?=$user['ville'];?></span>
                       </div>
 
                       <ul class="box-body flexbox flex-justified text-center" data-overlay="4">

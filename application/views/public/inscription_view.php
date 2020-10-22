@@ -46,34 +46,34 @@
                                     </div>';
                                 } ?>
                             </h1>
-                            <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; margin-bottom:15px;color:#02799c;"> S'inscrire</h1>
-                            <?php if($pseudo = $this->uri->segment(2)){}else{ $pseudo = "usermlm";} ?>
-                             Votre parrain est : <?=$pseudo?>
+                            <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; margin-bottom:15px;color:#02799c;"> <?=get_phrase('S\'inscrire')?></h1>
+                            <?php if($pseudo = $this->uri->segment(3)){}else{ $pseudo = "usermlm";} ?>
+                             <?=get_phrase('Votre parrain est')?> : <?=$pseudo?>
                             <input type="hidden" name="parrain" value="<?=$pseudo?>">
-                            <input type="text" id="user-name" class="form-control" placeholder="Votre pseudo" required autofocus=""  title="Votre pseudo" name="pseudo" value="<?=isset_value('pseudo')?>">
+                            <input type="text" id="user-name" class="form-control" placeholder="<?=get_phrase('Votre pseudo')?>" required autofocus=""  title="<?=get_phrase('Votre pseudo')?>" name="pseudo" value="<?=isset_value('pseudo')?>">
 
-                            <input type="email" id="user-email" class="form-control" placeholder="Votre addresse email" required autofocus=""  title="Votre addresse email" name="usermail" value="<?=isset_value('usermail')?>">
+                            <input type="email" id="user-email" class="form-control" placeholder="<?=get_phrase('Votre adresse email')?>" required autofocus=""  title="<?=get_phrase('Votre adresse email')?>" name="usermail" value="<?=isset_value('usermail')?>">
 
-                            <input type="text" id="user-first-name" class="form-control" placeholder="Ex: +22579815420" required="" autofocus="" title="Votre numéro de téléphone avec indicateur" name="phonenumber" value="<?=isset_value('phonenumber')?>">
+                            <input type="text" id="user-first-name" class="form-control" placeholder="<?=get_phrase('Ex: +22500000000')?>" required="" autofocus="" title="<?=get_phrase('Votre numéro de téléphone avec indicateur')?>" name="phonenumber" value="<?=isset_value('phonenumber')?>">
                            
-                            <input type="password" name="userpass" id="new-password" class="form-control" placeholder="Votre mot de passe" required autofocus=""  title="Votre mot de passe">
+                            <input type="password" name="userpass" id="new-password" class="form-control" placeholder="<?=get_phrase('Votre mot de passe')?>" required autofocus=""  title="<?=get_phrase('Votre mot de passe')?>">
 
-                            <input type="password" id="user-conf-pass" class="form-control" placeholder="Confirmer votre mot de passe" required autofocus=""  title="Confirmer votre mot de passe" name="userconfpass">
+                            <input type="password" id="user-conf-pass" class="form-control" placeholder="<?=get_phrase('Confirmer votre mot de passe')?>" required autofocus=""  title="<?=get_phrase('Confirmer votre mot de passe')?>" name="userconfpass">
 
                             <div class="row" style="margin-bottom: 10px; ">
                                 <div class="col-sm-6"> 
-                                    <label for="w3-captcha">Saisie dans captcha</label>
+                                    <label for="w3-captcha"><?=get_phrase('Saisie dans captcha')?></label>
                                     <div id="captcha">
                                     </div>
                                 </div>
                                 <div class="col-sm-6 ">
-                                    <label for="w3-captcha">Securité</label>
+                                    <label for="w3-captcha"><?=get_phrase('Securité')?></label>
                                      <input type="text" class="form-control" placeholder="Captcha" id="cpatchaTextBox"/>
                                 </div>
                             </div>
 
-                            <input class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-btn-style-fill ttm-icon-btn-right ttm-btn-bgcolor-skincolor"  type="submit" title="" value="S'INSCRIRE" name="register" onclick="actionform()">
-                            <a href="login-signup"  style="text-align: left; color:#0b0c26;"><i class="fa fa-angle-left"></i> Retour</a>
+                            <input class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-btn-style-fill ttm-icon-btn-right ttm-btn-bgcolor-skincolor"  type="submit" title="" value="<?=get_phrase('S\'INSCRIRE')?>" name="register" onclick="actionform()">
+                            <a href="login-signup"  style="text-align: left; color:#0b0c26;"><i class="fa fa-angle-left"></i> <?=get_phrase('Retour')?></a>
                         <?php echo form_close() ; ?>
                         <br>
                     </div>
@@ -84,43 +84,3 @@
     <!-- map-section end -->
 </div>
 
-<script type="text/javascript">
-        var code;
-        function createCaptcha() {
-          //clear the contents of captcha div first 
-          document.getElementById('captcha').innerHTML = "";
-          var charsArray ="0123456789";
-          var lengthOtp = 6;
-          var captcha = [];
-          for (var i = 0; i < lengthOtp; i++) {
-            //below code will not allow Repetition of Characters
-            var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
-            if (captcha.indexOf(charsArray[index]) == -1)
-              captcha.push(charsArray[index]);
-            else i--;
-          }
-          var canv = document.createElement("canvas");
-          canv.id = "captcha";
-          canv.width = 100;
-          canv.height = 40;
-          var ctx = canv.getContext("2d");
-          ctx.font = "25px Georgia";
-          ctx.strokeText(captcha.join(""), 0, 30);
-          //storing captcha so that can validate you can save it somewhere else according to your specific requirements
-          code = captcha.join("");
-          document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element
-        }
-        function validateCaptcha() {
-         
-          debugger
-          if(document.getElementById("cpatchaTextBox").value != code) {
-              event.preventDefault();
-              alert("<?php echo 'Le Captcha est invalide'; ?>");
-              return false;
-          }else
-          {
-            return true;
-          }
-        }
-
-    </script>

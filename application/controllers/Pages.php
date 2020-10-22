@@ -12,23 +12,24 @@
             $this->load->helper('form');
         }
         /*fuction page home*/
-        public function home(){
+        public function home($lang=''){
             $this->data['titre'] = 'home';
             $this->data['meta_keywords'] = 'SHAPP INVEST, investment on rentals, source of happiness';
             $this->data['page_title'] = 'SHAPP INVEST - Source of Happiness Investment';
             $this->data['meta_description'] = 'SHAPP INVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
+            defineLanguage($lang);
 
             $this->render('public/home_view');
         }
 
 
-        public function inscription()
+        public function inscription($lang='')
         {
-          $this->data['titre'] = 'registration';
+          $this->data['titre'] = get_phrase('registration');
           $this->data['meta_keywords'] = 'SHAPPINVEST, investment on rentals, source of happiness';
           $this->data['page_title'] = 'REGISTRATION';
           $this->data['meta_description'] = 'SHAPPINVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
-
+             defineLanguage($lang);
              if($this->input->post())
              {
 
@@ -44,10 +45,10 @@
                   $this->session->set_flashdata('message_erreur','Désolé! Ce pseudo est déjà pris.');
                 }elseif($this->UserModel->EmailExiste($this->input->post('usermail')))
                 {
-                  $this->session->set_flashdata('message_erreur', 'Désolé! Cet adresse email est déjà utilisée.');
+                  $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet adresse email est déjà utilisée.'));
                 }elseif($this->UserModel->PhoneExiste($this->input->post('phonenumber')))
                 {
-                  $this->session->set_flashdata('message_erreur', 'Désolé! Cet numéro de téléphone est déjà utilisée.');
+                  $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet numéro de téléphone est déjà utilisée.'));
                 }elseif(stripos($codepays, '+') || stripos($codepays, "00"))
                 {
                  $this->session->set_flashdata('message_erreur', 'Veuillez ajouter l\'indicateur de votre pays à votre contact en utilisant "+"');
@@ -85,12 +86,14 @@
             $this->render('public/inscription_view','front_master'); 
         }
         
-        public function connexion()
+        public function connexion($lang='')
         {
-          $this->data['titre'] = 'Login / Sign Up';
+          defineLanguage($lang);
+          $this->data['titre'] = get_phrase('Login / Sign Up');
           $this->data['meta_keywords'] = 'SHAPP INVEST, investment on rentals, source of happiness';
           $this->data['page_title'] = 'LOGIN / SIGN UP';
           $this->data['meta_description'] = 'SHAPP INVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
+
               if($this->input->post())
               {
                 $this->load->library('form_validation');
