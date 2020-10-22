@@ -152,124 +152,163 @@
 					</li> 
 
 					<li class="treeview <?php if($titre == 'Buy investment package' or $titre == 'My investment package' or $titre == 'Internal transactions' or $titre == 'Financial transactions') echo 'active';?>">
-					  <a href="#">
-						<i class="ti-dashboard"></i>
-						<span>Finance</span>
-						<span class="pull-right-container">
-						  <i class="fa fa-angle-right pull-right"></i>
-						</span>
-					  </a>
-					  <ul class="treeview-menu">
-						<li <?php if($titre == 'Buy investment package') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/buy-investment-package');?>">
-								<i class="ti-more"></i>
-								Buy investment package
-							</a>
-						</li>
-						<li <?php if($titre == 'My investment package') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/my-investment-package');?>">
-								<i class="ti-more"></i>
-								My investment package
-							</a>
-						</li>
-						<li <?php if($titre == 'Internal transactions') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/internal-transactions');?>">
-								<i class="ti-more"></i>
-								Internal transactions
-							</a>
-						</li>
-						<li <?php if($titre == 'Financial transactions') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/financial-transactions');?>">
-								<i class="ti-more"></i>
-								Financial transactions
-							</a>
-						</li>
-						
-					  </ul>
+						<a href="#">
+							<i class="ti-dashboard"></i>
+							<span><?= get_phrase("Mon reseau")?></span>
+							<span class="pull-right-container">
+							<i class="fa fa-angle-right pull-right"></i>
+							</span>
+						</a>
+						<ul class="treeview-menu">
+							<li <?php if($titre == 'Buy investment package') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/buy-investment-package');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Mon reseau actuel")?>
+								</a>
+							</li>
+							<li <?php if($titre == 'My investment package') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/my-investment-package');?>">
+									<i class="ti-more"></i>
+									<?=get_phrase("Matrice 1") ?>
+								</a>
+							</li>
+							<li <?php if($titre == 'Internal transactions') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/internal-transactions');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Matrice 2")?>
+								</a>
+							</li>
+							<li <?php if($titre == 'Financial transactions') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/financial-transactions');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Matrice 3")?>
+								</a>
+							</li>
+							
+						</ul>
 					</li> 
 
 					<li class="treeview <?php if($titre == 'New partners registration' or $titre == 'Partners list' or $titre == 'Your level') echo 'active';?>">
-					  <a href="#">
-						<i class="ti-dashboard"></i>
-						<span>My partners</span>
-						<span class="pull-right-container">
-						  <i class="fa fa-angle-right pull-right"></i>
-						</span>
-					  </a>
-					  <ul class="treeview-menu">
-						<li <?php if($titre == 'New partners registration') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/new-partners-registration');?>">
-								<i class="ti-more"></i>
-								New partners registration
-							</a>
-						</li>
-						<li <?php if($titre == 'Partners list') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/partners-list');?>">
-								<i class="ti-more"></i>
-								Partners list
-							</a>
-						</li>
-						<li <?php if($titre == 'Your level') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/your-level');?>">
-								<i class="ti-more"></i>
-								Your level
-							</a>
-						</li>
-						
-					  </ul>
+						<a href="#">
+							<i class="ti-dashboard"></i>
+							<span><?= get_phrase("Finance")?></span>
+							<span class="pull-right-container">
+							<i class="fa fa-angle-right pull-right"></i>
+							</span>
+						</a>
+						<ul class="treeview-menu">
+							<li <?php if($titre == 'New partners registration') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/new-partners-registration');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Mes opérations financières")?>
+								</a>
+							</li>
+							<li <?php if($titre == 'Partners list') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/partners-list');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Transfert internes")?>
+								</a>
+							</li>
+							<li <?php if($titre == 'Your level') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/your-level');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Faire l'achat initial")?>
+								</a>
+							</li>
+							
+						</ul>
 					</li>  
 					<li <?php if($titre == 'My documents') echo 'class="active"';?>>
 						<a href="<?php echo site_url('backoffice/my-documents');?>">
 							<i class="ti-dashboard"></i>
-							<span>My documents</span>
+							<span><?= get_phrase("Messagerie")?></span>
 						</a>
 					</li>
 
-					<!-- <li <?php if($titre == 'Messages') echo 'class="active"';?>>
-						<a href="<?php echo site_url('backoffice/messages');?>">
-							<i class="ti-dashboard"></i>
-							<span>Messages</span>
-						</a>
-					</li>  -->
-
 					<li class="treeview <?php if($titre == 'Profile data' or $titre == 'Security') echo 'active';?>">
-					  <a href="#">
-						<i class="ti-dashboard"></i>
-						<span>Personnal info</span>
-						<span class="pull-right-container">
-						  <i class="fa fa-angle-right pull-right"></i>
-						</span>
-					  </a>
-					  <ul class="treeview-menu">
-						<li <?php if($titre == 'Profile data') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/profile-data');?>">
-								<i class="ti-more"></i>
-								Profile data
-							</a>
-						</li>
-						<li <?php if($titre == 'Security') echo 'class="active"';?>>
-							<a href="<?php echo site_url('backoffice/security');?>">
-								<i class="ti-more"></i>
-								Security
-							</a>
-						</li>
-						
-					  </ul>
+						<a href="#">
+							<i class="ti-dashboard"></i>
+							<span><?= get_phrase("Données personnelles")?></span>
+							<span class="pull-right-container">
+							<i class="fa fa-angle-right pull-right"></i>
+							</span>
+						</a>
+						<ul class="treeview-menu">
+							<li <?php if($titre == 'Profile data') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/profile-data');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Mon Profil")?>
+								</a>
+							</li>
+							<li <?php if($titre == 'Security') echo 'class="active"';?>>
+								<a href="<?php echo site_url('backoffice/security');?>">
+									<i class="ti-more"></i>
+									<?= get_phrase("Sécurité")?>
+								</a>
+							</li>
+							
+						</ul>
 					</li> 
 
 					<li <?php if($titre == 'Promotional materials') echo 'class="active"';?>>
 						<a href="<?php echo site_url('backoffice/promotional-materials');?>">
 							<i class="ti-dashboard"></i>
-							<span>Promotional materials</span>
+							<span><?= get_phrase("Matériels marketing")?></span>
 						</a>
 					</li>
 
 					<li <?php if($titre == 'Signup new partner') echo 'class="active"';?>>
-					  <a class="btn btn-block btn-xs btn-rounded" href="<?php echo site_url('backoffice/signup-new-partner');?>">
-						<span>Signup new partner</span>
-					  </a>
+						<a href="<?php echo site_url('backoffice/signup-new-partner');?>">
+							<i class="ti-dashboard"></i>
+							<span><?= get_phrase("Ajouter un nouveau partenaire")?></span>
+						</a>
 					</li> 
-
+					<li class=treeview>
+						<a href="#">
+							<i class="ti-dashboard"></i>
+							<span><?= get_phrase("Extra")?></span>
+							<span class="pull-right-container">
+							<i class="fa fa-angle-right pull-right"></i>
+							</span>
+							<ul class="treeview-menu">
+								<li>
+									<a href="" class="ti-more">
+										<?= get_phrase("Webinaire")?>
+									</a>
+								</li>
+								<li>
+									<a href="" class="ti-more">
+										<?= get_phrase("Conférences")?>
+									</a>
+								</li>
+								<li>
+									<a href="" class="ti-more">
+										<?= get_phrase("Actualités")?>
+									</a>
+								</li>
+								<li>
+									<a href="" class="ti-more">
+										<?= get_phrase("Support technique")?>
+									</a>
+								</li>
+								<li>
+									<a href="" class="ti-more">
+										<?= get_phrase("FAQ")?>
+									</a>
+								</li>
+								<li>
+									<a href="" class="ti-more">
+										<?= get_phrase("Politique de confidentialité")?>
+									</a>
+								</li>
+								<li>
+									<a href="" class="ti-more">
+										<?= get_phrase("Mention légales")?>
+									</a>
+								</li>
+							</ul>
+						</a>
+					</li>
 			  </ul>
 			</section>
 		</aside>
