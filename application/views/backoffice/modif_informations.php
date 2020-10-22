@@ -84,7 +84,12 @@
                 <div class="row">
                     <div class="col-sm-6 mb-lg">
                         <label for="w3-country" required=""><?= get_phrase("Pays actuel"); ?></label>
-                        <input type="text" class="form-control" name="pays" value="<?=$user['pays']?>" placeholder="<?= get_phrase("Pays")?>">
+                        <input name="pays" type="text" list="pays" class="form-control" id="w3-pays"  value="<?php if(isset($_POST['pays'])){ echo $_POST['pays'];}else{ echo trim($this->Crud_model->selectPaysById($user['pays'])); } ?>">
+                            <datalist id="pays">
+                               <?php foreach ($listepays as $elmt) {?>
+                                 <option value="<?=$elmt['name']?>"></option>
+                               <?php } ?>
+                            </datalist>
                         
                     </div>
                     <div class="col-sm-6 mb-lg">

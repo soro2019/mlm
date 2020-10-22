@@ -10,7 +10,7 @@ class Membre extends MY_Controller
         
       
     $this->load->library('ion_auth');
-    $this->load->model('UserModel');
+    $this->load->model(['UserModel', 'Crud_model']);
       
     $this->data['pseudo'] = $this->session->userdata('identity');
     $membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
@@ -52,6 +52,7 @@ class Membre extends MY_Controller
         redirect('connexion');
       }
       defineLanguage($lang);
+      $this->data['listepays'] = $this->Crud_model->listePays();
       $this->data['page_title'] = get_phrase('My profile');
       $this->data['page_description'] = get_phrase('information in member');
       $this->data['titre'] = 'My profile';
@@ -79,6 +80,7 @@ class Membre extends MY_Controller
       $socials = json_decode($user['social_reseau']);
       $this->data['user'] = $user;
       $this->data['social_reseau'] = $socials;
+      $this->data['listepays'] = $this->Crud_model->listePays();
 
       if($this->input->post('modifier-profil') !== null)
       {
@@ -98,6 +100,8 @@ class Membre extends MY_Controller
           $this->session->set_flashdata('message_erreur', get_phrase('Les informations saisie sont déjà utilisée par un autre utilisateur'));
         }else
         {
+
+          $pays = $this->Crud_model->listePays($this->input->post('pays'));
           $new_data = array(
                     'social_reseau' => $socials,
                     'email' => test_inputValide($this->input->post('email')),
@@ -106,7 +110,7 @@ class Membre extends MY_Controller
                     'genre' => test_inputValide($this->input->post('genre')),
                     'Lieu_naissance' => test_inputValide($this->input->post('lieu_naissance')),
                     'date_naissance' => test_inputValide($date_n),
-                    'pays' => test_inputValide(1),
+                    'pays' => test_inputValide($pays['id']),
                     'phone' => test_inputValide($this->input->post('telephone')),
                     'ville' => test_inputValide($this->input->post('ville')),
                     'region' => test_inputValide($this->input->post('region')),

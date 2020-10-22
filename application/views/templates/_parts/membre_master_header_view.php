@@ -145,7 +145,7 @@
 				<li class="header nav-small-cap"><?=strtoupper(get_phrase('menu principal'))?></li>
 
 					<li <?php if($titre == 'dashboard') echo 'class="active"';?>>
-						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/dashboard');?>">
+						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice');?>">
 							<i class="fa fa-dashboard"></i>
 							<span><?=get_phrase('dashboard')?></span>
 						</a>
@@ -154,7 +154,7 @@
 					<li class="treeview <?php if($titre == 'Buy investment package' or $titre == 'My investment package' or $titre == 'Internal transactions' or $titre == 'Financial transactions') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
-							<span><?= get_phrase("Mon reseau")?></span>
+							<span><?=ucfirst(get_phrase("mon reseau"))?></span>
 							<span class="pull-right-container">
 							<i class="fa fa-angle-right pull-right"></i>
 							</span>
@@ -163,28 +163,20 @@
 							<li <?php if($titre == 'Buy investment package') echo 'class="active"';?>>
 								<a href="<?php echo site_url('backoffice/buy-investment-package');?>">
 									<i class="ti-more"></i>
-									<?= get_phrase("Mon reseau actuel")?>
+									<?= ucfirst(get_phrase("mon reseau actuel"))?>
 								</a>
 							</li>
+							<?php $j = 10; 
+							 /*for($i=0; $i < $j; $i+6)
+							 {*/
+							?>
 							<li <?php if($titre == 'My investment package') echo 'class="active"';?>>
 								<a href="<?php echo site_url('backoffice/my-investment-package');?>">
 									<i class="ti-more"></i>
 									<?=get_phrase("Matrice 1") ?>
 								</a>
 							</li>
-							<li <?php if($titre == 'Internal transactions') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/internal-transactions');?>">
-									<i class="ti-more"></i>
-									<?= get_phrase("Matrice 2")?>
-								</a>
-							</li>
-							<li <?php if($titre == 'Financial transactions') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/financial-transactions');?>">
-									<i class="ti-more"></i>
-									<?= get_phrase("Matrice 3")?>
-								</a>
-							</li>
-							
+						  <?php //} ?>
 						</ul>
 					</li> 
 

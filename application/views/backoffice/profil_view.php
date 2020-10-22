@@ -19,7 +19,7 @@
                             echo site_url('assets/member/images/avatar/'.$user['img_profil']);}?>" alt="<?=$user['first_name'];?>">
                         </a>
                         <h4 class="mt-2 mb-0"><a class="hover-primary text-white" href="#"><?php echo strtoupper($nom_membre); ?>&nbsp;<?php echo strtoupper($prenom_membre); ?></a></h4>
-                        <span><i class="fa fa-map-marker w-20"></i> <?=$user['ville'];?></span>
+                        <span><i class="fa fa-map-marker w-20"></i> <?=trim($user['ville']);?>, <?php echo trim($this->Crud_model->selectPaysById($user['pays']));?></span>
                       </div>
 
                       <ul class="box-body flexbox flex-justified text-center" data-overlay="4">
@@ -28,8 +28,8 @@
                           <span class="font-size-20">8.6K</span>
                         </li>
                         <li>
-                          <span class="opacity-60">Following</span><br>
-                          <span class="font-size-20">8457</span>
+                          <span class="opacity-60"><?=ucfirst(get_phrase('mes filleuls'))?></span><br>
+                          <span class="font-size-20"><?=$membrereseauperso?></span>
                         </li>
                         <li>
                           <span class="opacity-60">Tweets</span><br>
@@ -41,13 +41,13 @@
             <div class="col-12 col-lg-7 col-xl-8">              
               <div class="nav-tabs-custom box-profile">
                 <ul class="nav nav-tabs">
-                    <li><a href="#Module" data-toggle="tab">Module</a></li>
-                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                   <!--  <li><a href="#Module" data-toggle="tab">Module</a></li> -->
+                    <li><a href="#settings" data-toggle="tab"><?=ucfirst(get_phrase('settings'))?></a></li>
                 </ul>
 
                 <div class="tab-content">
 
-                <div class="tab-pane" id="Module">
+                <!-- <div class="tab-pane" id="Module">
                     <div class="publisher publisher-multi bg-white b-1 mb-30">
                       <textarea class="publisher-input auto-expand" rows="4" placeholder="Write something"></textarea>
                       <div class="flexbox">
@@ -63,102 +63,106 @@
                         <button class="btn btn-sm btn-bold btn-primary">Post</button>
                       </div>
                     </div> 
+                  </div>   -->  
 
-                    
-
-                      
-                  </div>    
-                  <!-- /.tab-pane -->
-
-                  <div class="active tab-pane" id="activity">   
-                    <div class="box p-15">              
-                        <!-- Post -->
-                        <div class="post">
-                          <div class="user-block">
-                            <img class="img-bordered-sm rounded-circle" src="../../images/user1-128x128.jpg" alt="user image">
-                                <span class="username">
-                                  <a href="#">Brayden</a>
-                                  <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-                                </span>
-                            <span class="description">5 minutes ago</span>
-                          </div>
-                          <!-- /.user-block -->
-                          <div class="activitytimeline">
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.
-                              </p>
-                              <ul class="list-inline">
-                                <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-                                <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-                                </li>
-                                <li class="pull-right">
-                                  <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-                                    (5)</a></li>
-                              </ul>
-                              <form class="form-element">
-                                  <input class="form-control input-sm" type="text" placeholder="Type a comment">
-                             </form>
-                          </div>
-                        </div>
-                        <!-- /.post -->
-                        
-                        <!-- Post -->
-                       
-                        <!-- /.post -->
-                   </div>
-                  </div>
-                  <!-- /.tab-pane -->
-
-                  <div class="tab-pane" id="settings">  
+                  <div class="active tab-pane" id="settings">  
                     <div class="box p-15">      
-                        <form class="form-horizontal form-element col-12">
+                        <form class="form-horizontal form-element col-12" method="POST" action="">
                           <div class="form-group row">
-                            <label for="inputName" class="col-sm-2 control-label">Name</label>
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('nom'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="email" class="form-control" id="inputName" placeholder="">
+                              <input type="text" name="first_name" class="form-control" id="inputName" value="<?=trim($user['first_name']);?>">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('prenom'))?></label>
+
+                            <div class="col-sm-10">
+                              <input type="text" name="last_name" class="form-control" id="inputName" value="<?=trim($user['last_name']);?>">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('date naissance'))?></label>
+
+                            <div class="col-sm-10">
+                              <input type="date" name="date_naissance" class="form-control" id="inputName" value="<?=trim($user['date_naissance']);?>">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('lieu naissance'))?></label>
+
+                            <div class="col-sm-10">
+                              <input type="text" name="Lieu_naissance" class="form-control" id="inputName" value="<?=trim($user['Lieu_naissance']);?>">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('genre'))?></label>
+
+                            <div class="col-sm-10">
+                              <select name="genre" class="form-control" id="w3-don" required="">
+                                  <option value="H" <?= $user['genre'] == 'H' ? 'selected':'' ?> ><?= get_phrase("Homme") ?></option>
+                                  <option value="F" <?= $user['genre'] == 'F' ? 'selected':'' ?> ><?=get_phrase("Femme") ?></option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputEmail" class="col-sm-2 control-label"><?=ucfirst(get_phrase('email'))?></label>
+
+                            <div class="col-sm-10">
+                              <input type="email" class="form-control" id="inputEmail" value="<?=trim($user['email']);?>">
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                            <label for="inputPhone" class="col-sm-2 control-label"><?=ucfirst(get_phrase('phone'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="email" class="form-control" id="inputEmail" placeholder="">
+                              <input type="tel" name="phone" class="form-control" id="inputPhone" value="<?=trim($user['phone']);?>">
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label for="inputPhone" class="col-sm-2 control-label">Phone</label>
+                            <label for="inputExperience" class="col-sm-2 control-label"><?=ucfirst(get_phrase('code postal'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="tel" class="form-control" id="inputPhone" placeholder="">
+                               <input type="tel" name="code_postal" class="form-control" id="inputPhone" value="<?=trim($user['code_postal']);?>">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputSkills" class="col-sm-2 control-label"><?=ucfirst(get_phrase('pays'))?></label>
+
+                            <div class="col-sm-10">
+                              <input name="pays" type="text" list="pays" class="form-control" id="inputSkills"  value="<?php if(isset($_POST['pays'])){ echo $_POST['pays'];}else{ echo trim($this->Crud_model->selectPaysById($user['pays'])); } ?>">
+                                <datalist id="pays">
+                                   <?php foreach ($listepays as $elmt) {?>
+                                     <option value="<?=$elmt['name']?>"></option>
+                                   <?php } ?>
+                                </datalist>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputSkills" class="col-sm-2 control-label"><?=ucfirst(get_phrase('ville'))?></label>
+
+                            <div class="col-sm-10">
+                              <input type="text" name="ville" class="form-control" id="inputSkills" value="<?=trim($user['ville']);?>">
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
+                            <label for="inputSkills" class="col-sm-2 control-label"><?=ucfirst(get_phrase('region'))?></label>
 
                             <div class="col-sm-10">
-                              <textarea class="form-control" id="inputExperience" placeholder=""></textarea>
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label for="inputSkills" class="col-sm-2 control-label">Skills</label>
-
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" id="inputSkills" placeholder="">
+                              <input type="text" name="region" class="form-control" id="inputSkills" value="<?=trim($user['region']);?>">
                             </div>
                           </div>
                           <div class="form-group row">
                             <div class="ml-auto col-sm-10">
-                              <div class="checkbox">
-                                <input type="checkbox" id="basic_checkbox_1" checked="">
-                                <label for="basic_checkbox_1"> I agree to the</label>
-                                  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#">Terms and Conditions</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <div class="ml-auto col-sm-10">
-                              <button type="submit" class="btn btn-rounded btn-success">Submit</button>
+                              <button type="submit" class="btn btn-rounded btn-primary"><?=ucfirst(get_phrase('modifier'))?></button>
                             </div>
                           </div>
                         </form>
@@ -178,14 +182,15 @@
                       <div class="row">
                         <div class="col-12">
                             <div>
-                                <p>Email :<span class="text-gray pl-10">David@yahoo.com</span> </p>
-                                <p>Phone :<span class="text-gray pl-10">+11 123 456 7890</span></p>
-                                <p>Address :<span class="text-gray pl-10">123, Lorem Ipsum, Florida, USA</span></p>
+                                <p><?=ucwords(get_phrase('email'))?> :<span class="text-gray pl-10"><?=trim($user['email'])?></span> </p>
+                                <p><?=ucwords(get_phrase('phone'))?> :<span class="text-gray pl-10"><?=trim($user['phone'])?></span></p>
+                                <p><?=ucwords(get_phrase('adresse'))?> :<span class="text-gray pl-10"><?=trim($user['ville']);?>, <?php echo trim($this->Crud_model->selectPaysById($user['pays']));?></span></p>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="pb-15">                     
-                                <p class="mb-10">Social Profile</p>
+                                <p class="mb-10"><?=ucwords(get_phrase('social profile'))?></p>
+                                <?php $social_reseau = json_decode($user['social_reseau']); ?>
                                 <div class="user-social-acount">
                                     <button class="btn btn-circle btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></button>
                                     <button class="btn btn-circle btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></button>
@@ -193,7 +198,6 @@
                                 </div>
                             </div>
                         </div>
-                        
                       </div>
                     </div>
                     <!-- /.box-body -->
@@ -201,45 +205,16 @@
                   
                 <div class="box box-widget widget-user">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-black" style="background: url('../../images/gallery/full/10.jpg') center center;">
+                    <!-- <div class="widget-user-header bg-black" style="background: url('../../images/gallery/full/10.jpg') center center;">
                       <h3 class="widget-user-username">Michael Jorden</h3>
                       <h6 class="widget-user-desc">Designer</h6>
-                    </div>
-                    <div class="widget-user-image">
+                    </div> -->
+                   <!--  <div class="widget-user-image">
                       <img class="rounded-circle" src="../../images/user3-128x128.jpg" alt="User Avatar">
-                    </div>
-                    <div class="box-footer">
-                      <div class="row">
-                        <div class="col-sm-4">
-                          <div class="description-block">
-                            <h5 class="description-header">12K</h5>
-                            <span class="description-text">FOLLOWERS</span>
-                          </div>
-                          <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4 br-1 bl-1">
-                          <div class="description-block">
-                            <h5 class="description-header">550</h5>
-                            <span class="description-text">FOLLOWERS</span>
-                          </div>
-                          <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4">
-                          <div class="description-block">
-                            <h5 class="description-header">158</h5>
-                            <span class="description-text">TWEETS</span>
-                          </div>
-                          <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                      </div>
-                      <!-- /.row -->
-                    </div>
+                    </div> -->
                   </div>
 
-                <div class="box">
+                <!-- <div class="box">
                     <div class="box-body">
                         <div class="flexbox align-items-baseline mb-20">
                           <h6 class="text-uppercase ls-2">Friends</h6>
@@ -276,7 +251,7 @@
                       <span><i class="fa fa-heart"></i> 75</span>
                     </div>
                   </blockquote>
-                </div>
+                </div> -->
 
               </div>
                                 
