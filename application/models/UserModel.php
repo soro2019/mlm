@@ -179,6 +179,25 @@ class UserModel extends CI_Model {
              return 0;
          }
     }
+
+    public function selectMesFieulles($pseudo, $limit="")
+    {
+
+        if($limit!="")
+        {
+          $this->db->limit($limit);
+        }
+        $this->db->select('*');
+        $this->db->from($this->Table);
+        $this->db->where('pseudo_parrain',$pseudo);
+        $this->db->order_by('created_on','DESC');
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+             return $query->result_array();
+         } else {
+             return 0;
+         }
+    }
     
     public function getdateInscription($pseudo)
 	{  

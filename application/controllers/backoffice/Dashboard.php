@@ -8,7 +8,7 @@ class Dashboard extends Backoffice_Controller
   function __construct()
   {
     parent::__construct();
-    $this->load->model('UserModel');
+    $this->load->model(['UserModel', 'Crud_model']);
 
     $this->data['pseudo'] = $this->session->userdata('identity');
     $membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
@@ -34,9 +34,28 @@ class Dashboard extends Backoffice_Controller
       $this->data['page_description'] = get_phrase('dashboard');
       $this->data['page_author'] = get_phrase('dashboard');
       
-      //$this->data['membreNiveau1'] = $this->MesFilleulsModel->tousmembresniveau(1);
+      $this->data['mesFieulles'] = $this->UserModel->selectMesFieulles($this->session->userdata('identity'), 3);
       
       $this->render('backoffice/dashboard_view');
+  }
+
+  public function modaldInfoFieulle()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+         redirect('connexion');
+      }
+      $user = $this->Crud_model->GetUserDataByPseudo($_POST['pseudo']);
+      $result = '<div class="modal-body">
+                   <div class="row">
+                       <div class="col-sm-6">'.ucfirst(get_phrase('pseudo')).' : '.trim($user['pseudo']).'                         
+                       </div>
+                       <div class="col-sm-6">'.ucfirst(get_phrase('pseudo')).' : '.trim($user['pseudo']).'                         
+                       </div>
+                    </div><br>
+                  </div>
+                  ';
+        echo json_encode($result);
   }
     
   public function mon_reseau($lang='')
