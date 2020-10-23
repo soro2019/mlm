@@ -11,6 +11,92 @@
             $this->load->library('form_validation');
             $this->load->helper('form');
         }
+
+
+        function select_filleuls($parrain,$matrice)
+        {
+            $this->db->select('pseudo_filleulGauche, pseudo_filleulDroit');
+            $this->db->from('matrices');
+            $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice ));
+            $query = $this->db->get();
+            return = $query->result_array();           
+        }
+
+        function compte_filleuls($parrain,$niveau)
+        {
+            $filleuls = $this->select_filleuls($parrain,$matrice);
+            if($filleuls['pseudo_filleulGauche'] == "")
+            {
+                return 0;
+            }
+            elseif($filleuls['pseudo_filleulDroit'] == "")
+            {
+                return 1;
+            }
+            else{
+                return 2;
+            }
+        }
+
+        function compte_descendants($parrain,$niveau)
+        {
+            $nb = 0;
+            $parrains_a_compter = array();
+            do{
+                $filleuls = $this->select_filleuls($parrain, $matrice);
+                if($filleuls['pseudo_filleulGauche'] != "")
+                {
+                    array_push($parrains_a_compter, $filleuls['pseudo_filleulGauche']);
+                }
+                if($filleuls['pseudo_filleulDroit'] != "")
+                {
+                    array_push($parrains_a_compter, $filleuls['pseudo_filleulDroit']);
+                }
+                $parrain = array_shift($parrains_a_compter);
+                $nb+=$this->compte_filleuls($parrain,$niveau);
+
+            }while(count($parrains_a_compter) != 0);
+        }
+
+        function choix_filleul($fg,$fd,$niveau)
+        {
+            return $this->compte_descendants($fg,$niveau) >= $this->compte_descendants($fg,$niveau) ? $fg : $fd;
+        }
+
+        function definir_parrain_de_matrice($pseudo_user,$parrain,$matrice)
+        {
+            $filleuls = $this->select_filleuls($parrain,$matrice);
+
+            if($filleuls['pseudo_filleulGauche'] == "")
+            {
+                ////insertion comme filleulGauche
+                // Insérer une donnée dans la table "mytable"
+
+                $data_parrain = array(
+                    'niveau' => $matrice,
+                    'pseudo_user' => $parrain,
+                    'pseudo_filleulGauche' = $pseudo_user,
+                    'date' => time());
+                $this->db->insert('matrices',$data_parrain); 
+            }
+            elseif($filleuls['pseudo_filleulDroit'] == "")
+            {
+                ////insertion comme filleulDroit
+                $data_parrain = array(
+                    'niveau' => $matrice,
+                    'pseudo_user' => $parrain,
+                    'pseudo_filleulDroit' = $pseudo_user,
+                    'date' => time());
+                $this->db->insert('matrices',$data_parrain);
+            }
+            else{
+                ////prendre celui qui a le moins de descandants
+                $filleulChoisis = $this->choix_filleul($filleuls['pseudo_filleulGauche'],$filleuls['pseudo_filleulDroit'],$niveau);
+                $this->definir_parrain_de_matrice($user_data,$filleulChoisis,$matrice);
+
+            }
+
+        }
         /*fuction page home*/
         public function home($lang=''){
             $this->data['titre'] = 'home';
@@ -62,8 +148,11 @@
                     $pseudo = test_inputValide($this->input->post('pseudo'));
                     $password = test_inputValide($this->input->post('userpass'));
                     $mail = test_inputValide(strtolower($this->input->post('usermail')));
+
+                    $parrain = test_inputValide($this->input->post('parrain'));
+                    $matrice =1;
                     $additional_data = array(
-                            'pseudo_parrain' => test_inputValide($this->input->post('parrain')),
+                            'pseudo_parrain' => $parrain,
                             'phone' => test_inputValide($this->input->post('phonenumber')),
                             'company' => "MEMBRE",
                             'created_on' => time(),
@@ -71,6 +160,14 @@
 
                     if($this->ion_auth->register($pseudo, $password, $mail, $additional_data, $group_ids))
                     {
+                        $matrice =1;
+                        $data_filleul = array(
+                            'niveau' => $matrice,
+                            'pseudo_user' => $pseudo_user,
+                            'date' => time());
+                        $this->db->insert('matrices',$data_filleul);
+
+                        definir_parrain_de_matrice($pseudo,$parrain,$matrice)
                         $souvenir = (bool) 1;
                         if ($this->ion_auth->login($pseudo, $password, $souvenir))
                         {
