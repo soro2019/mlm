@@ -142,7 +142,7 @@
 			  <!-- sidebar menu-->
 			  <ul class="sidebar-menu" data-widget="tree">
 
-				<li class="header nav-small-cap"><?=strtoupper(get_phrase('menu principal'))?></li>
+				<li class="header nav-small-cap"><?=strtoupper(get_phrase('menu principal'))?></li> 
 
 					<li <?php if($titre == 'dashboard') echo 'class="active"';?>>
 						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice');?>">
@@ -161,7 +161,7 @@
 						</a>
 						<ul class="treeview-menu">
 							<li <?php if($titre == 'Buy investment package') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/buy-investment-package');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/mon_reseau');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("mon reseau actuel"))?>
 								</a>
@@ -171,7 +171,7 @@
 							 {*/
 							?>
 							<li <?php if($titre == 'My investment package') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/my-investment-package');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/matrice/1');?>">
 									<i class="ti-more"></i>
 									<?=get_phrase("Matrice 1") ?>
 								</a>
@@ -190,19 +190,19 @@
 						</a>
 						<ul class="treeview-menu">
 							<li <?php if($titre == 'New partners registration') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/new-partners-registration');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/operation_financiere');?>">
 									<i class="ti-more"></i>
 									<?= get_phrase("Mes opérations financières")?>
 								</a>
 							</li>
 							<li <?php if($titre == 'Partners list') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/partners-list');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/transferts_interne');?>">
 									<i class="ti-more"></i>
-									<?= get_phrase("Transfert internes")?>
+									<?= get_phrase("Transferts interne")?>
 								</a>
 							</li>
 							<li <?php if($titre == 'Your level') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/your-level');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/souscription');?>">
 									<i class="ti-more"></i>
 									<?= get_phrase("Faire l'achat initial")?>
 								</a>
@@ -211,7 +211,7 @@
 						</ul>
 					</li>  
 					<li <?php if($titre == 'My documents') echo 'class="active"';?>>
-						<a href="<?php echo site_url('backoffice/my-documents');?>">
+						<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/messagerie');?>">
 							<i class="ti-dashboard"></i>
 							<span><?= get_phrase("Messagerie")?></span>
 						</a>
@@ -227,13 +227,13 @@
 						</a>
 						<ul class="treeview-menu">
 							<li <?php if($titre == 'Profile data') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/profile-data');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/my-info');?>">
 									<i class="ti-more"></i>
 									<?= get_phrase("Mon Profil")?>
 								</a>
 							</li>
 							<li <?php if($titre == 'Security') echo 'class="active"';?>>
-								<a href="<?php echo site_url('backoffice/security');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/securite');?>">
 									<i class="ti-more"></i>
 									<?= get_phrase("Sécurité")?>
 								</a>
@@ -243,14 +243,14 @@
 					</li> 
 
 					<li <?php if($titre == 'Promotional materials') echo 'class="active"';?>>
-						<a href="<?php echo site_url('backoffice/promotional-materials');?>">
+						<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/materiel_marketing');?>">
 							<i class="ti-dashboard"></i>
 							<span><?= get_phrase("Matériels marketing")?></span>
 						</a>
 					</li>
 
 					<li <?php if($titre == 'Signup new partner') echo 'class="active"';?>>
-						<a href="<?php echo site_url('backoffice/signup-new-partner');?>">
+						<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/nouveau_partenaire');?>">
 							<i class="ti-dashboard"></i>
 							<span><?= get_phrase("Ajouter un nouveau partenaire")?></span>
 						</a>
@@ -264,37 +264,37 @@
 							</span>
 							<ul class="treeview-menu">
 								<li>
-									<a href="" class="ti-more">
+									<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/webinaire');?>" class="ti-more">
 										<?= get_phrase("Webinaire")?>
 									</a>
 								</li>
 								<li>
-									<a href="" class="ti-more">
+									<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/conferences');?>" class="ti-more">
 										<?= get_phrase("Conférences")?>
 									</a>
 								</li>
 								<li>
-									<a href="" class="ti-more">
+									<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/actualites');?>" class="ti-more">
 										<?= get_phrase("Actualités")?>
 									</a>
 								</li>
 								<li>
-									<a href="" class="ti-more">
+									<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/support_technique');?>" class="ti-more">
 										<?= get_phrase("Support technique")?>
 									</a>
 								</li>
 								<li>
-									<a href="" class="ti-more">
+									<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/faq');?>" class="ti-more">
 										<?= get_phrase("FAQ")?>
 									</a>
 								</li>
 								<li>
-									<a href="" class="ti-more">
+									<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/politique_confidentialite');?>" class="ti-more">
 										<?= get_phrase("Politique de confidentialité")?>
 									</a>
 								</li>
 								<li>
-									<a href="" class="ti-more">
+									<a href="<?php echo site_url(trim($_SESSION['language']).'backoffice/mention_legale');?>" class="ti-more">
 										<?= get_phrase("Mention légales")?>
 									</a>
 								</li>
