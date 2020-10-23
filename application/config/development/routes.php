@@ -219,6 +219,7 @@ $route['connexion'] = 'pages/connexion/en';
 
 
 ///BACKOFFICE ROUTE
+ 
 $route['(fr|en)/backoffice'] = 'backoffice/dashboard/index/$1';
 $route['backoffice'] = 'backoffice/dashboard/index/en';
 
@@ -226,7 +227,55 @@ $route['(fr|en)/backoffice/my-info'] = 'backoffice/membre/modifier_profil/$1';
 $route['backoffice/my-info'] = 'backoffice/membre/modifier_profil/en';
 
 $route['(fr|en)/backoffice/my-profile'] = 'backoffice/membre/profil/$1';
-$route['(fr|en)/backoffice/my-profile'] = 'backoffice/membre/profil/en';
+$route['backoffice/my-profile'] = 'backoffice/membre/profil/en';
+
+$route["(fr|en)/backoffice/mon_reseau"] = 'backoffice/dashboard/mon_reseau/$1';
+$route["backoffice/mon_reseau"] = 'backoffice/dashboard/mon_reseau';
+
+$route["(fr|en)/backoffice/matrice"] = 'backoffice/dashboard/matrice/$1/$2';
+$route["backoffice/matrice"] = 'backoffice/dashboard/matrice/$2';
+
+$route["(fr|en)/backoffice/operation_financiere"] = 'backoffice/dashboard/operation_financiere/$1';
+$route["backoffice/operation_financiere"] = 'backoffice/dashboard/operation_financiere';
+
+$route["(fr|en)/backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne/$1';
+$route["backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne';
+
+$route["(fr|en)/backoffice/souscription"] = 'backoffice/dashboard/souscription/$1';
+$route["backoffice/souscription"] = 'backoffice/dashboard/souscription';
+
+$route["(fr|en)/backoffice/messagerie"] = 'backoffice/dashboard/messagerie/$1';
+$route["backoffice/messagerie"] = 'backoffice/dashboard/messagerie';
+
+$route["(fr|en)/backoffice/securite"] = 'backoffice/dashboard/securite/$1';
+$route["backoffice/securite"] = 'backoffice/dashboard/securite';
+
+$route["(fr|en)/backoffice/materiel_marketing"] = 'backoffice/dashboard/materiel_marketing/$1';
+$route["backoffice/materiel_marketing"] = 'backoffice/dashboard/materiel_marketing';
+
+$route["(fr|en)/backoffice/nouveau_partenaire"] = 'backoffice/dashboard/nouveau_partenaire/$1';
+$route["backoffice/nouveau_partenaire"] = 'backoffice/dashboard/nouveau_partenaire';
+
+$route["(fr|en)/backoffice/webinaire"] = 'backoffice/dashboard/webinaire/$1';
+$route["backoffice/webinaire"] = 'backoffice/dashboard/webinaire';
+
+$route["(fr|en)/backoffice/conferences"] = 'backoffice/dashboard/conferences/$1';
+$route["backoffice/conferences"] = 'backoffice/dashboard/conferences';
+
+$route["(fr|en)/backoffice/actualites"] = 'backoffice/dashboard/actualites/$1';
+$route["backoffice/actualites"] = 'backoffice/dashboard/actualites';
+
+$route["(fr|en)/backoffice/support_technique"] = 'backoffice/dashboard/support_technique/$1';
+$route["backoffice/support_technique"] = 'backoffice/dashboard/support_technique';
+
+$route["(fr|en)/backoffice/faq"] = 'backoffice/dashboard/faq/$1';
+$route["backoffice/faq"] = 'backoffice/dashboard/faq';
+
+$route["(fr|en)/backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite/$1';
+$route["backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite';
+
+$route["(fr|en)/backoffice/mention_legale"] = 'backoffice/dashboard/mention_legale/$1';
+$route["backoffice/mention_legale"] = 'backoffice/dashboard/mention_legale';
 
 
 

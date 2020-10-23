@@ -39,22 +39,309 @@ class Dashboard extends Backoffice_Controller
       $this->render('backoffice/dashboard_view');
   }
     
-    
-   public function mon_reseau()
+  public function mon_reseau($lang='')
   {
-      if(!$this->ion_auth->logged_mlm_in())
-      {
-        redirect('connexion');
-      }
-      $this->data['page_title'] = 'Mon réseau';
-      $this->data['titre'] = 'reseau';
-        
-      $users = $this->MesFilleulsModel->MesFilleuls($this->session->userdata('identity'));
-      $this->data['users'] = $users;
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
 
-      $this->render('backoffice/monreseau_view','backoffice_master');
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/reseau_view');
       
   }
+
+  public function matrice($lang='',$nieme)
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/matrice_view');
+      
+  }
+
+  public function operation_financiere($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/operation_financiere_view');
+      
+  }
+  
+  public function transferts_interne($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/transferts_interne_view');
+      
+  }
+  
+  public function souscription($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/souscription_view');
+      
+  }
+  
+  public function messagerie($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/messagerie_view');
+      
+  }
+  
+  public function securite($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/securite_view');
+      
+  }
+
+  public function materiel_marketing($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/materiel_marketing_view');
+      
+  }
+  
+  public function nouveau_partenaire($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/nouveau_partenaire_view');
+      
+  }
+
+  public function webinaire($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/webinaire');
+      
+  }
+
+  public function conferences($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/conferences');
+      
+  }
+
+  public function actualites($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/actualites');
+      
+  }
+
+  public function support_technique($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/support_technique');
+      
+  }
+
+  public function faq($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/faq');
+      
+  }
+
+  public function politique_confidentialite($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/politique_confidentialite');
+      
+  }
+
+  public function mention_legale($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect('connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
+
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
+    $this->render('backoffice/mention_legale');
+      
+  }
+
+  //  public function mon_reseau()
+  // {
+  //     if(!$this->ion_auth->logged_mlm_in())
+  //     {
+  //       redirect('connexion');
+  //     }
+  //     $this->data['page_title'] = 'Mon réseau';
+  //     $this->data['titre'] = 'reseau';
+        
+  //     $users = $this->MesFilleulsModel->MesFilleuls($this->session->userdata('identity'));
+  //     $this->data['users'] = $users;
+
+  //     $this->render('backoffice/monreseau_view','backoffice_master');
+      
+  // }
   
   public function mon_arbre()
   {
