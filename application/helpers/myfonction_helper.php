@@ -53,7 +53,7 @@ if ( !function_exists('defineLanguage'))
   {
     $CI =&  get_instance();
     if ($lang == '') { 
-      $CI->session->set_userdata('language' , 'fr');
+      $CI->session->set_userdata('language' , 'en');
     }else{
       $CI->session->set_userdata('language' , $lang);
     }
