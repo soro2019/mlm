@@ -43,4 +43,15 @@ class Crud_model extends CI_Model {
     	}
     }
 
+    public function selectArticle($categorie)
+    {
+      $this->db->select('*');
+      $this->db->from('articles');
+      $this->db->where('id_categorie', $categorie);
+      $query = $this->db->get();
+      if($query->num_rows() > 0){
+          return $query->result_array();
+      }else return 0;
+    }
+
 }

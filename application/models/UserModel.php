@@ -166,6 +166,21 @@ class UserModel extends CI_Model {
 		 }
    	}
 
+
+    public function GetUserDataById($id)
+    {  
+        $this->db->select('*');
+        $this->db->from($this->Table);
+        $this->db->where("id", $id);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        if ($query) {
+             return $query->row_array();
+         } else {
+             return false;
+         }
+    }
+
     public function membresreseauperso($pseudo)
     {
             $this->db->select('pseudo_parrain');

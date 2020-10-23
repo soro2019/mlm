@@ -146,7 +146,7 @@
 							<h3 class="card-title text-center"><?=get_phrase("Mon Niveau")?></h3>
 							
 							<h3 class="card-title text-center">Matrice 4</h3>
-							<h3 class="card-title text-center">2/4</h3>
+							<h3 class="card-title text-center">2/6</h3>
 
 						</div>
 					</div>
@@ -164,7 +164,7 @@
 								<div class="col-lg-12"><?=ucfirst(get_phrase("pseudo"))?>: <?=trim($elmt['pseudo'])?></div>
 								<div class="col-lg-12"><?=ucfirst(get_phrase("date d'ajout"))?>: <?=date('d/m/Y à H:i:s',trim($elmt['created_on']))?></div>
 								<div class="col-lg-12">
-                                 <a href="#" data-backdrop="static" data-toggle="modal" class="btn btn-info" data-toggle="modal" onclick="infouser(<?=trim($elmt['id'])?>)">
+                                 <a href="#" data-backdrop="static" data-toggle="modal" class="btn btn-primary" data-target="#userinfo" data-toggle="modal" onclick="infouser(<?=trim($elmt['id'])?>)">
                                    <?=get_phrase("voir")?>+
                                  </a>
                                 </div>
@@ -174,109 +174,165 @@
 						</div>
 					</div>
 				</div><hr><br>         
-                
+                <?php if($actualites!=0){ ?>
                 <div class="row">
                     <div class="col-md-12">
-                        <h2><?=ucfirst(get_phrase("actualité"))?></h2>
+                        <h2><?=ucfirst(get_phrase("actualités"))?></h2>
                     </div>
                 </div><br>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2007</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2008</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2009</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                </div>
+                </div><br>
+                <?php } ?>
+
                 <div class="row">
                     <div class="col-md-12">
                         <h2><?=ucfirst(get_phrase("webinaire à venir"))?></h2>
                     </div>
                 </div><br>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2007</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2008</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2009</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                </div>
+                </div><br>
                 <div class="row">
                     <div class="col-md-12">
                         <h2><?=ucfirst(get_phrase("conférences"))?></h2>
                     </div>
                 </div><br>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2007</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2008</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card">
-                        <!-- <img class="card-img-top" src="../images/avatar/375x200/1.jpg" alt="Card image cap"> -->
-                            <div class="card-body">
-                                <h3 class="card-title text-center"><?=ucfirst(get_phrase("titre"))?>: Bonjour 2020</h3>
-                                <h4 class="card-title text-center"><?=ucfirst(get_phrase("date du webinaire"))?>: 15/03/2009</h4>
+                    <div class="col-4">
+                        <div class="news-slider">
+                            <div class="box">
+                                <img class="card-img-top img-responsive" src="<?=site_url('assets/member/')?>images/card/img1.jpg" alt="Card image cap">
+                                <div class="box-body"> 
+                                    <div class="text-center">
+                                        <h4 class="box-title">Blog title</h4>
+                                        <p class="box-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
-                </div>
+                </div><br>
                 
                 
                 <div class="col-md-12 col-12">
@@ -332,19 +388,19 @@
                 document.querySelector("#copy").addEventListener("click", copy);
 
 
-                function infouser(pseudo){
+                function infouser(id){
 
-                    alert(pseudo);
-                    /*var base_url = "<?php echo base_url('backoffice/dashboard/');?>";
+                    //alert(pseudo);
+                    var base_url = "<?php echo base_url('backoffice/dashboard/');?>";
                     $.ajax({
                             url: base_url+'modaldInfoFieulle/',
                             type: 'POST',
-                            data : {pseudo : pseudo},
+                            data : {id : id},
                             dataType: 'json',
                             success:function(response) {
                                 document.getElementById('infouser').innerHTML=response;
                             }
-                        });*/
+                        });
                      
                   }
 

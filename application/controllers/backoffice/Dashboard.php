@@ -35,6 +35,8 @@ class Dashboard extends Backoffice_Controller
       $this->data['page_author'] = get_phrase('dashboard');
       
       $this->data['mesFieulles'] = $this->UserModel->selectMesFieulles($this->session->userdata('identity'), 3);
+
+      $this->data['actualites'] = $this->Crud_model->selectArticle(1);
       
       $this->render('backoffice/dashboard_view');
   }
@@ -45,16 +47,59 @@ class Dashboard extends Backoffice_Controller
       {
          redirect('connexion');
       }
-      $user = $this->Crud_model->GetUserDataByPseudo($_POST['pseudo']);
+      $user = $this->UserModel->GetUserDataById($_POST['id']);
+      //var_dump($user);die;
+      $genre = $user['genre'] == 'H' ? 'Homme':'Femme';
+      /*if($user['genre']=='F')
+      {
+        $genre = "Femme";
+      }*/
       $result = '<div class="modal-body">
                    <div class="row">
-                       <div class="col-sm-6">'.ucfirst(get_phrase('pseudo')).' : '.trim($user['pseudo']).'                         
+                       <div class="col-sm-5">'.ucfirst(get_phrase('pseudo')).' : <b>'.trim($user['pseudo']).'</b>                         
                        </div>
-                       <div class="col-sm-6">'.ucfirst(get_phrase('pseudo')).' : '.trim($user['pseudo']).'                         
+                       <div class="col-sm-7">'.ucfirst(get_phrase("date d'ajout")).' : <b>'.date('d/m/Y à H:i:s',trim($user['created_on'])).'</b>                       
+                       </div>
+                    </div><br>
+                    <div class="row">
+                       <div class="col-sm-5">'.ucfirst(get_phrase('email')).' : <b>'.trim($user['email']).'</b>                         
+                       </div>
+                       <div class="col-sm-7">'.ucfirst(get_phrase("phone")).' : <b>'.trim($user['phone']).'</b>                       
+                       </div>
+                    </div><br>
+                    <div class="row">
+                       <div class="col-sm-5">'.ucfirst(get_phrase('nom')).' : <b>'.trim($user['first_name']).'</b>                         
+                       </div>
+                       <div class="col-sm-7">'.ucfirst(get_phrase("prenoms")).' : <b>'.trim($user['last_name']).'</b>                       
+                       </div>
+                    </div><br>
+                    <div class="row">
+                       <div class="col-sm-6">'.ucfirst(get_phrase('date naissance')).' : <b>'.trim(formtageDate22($user['date_naissance'])).'</b>                         
+                       </div>
+                       <div class="col-sm-6">'.ucfirst(get_phrase("lieu naissance")).' : <b>'.trim($user['Lieu_naissance']).'</b>                       
+                       </div>
+                    </div><br>
+                    <div class="row">
+                       <div class="col-sm-5">'.ucfirst(get_phrase('genre')).' : <b>'.$genre.'</b>                         
+                       </div>
+                       <div class="col-sm-7">'.ucfirst(get_phrase("ville")).' : <b>'.trim($user['ville']).'</b>                       
+                       </div>
+                    </div><br>
+                    <div class="row">
+                       <div class="col-sm-6">'.ucfirst(get_phrase('region')).' : <b>'.trim(ucfirst($user['region'])).'</b>                        
+                       </div>
+                       <div class="col-sm-6">'.ucfirst(get_phrase('code postal')).' : <b>'.trim($user['code_postal']).'</b>                        
+                       </div>
+                    </div><br>
+
+                    <div class="row">
+                       <div class="col-sm-12">'.ucfirst(get_phrase('pays')).' : <b>'.trim($this->Crud_model->selectPaysById($user['pays'])).'</b>                        
                        </div>
                     </div><br>
                   </div>
                   ';
+
+                  
         echo json_encode($result);
   }
     
