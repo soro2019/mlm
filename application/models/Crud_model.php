@@ -43,11 +43,16 @@ class Crud_model extends CI_Model {
     	}
     }
 
-    public function selectArticle($categorie)
+    public function selectArticle($categorie, $limit="")
     {
+        if($limit!="")
+        {
+          $this->db->limit($limit);
+        }
       $this->db->select('*');
       $this->db->from('articles');
       $this->db->where('id_categorie', $categorie);
+      $this->db->order_by('id', 'DESC');
       $query = $this->db->get();
       if($query->num_rows() > 0){
           return $query->result_array();
