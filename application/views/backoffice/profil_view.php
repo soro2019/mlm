@@ -42,7 +42,7 @@
               <div class="nav-tabs-custom box-profile">
                 <ul class="nav nav-tabs">
                    <!--  <li><a href="#Module" data-toggle="tab">Module</a></li> -->
-                    <li><a href="#settings" data-toggle="tab"><?=ucfirst(get_phrase('settings'))?></a></li>
+                    <li><a href="#settings" data-toggle="tab"><?=ucwords(get_phrase('profil settings'))?></a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -65,7 +65,7 @@
                     </div> 
                   </div>   -->  
 
-                  <div class="active tab-pane" id="settings">  
+                  <div class="tab-pane active" id="settings">  
                     <div class="box p-15">      
                         <form class="form-horizontal form-element col-12" method="POST" action="">
                           <div class="form-group row">
