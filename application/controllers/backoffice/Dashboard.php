@@ -25,9 +25,11 @@ class Dashboard extends Backoffice_Controller
        defineLanguage($lang);
       if(!$this->ion_auth->logged_mlm_in())
       {
-        redirect('connexion');
+        redirect(trim($_SESSION['language']).'/connexion');
       }
       $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+
+      $matrice = $this->data['membre']['niveau'];
       
       $this->data['titre'] = get_phrase('dashboard');
 
@@ -36,8 +38,18 @@ class Dashboard extends Backoffice_Controller
       
       $this->data['mesFieulles'] = $this->UserModel->selectMesFieulles($this->session->userdata('identity'), 3);
 
-      $this->data['actualites'] = $this->Crud_model->selectArticle(1);
-      
+      $this->data['actualites'] = $this->Crud_model->selectArticle(1, 3);
+      $this->data['conferneces'] = $this->Crud_model->selectArticle(2, 3);
+      $this->data['webinaires'] = $this->Crud_model->selectArticle(3, 3);
+
+      $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
+
+      $this->data['compactmatrice'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 1);
+
+      $this->data['compactbonus'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 2);
+
+      $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
+      $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), $matrice);
       $this->render('backoffice/dashboard_view');
   }
 
@@ -102,7 +114,7 @@ class Dashboard extends Backoffice_Controller
                   
         echo json_encode($result);
   }
-    
+
   public function mon_reseau($lang='')
   {
     defineLanguage($lang);
@@ -112,14 +124,32 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = get_phrase('mon réseau');
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = get_phrase('mon réseau');
+    $this->data['page_author'] = get_phrase('mon réseau');
     
     $this->render('backoffice/reseau_view');
-      
   }
+
+  public function souscription($lang='')
+  {
+    defineLanguage($lang);
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect(trim($_SESSION['language']).'/connexion');
+    }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('achat initial');
+
+    $this->data['page_description'] = get_phrase('achat initial');
+    $this->data['page_author'] = get_phrase('achat initial');
+    
+    $this->render('backoffice/souscription_view');
+  }
+    
+  
 
   public function matrice($lang='',$nieme)
   {
@@ -175,23 +205,7 @@ class Dashboard extends Backoffice_Controller
       
   }
   
-  public function souscription($lang='')
-  {
-    defineLanguage($lang);
-    if(!$this->ion_auth->logged_mlm_in())
-    {
-      redirect('connexion');
-    }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-    
-    $this->data['titre'] = get_phrase('dashboard');
-
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
-    
-    $this->render('backoffice/souscription_view');
-      
-  }
+  
   
   public function messagerie($lang='')
   {

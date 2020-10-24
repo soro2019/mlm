@@ -76,7 +76,7 @@ class Backoffice_Controller extends MY_Controller
     if (!$this->ion_auth->logged_mlm_in())
     {
       //redirect them to the login page
-      redirect('login-signup', 'refresh');
+      redirect('connexion', 'refresh');
     }
       
     $this->data['page_title'] = 'Shappinvest - Backoffice';

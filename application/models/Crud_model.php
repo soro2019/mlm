@@ -59,4 +59,36 @@ class Crud_model extends CI_Model {
       }else return 0;
     }
 
+    public function mescomptes($pseudo)
+    {
+      $this->db->select('*');
+      $this->db->from('comptes');
+      $this->db->where(array('pseudo_propio' => $pseudo));
+      $query = $this->db->get();
+      if($query->num_rows() > 0){
+          return $query->result_array();
+      }else return 0;
+    }
+
+    public function moncomptes($pseudo, $type)
+    {
+      $this->db->select('*');
+      $this->db->from('comptes');
+      $this->db->where('typecompte', $type);
+      $query = $this->db->get();
+      if($query->num_rows() == 1){
+          return $query->row_array();
+      }else return 0;
+    }
+
+
+    public function select_filleuls($parrain, $matrice)
+    {
+        $this->db->select('*');
+        $this->db->from('matrices');
+        $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice));
+        $query = $this->db->get();
+        return $query->row_array();           
+    }
+
 }

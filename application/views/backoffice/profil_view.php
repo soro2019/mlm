@@ -7,6 +7,21 @@
                     
                 </div>
             </div>
+            <?php if(empty($membre['first_name']) || empty($membre['last_name']) || empty($membre['genre']) || empty($membre['Lieu_naissance']) || empty($membre['date_naissance']) || empty($membre['pays']) || empty($membre['phone']) || empty($membre['ville']) || empty($membre['region']) /*|| empty($membre['code_postal'])*/){ ?>
+                   <div class="col-xl-12 col-12">
+                        <div class="row">
+                            <div class="col-md-12 col-12">
+                                <div class="alert alert-danger alert-dismissible">
+                                    <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
+                                    <h4>
+                                    <i class="icon fa fa-check"></i><?=get_phrase('Information')?>
+                                    </h4>
+                                    <a href="<?=site_url(trim($_SESSION['language']).'/backoffice/my-info')?>" style="text-decoration: none;"><?=ucfirst(get_phrase('pour bénéficier entièrement des avantages du réseau merci de compléter vos informations'));?></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
 
             <div class="row">
                 <div class="col-12">

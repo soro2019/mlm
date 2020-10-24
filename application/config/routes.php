@@ -57,7 +57,6 @@ $route['default_controller'] = 'pages/accueil';
 */
 
 $route['backoffice'] = 'backoffice/dashboard';
-$route['login-signup'] = 'pages/connexion';
 $route['inscription'] = 'backoffice/membre/inscription';
 $route['mot-de-passe-oublie'] = 'backoffice/membre/mdp_oublie';
 //$route['cafo-vita'] = 'backoffice/membre/inscription';

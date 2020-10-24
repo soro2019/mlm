@@ -50,30 +50,30 @@
                             <?php if($pseudo = $this->uri->segment(3)){}else{ $pseudo = "usermlm";} ?>
                              <?=get_phrase('Votre parrain est')?> : <?=$pseudo?>
                             <input type="hidden" name="parrain" value="<?=$pseudo?>">
-                            <input type="text" id="user-name" class="form-control" placeholder="<?=get_phrase('Votre pseudo')?>" required autofocus=""  title="<?=get_phrase('Votre pseudo')?>" name="pseudo" value="<?=isset_value('pseudo')?>">
+                            <input type="text" id="user-name" class="form-control" placeholder="<?=ucfirst(get_phrase('votre pseudo'))?>" required autofocus=""  title="<?=ucfirst(get_phrase('votre pseudo'))?>" name="pseudo" value="<?=isset_value('pseudo')?>">
 
-                            <input type="email" id="user-email" class="form-control" placeholder="<?=get_phrase('Votre adresse email')?>" required autofocus=""  title="<?=get_phrase('Votre adresse email')?>" name="usermail" value="<?=isset_value('usermail')?>">
+                            <input type="email" id="user-email" class="form-control" placeholder="<?=ucfirst(get_phrase('votre adresse email'))?>" required autofocus=""  title="<?=ucfirst(get_phrase('votre adresse email'))?>" name="usermail" value="<?=isset_value('usermail')?>">
 
-                            <input type="text" id="user-first-name" class="form-control" placeholder="<?=get_phrase('Ex: +22500000000')?>" required="" autofocus="" title="<?=get_phrase('Votre numéro de téléphone avec indicateur')?>" name="phonenumber" value="<?=isset_value('phonenumber')?>">
+                            <input type="text" id="user-first-name" class="form-control" placeholder="<?=ucfirst(get_phrase('ex: +22500000000'))?>" required="" autofocus="" title="<?=ucfirst(get_phrase('votre numéro de téléphone avec indicateur'))?>" name="phonenumber" value="<?=isset_value('phonenumber')?>">
                            
-                            <input type="password" name="userpass" id="new-password" class="form-control" placeholder="<?=get_phrase('Votre mot de passe')?>" required autofocus=""  title="<?=get_phrase('Votre mot de passe')?>">
+                            <input type="password" name="userpass" id="new-password" class="form-control" placeholder="<?=ucfirst(get_phrase('votre mot de passe'))?>" required autofocus=""  title="<?=ucfirst(get_phrase('votre mot de passe'))?>">
 
-                            <input type="password" id="user-conf-pass" class="form-control" placeholder="<?=get_phrase('Confirmer votre mot de passe')?>" required autofocus=""  title="<?=get_phrase('Confirmer votre mot de passe')?>" name="userconfpass">
+                            <input type="password" id="user-conf-pass" class="form-control" placeholder="<?=ucfirst(get_phrase('confirmer votre mot de passe'))?>" required autofocus=""  title="<?=ucfirst(get_phrase('confirmer votre mot de passe'))?>" name="userconfpass">
 
                             <div class="row" style="margin-bottom: 10px; ">
                                 <div class="col-sm-6"> 
-                                    <label for="w3-captcha"><?=get_phrase('Saisie dans captcha')?></label>
+                                    <label for="w3-captcha"><?=ucfirst(get_phrase('saisie dans captcha'))?></label>
                                     <div id="captcha">
                                     </div>
                                 </div>
                                 <div class="col-sm-6 ">
-                                    <label for="w3-captcha"><?=get_phrase('Securité')?></label>
+                                    <label for="w3-captcha"><?=ucfirst(get_phrase('securité'))?></label>
                                      <input type="text" class="form-control" placeholder="Captcha" id="cpatchaTextBox"/>
                                 </div>
                             </div>
 
-                            <input class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-btn-style-fill ttm-icon-btn-right ttm-btn-bgcolor-skincolor"  type="submit" title="" value="<?=get_phrase('S\'INSCRIRE')?>" name="register" onclick="actionform()">
-                            <a href="login-signup"  style="text-align: left; color:#0b0c26;"><i class="fa fa-angle-left"></i> <?=get_phrase('Retour')?></a>
+                            <input class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-btn-style-fill ttm-icon-btn-right ttm-btn-bgcolor-skincolor"  type="submit" title="" value="<?=strtoupper(get_phrase('s\'inscrire'))?>" name="register" onclick="actionform()">
+                            <a href="<?=site_url(trim($_SESSION['language']).'/connexion')?>"  style="text-align: left; color:#0b0c26;"><i class="fa fa-angle-left"></i> <?=ucfirst(get_phrase('retour'))?></a>
                         <?php echo form_close() ; ?>
                         <br>
                     </div>

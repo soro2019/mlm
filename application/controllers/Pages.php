@@ -10,21 +10,12 @@
             parent::__construct();
             $this->load->library('form_validation');
             $this->load->helper('form');
+            $this->load->model(['Crud_model']);
         }
 
-
-        function select_filleuls($parrain,$matrice)
+        private function compte_filleuls($parrain, $matrice)
         {
-            $this->db->select('pseudo_filleulGauche, pseudo_filleulDroit');
-            $this->db->from('matrices');
-            $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice ));
-            $query = $this->db->get();
-            return = $query->result_array();           
-        }
-
-        function compte_filleuls($parrain,$niveau)
-        {
-            $filleuls = $this->select_filleuls($parrain,$matrice);
+            $filleuls = $this->Crud_model->select_filleuls($parrain, $matrice);
             if($filleuls['pseudo_filleulGauche'] == "")
             {
                 return 0;
@@ -38,12 +29,12 @@
             }
         }
 
-        function compte_descendants($parrain,$niveau)
+        private function compte_descendants($parrain, $matrice)
         {
             $nb = 0;
             $parrains_a_compter = array();
             do{
-                $filleuls = $this->select_filleuls($parrain, $matrice);
+                $filleuls = $this->Crud_model->select_filleuls($parrain, $matrice);
                 if($filleuls['pseudo_filleulGauche'] != "")
                 {
                     array_push($parrains_a_compter, $filleuls['pseudo_filleulGauche']);
@@ -53,47 +44,42 @@
                     array_push($parrains_a_compter, $filleuls['pseudo_filleulDroit']);
                 }
                 $parrain = array_shift($parrains_a_compter);
-                $nb+=$this->compte_filleuls($parrain,$niveau);
+                $nb+=$this->compte_filleuls($parrain, $matrice);
 
             }while(count($parrains_a_compter) != 0);
         }
 
-        function choix_filleul($fg,$fd,$niveau)
+        private function choix_filleul($fg, $fd, $niveau)
         {
-            return $this->compte_descendants($fg,$niveau) >= $this->compte_descendants($fg,$niveau) ? $fg : $fd;
+          return $this->compte_descendants($fg, $niveau) >= $this->compte_descendants($fg, $niveau) ? $fg : $fd;
         }
 
-        function definir_parrain_de_matrice($pseudo_user,$parrain,$matrice)
+        private function definir_parrain_de_matrice($pseudo_user,$parrain,$matrice)
         {
-            $filleuls = $this->select_filleuls($parrain,$matrice);
-
+            $filleuls = $this->Crud_model->select_filleuls($parrain,$matrice);
+            //var_dump($filleuls['pseudo_filleulGauche']);die;
             if($filleuls['pseudo_filleulGauche'] == "")
             {
-                ////insertion comme filleulGauche
+                ////mettre comme filleulGauche
                 // Insérer une donnée dans la table "mytable"
 
                 $data_parrain = array(
-                    'niveau' => $matrice,
-                    'pseudo_user' => $parrain,
-                    'pseudo_filleulGauche' = $pseudo_user,
-                    'date' => time());
-                $this->db->insert('matrices',$data_parrain); 
+                    'pseudo_filleulGauche' => $pseudo_user);
+                $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice));
+                $this->db->update('matrices', $data_parrain); 
             }
             elseif($filleuls['pseudo_filleulDroit'] == "")
             {
                 ////insertion comme filleulDroit
                 $data_parrain = array(
-                    'niveau' => $matrice,
-                    'pseudo_user' => $parrain,
-                    'pseudo_filleulDroit' = $pseudo_user,
-                    'date' => time());
-                $this->db->insert('matrices',$data_parrain);
+                    'pseudo_filleulDroit' => trim($pseudo_user));
+                $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice));
+                $this->db->update('matrices', $data_parrain); 
             }
             else{
                 ////prendre celui qui a le moins de descandants
-                $filleulChoisis = $this->choix_filleul($filleuls['pseudo_filleulGauche'],$filleuls['pseudo_filleulDroit'],$niveau);
-                $this->definir_parrain_de_matrice($user_data,$filleulChoisis,$matrice);
-
+                $filleulChoisis = $this->choix_filleul($filleuls['pseudo_filleulGauche'],$filleuls['pseudo_filleulDroit'], $matrice);
+                $this->definir_parrain_de_matrice($pseudo_user, $filleulChoisis, $matrice);
             }
 
         }
@@ -113,35 +99,38 @@
         {
           $this->data['titre'] = get_phrase('registration');
           $this->data['meta_keywords'] = 'SHAPPINVEST, investment on rentals, source of happiness';
-          $this->data['page_title'] = 'REGISTRATION';
+          $this->data['page_title'] = strtoupper(get_phrase('registration'));
           $this->data['meta_description'] = 'SHAPPINVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
              defineLanguage($lang);
+             if($this->ion_auth->logged_mlm_in())
+              {
+                redirect(trim($_SESSION['language']).'/backoffice','refresh');
+              }
              if($this->input->post())
              {
-
                 $codepays = substr($this->input->post('phonenumber'),0,2);
                 if(empty($this->input->post('parrain')) || empty($this->input->post('pseudo')) || empty($this->input->post('usermail')) || empty($this->input->post('phonenumber')) || empty($this->input->post('userpass')) || empty($this->input->post('userconfpass')))
                 {
-                  $this->session->set_flashdata('message_erreur', 'Aucun champs ne doit être vide');
+                  $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('aucun champs ne doit être vide')));
                 }elseif(!$this->UserModel->PseudoExiste($this->input->post('parrain')))
                 {
-                  $this->session->set_flashdata('message_erreur', 'Votre parrain n\'existe pas dans notre base');
+                  $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('votre parrain n\'existe pas dans notre base')));
                 }elseif($this->UserModel->PseudoExiste($this->input->post('pseudo')))
                 {
-                  $this->session->set_flashdata('message_erreur','Désolé! Ce pseudo est déjà pris.');
+                  $this->session->set_flashdata('message_erreur',ucfirst(get_phrase('désolé! Ce pseudo est déjà pris.')));
                 }elseif($this->UserModel->EmailExiste($this->input->post('usermail')))
                 {
-                  $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet adresse email est déjà utilisée.'));
+                  $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet adresse email est déjà utilisée.')));
                 }elseif($this->UserModel->PhoneExiste($this->input->post('phonenumber')))
                 {
-                  $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet numéro de téléphone est déjà utilisée.'));
+                  $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet numéro de téléphone est déjà utilisée.')));
                 }elseif(stripos($codepays, '+') || stripos($codepays, "00"))
                 {
-                 $this->session->set_flashdata('message_erreur', 'Veuillez ajouter l\'indicateur de votre pays à votre contact en utilisant "+"');
+                 $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('veuillez ajouter l\'indicateur de votre pays à votre contact en utilisant "+"')));
                 }
                 elseif(!$this->input->post('userpass')===$this->input->post('userconfpass'))
                 {
-                  $this->session->set_flashdata('message_erreur', 'Désolé! Les deux mots de passe ne correspondent pas.');
+                  $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Les deux mots de passe ne correspondent pas.')));
                 }else
                 {
                     $group_ids = [2];
@@ -150,30 +139,32 @@
                     $mail = test_inputValide(strtolower($this->input->post('usermail')));
 
                     $parrain = test_inputValide($this->input->post('parrain'));
-                    $matrice =1;
                     $additional_data = array(
                             'pseudo_parrain' => $parrain,
                             'phone' => test_inputValide($this->input->post('phonenumber')),
                             'company' => "MEMBRE",
                             'created_on' => time(),
+                            'niveau' => 1,
                         );
 
                     if($this->ion_auth->register($pseudo, $password, $mail, $additional_data, $group_ids))
                     {
-                        $matrice =1;
+                        $matrice = 1;
                         $data_filleul = array(
-                            'niveau' => $matrice,
-                            'pseudo_user' => $pseudo_user,
+                            'niveau' => trim($matrice),
+                            'pseudo_user' => trim($pseudo),
                             'date' => time());
-                        $this->db->insert('matrices',$data_filleul);
-
-                        definir_parrain_de_matrice($pseudo,$parrain,$matrice)
+                        $this->db->insert('matrices', $data_filleul);
+                        $this->definir_parrain_de_matrice($pseudo, $parrain, $matrice);
+                        for($i=1; $i <=3 ; $i++){ 
+                           $this->db->insert('comptes', ['pseudo_propio'=> $pseudo, 'typecompte'=> $i,  'montant' => 0]);
+                        }
                         $souvenir = (bool) 1;
-                        if ($this->ion_auth->login($pseudo, $password, $souvenir))
+                        if($this->ion_auth->login($pseudo, $password, $souvenir))
                         {
                             if($this->ion_auth->in_group('membre'))
                             {
-                              redirect('backoffice','refresh');
+                              redirect(trim($_SESSION['language']).'/backoffice','refresh');
                             }
                         }
                     }
@@ -186,11 +177,14 @@
         public function connexion($lang='')
         {
           defineLanguage($lang);
-          $this->data['titre'] = get_phrase('Login / Sign Up');
+          $this->data['titre'] = ucwords(get_phrase('login/sign up'));
           $this->data['meta_keywords'] = 'SHAPP INVEST, investment on rentals, source of happiness';
           $this->data['page_title'] = 'LOGIN / SIGN UP';
           $this->data['meta_description'] = 'SHAPP INVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
-
+              if($this->ion_auth->logged_mlm_in())
+              {
+                redirect(trim($_SESSION['language']).'/backoffice','refresh');
+              }
               if($this->input->post())
               {
                 $this->load->library('form_validation');
@@ -204,11 +198,11 @@
                       
                         if($this->ion_auth->in_group('membre'))
                         {
-                          redirect('backoffice','refresh');
+                          redirect(trim($_SESSION['language']).'/backoffice','refresh');
                         }else
                         {
                           $this->session->unset_userdata(array('identity','password'));
-                          $this->session->set_flashdata('message','Vous n\'êtes pas sur le bon espace de connexion Monsieur l\'administrateur');
+                          $this->session->set_flashdata('message', ucfirst(get_phrase('vous n\'êtes pas sur le bon espace de connexion Monsieur l\'administrateur')));
                         }
                   }
                   else

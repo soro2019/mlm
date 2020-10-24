@@ -36,7 +36,7 @@ class Membre extends MY_Controller
   public function deconnexion()
   {
       $this->ion_auth->logout();
-      redirect('login-signup', 'refresh');
+      redirect('connexion', 'refresh');
   }
     
     public function mdp_oublie()

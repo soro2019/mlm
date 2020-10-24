@@ -110,3 +110,33 @@ if(!function_exists('get_phrase'))
       return trim(str_replace('_',' ',$phrase));
   }
 }
+
+
+function countFilleulByMatrice($pseudo, $matrice)
+{
+  $CI  =&  get_instance();
+  $CI->load->database();
+  $filleuls = [];
+  $i = 0;
+    do
+    {
+      $query = $CI->Crud_model->select_filleuls($pseudo, $matrice);
+      if($query["pseudo_filleulGauche"] !="")
+      {
+        $i++;
+        array_push($filleuls, trim($query["pseudo_filleulGauche"]));
+      }
+      if($query["pseudo_filleulDroit"] !="")
+      {
+        $i++;
+        array_push($filleuls, trim($query["pseudo_filleulDroit"]));
+      }
+
+      $pseudo = array_shift($filleuls);
+
+    }while(count($filleuls) != 0);
+
+    return $i;
+}
+ 
+      
