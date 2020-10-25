@@ -47,6 +47,7 @@
                 $nb+=$this->compte_filleuls($parrain, $matrice);
 
             }while(count($parrains_a_compter) != 0);
+            return $nb;
         }
 
         private function choix_filleul($fg, $fd, $niveau)
