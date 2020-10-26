@@ -91,4 +91,16 @@ class Crud_model extends CI_Model {
         return $query->row_array();           
     }
 
+
+    public function selectAllProduct()
+    {
+      $this->db->select('*');
+        $this->db->from('produits');
+        $this->db->where(array('status' => '1'));
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+          return $query->result_array();
+        }else return 0;
+    }
+
 }

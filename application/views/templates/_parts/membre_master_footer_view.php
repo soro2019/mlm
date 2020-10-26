@@ -105,6 +105,32 @@
             return true;
           }
         }
-</script>
+        function copy() {
+          var copyText = document.querySelector("#to-copy");
+          copyText.select();
+          document.execCommand("copy");
+        }
+
+        document.querySelector("#copy").addEventListener("click", copy);
+
+
+        function infouser(id){
+
+            //alert(pseudo);
+            var base_url = "<?php echo base_url('backoffice/dashboard/');?>";
+            $.ajax({
+                    url: base_url+'modaldInfoFieulle/',
+                    type: 'POST',
+                    data : {id : id},
+                    dataType: 'json',
+                    success:function(response) {
+                        document.getElementById('infouser').innerHTML=response;
+                    }
+                });
+             
+          }
+    </script> 
+
+         
 </body>
 </html>

@@ -271,8 +271,6 @@
                 <?php } ?>
                 </div><br>
                 <?php } ?>
-                
-                
                 <div class="col-md-12 col-12">
                     <div class="box box-solid bg-primary">
                         <div class="box-header" style="background-color: #f25e24!important;border-color:#f25e24!important">
@@ -298,7 +296,7 @@
                     </div>
                 </div>
             </div>
-         <div class="modal center-modal fade" id="userinfo" tabindex="-1">
+        <div class="modal center-modal fade" id="userinfo" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -316,35 +314,7 @@
             </div>
           </div>
        </div>                  
-            <script type="text/javascript">
-                function copy() {
-                  var copyText = document.querySelector("#to-copy");
-                  copyText.select();
-                  document.execCommand("copy");
-                }
-
-                document.querySelector("#copy").addEventListener("click", copy);
-
-
-                function infouser(id){
-
-                    //alert(pseudo);
-                    var base_url = "<?php echo base_url('backoffice/dashboard/');?>";
-                    $.ajax({
-                            url: base_url+'modaldInfoFieulle/',
-                            type: 'POST',
-                            data : {id : id},
-                            dataType: 'json',
-                            success:function(response) {
-                                document.getElementById('infouser').innerHTML=response;
-                            }
-                        });
-                     
-                  }
-
-
-
-            </script>       
+     
      
         
             

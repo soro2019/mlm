@@ -18,6 +18,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['dateInscription'] = $membre['created_on'];
     $this->data['email_membre'] = $membre['email'];
     $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
+    $this->data['niveau'] = $membre['niveau'];
   }
 
   public function index($lang='')
@@ -61,7 +62,7 @@ class Dashboard extends Backoffice_Controller
       }
       $user = $this->UserModel->GetUserDataById($_POST['id']);
       //var_dump($user);die;
-      $genre = $user['genre'] == 'H' ? 'Homme':'Femme';
+      $genre = $user['genre'] == 'H' ? 'Homme' : ($user['genre'] == 'F') ? 'Femme' : '';
       /*if($user['genre']=='F')
       {
         $genre = "Femme";
@@ -141,10 +142,12 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('achat initial');
+    $this->data['titre'] = get_phrase('faire l\'achat initial');
 
     $this->data['page_description'] = get_phrase('achat initial');
     $this->data['page_author'] = get_phrase('achat initial');
+
+    $this->data['products'] = $this->Crud_model->selectAllProduct();
     
     $this->render('backoffice/souscription_view');
   }

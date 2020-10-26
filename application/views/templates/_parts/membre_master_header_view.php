@@ -171,21 +171,21 @@
 									<?= ucfirst(get_phrase("mon reseau actuel"))?>
 								</a>
 							</li>
-							<?php $j = 10; 
-							 /*for($i=0; $i < $j; $i+6)
-							 {*/
+							<?php  
+							 for($i=1; $i <= $niveau; $i++)
+							 {
 							?>
-							<li <?php if($titre == 'My investment package') echo 'class="active"';?>>
-								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/matrice/1');?>">
+							<li <?php if($titre == 'matrice') echo 'class="active"';?>>
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/matrice/'.$i);?>">
 									<i class="ti-more"></i>
-									<?=get_phrase("Matrice 1") ?>
+									<?=ucfirst(get_phrase("matrice"))?> <?=$i?> 
 								</a>
 							</li>
-						  <?php //} ?>
+						  <?php } ?>
 						</ul>
 					</li> 
 
-					<li class="treeview <?php if($titre == 'achat initial' or $titre == 'Partners list' or $titre == 'Your level') echo 'active';?>">
+					<li class="treeview <?php if($titre == get_phrase('faire l\'achat initial') or $titre == 'Partners list' or $titre == 'Your level') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= get_phrase("Finance")?></span>
@@ -206,7 +206,7 @@
 									<?= ucfirst(get_phrase("transferts interne"))?>
 								</a>
 							</li>
-							<li <?php if($titre == 'achat initial') echo 'class="active"';?>>
+							<li <?php if($titre == get_phrase('faire l\'achat initial')) echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/souscription');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("faire l'achat initial"))?>
