@@ -149,9 +149,6 @@ class Membre extends MY_Controller
         redirect('admin');
 
       }
-      
-
-          
 
       elseif($this->input->post('modifier-mdp') !== null) {
         $old = $this->input->post('ancien');

@@ -120,7 +120,7 @@ function countFilleulByMatrice($pseudo, $matrice)
   $i = 0;
     do
     {
-      $query = $CI->Crud_model->select_filleuls($pseudo, $matrice);
+      $query = $CI->Crud_model->select_filleuls(trim($pseudo), trim($matrice));
       if($query["pseudo_filleulGauche"] !="")
       {
         $i++;

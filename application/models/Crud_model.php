@@ -63,7 +63,7 @@ class Crud_model extends CI_Model {
     {
       $this->db->select('*');
       $this->db->from('comptes');
-      $this->db->where(array('pseudo_propio' => $pseudo));
+      $this->db->where(array('pseudo_propio' => trim($pseudo)));
       $query = $this->db->get();
       if($query->num_rows() > 0){
           return $query->result_array();
@@ -74,7 +74,20 @@ class Crud_model extends CI_Model {
     {
       $this->db->select('*');
       $this->db->from('comptes');
-      $this->db->where('typecompte', $type);
+      $this->db->where('typecompte', trim($type));
+      $this->db->where('pseudo_propio', trim($pseudo));
+      $query = $this->db->get();
+      if($query->num_rows() == 1){
+          return $query->row_array();
+      }else return 0;
+    }
+
+
+    public function moncompteById($id)
+    {
+      $this->db->select('*');
+      $this->db->from('comptes');
+      $this->db->where('id', $id);
       $query = $this->db->get();
       if($query->num_rows() == 1){
           return $query->row_array();
@@ -94,13 +107,38 @@ class Crud_model extends CI_Model {
 
     public function selectAllProduct()
     {
-      $this->db->select('*');
+        $this->db->select('*');
         $this->db->from('produits');
         $this->db->where(array('status' => '1'));
         $query = $this->db->get();
         if($query->num_rows() > 0){
           return $query->result_array();
         }else return 0;
+    }
+
+    public function GetProductDataById($id)
+    {
+        $this->db->select('*');
+        $this->db->from('produits');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        if($query->num_rows() == 1){
+          return $query->row_array();
+        }else return 0;
+    }
+
+
+    public function update_where($table, $data, $condition, $where)
+    {
+      $this->db->where($where, $condition);
+      $this->db->update($table, $data);
+      return true;
+    }
+
+    public function insertion_($tablename, $data)
+    {
+      $this->db->insert($tablename, $data);
+      return $this->db->insert_id();
     }
 
 }

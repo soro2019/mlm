@@ -206,10 +206,18 @@
 									<?= ucfirst(get_phrase("transferts interne"))?>
 								</a>
 							</li>
+							<?php if($achat_ini != 1){ ?>
 							<li <?php if($titre == get_phrase('faire l\'achat initial')) echo 'class="active"';?>>
-								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/souscription');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/subscription');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("faire l'achat initial"))?>
+								</a>
+							</li>
+						   <?php } ?>
+							<li <?php if($titre == get_phrase('notre boutique')) echo 'class="active"';?>>
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/boutique');?>">
+									<i class="ti-more"></i>
+									<?= ucfirst(get_phrase("notre boutique"))?>
 								</a>
 							</li>
 							

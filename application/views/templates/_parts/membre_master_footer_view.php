@@ -129,6 +129,22 @@
                 });
              
           }
+
+          function infoachat(id){
+
+            //alert(pseudo);
+            var base_url = "<?php echo base_url('backoffice/dashboard/');?>";
+            $.ajax({
+                    url: base_url+'modaldProduit/',
+                    type: 'POST',
+                    data : {id : id},
+                    dataType: 'json',
+                    success:function(response) {
+                        document.getElementById('infoachat').innerHTML=response;
+                    }
+                });
+             
+          }
     </script> 
 
          

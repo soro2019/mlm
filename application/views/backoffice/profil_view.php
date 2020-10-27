@@ -7,7 +7,9 @@
                     
                 </div>
             </div>
-            <?php if(empty($membre['first_name']) || empty($membre['last_name']) || empty($membre['genre']) || empty($membre['Lieu_naissance']) || empty($membre['date_naissance']) || empty($membre['pays']) || empty($membre['phone']) || empty($membre['ville']) || empty($membre['region']) /*|| empty($membre['code_postal'])*/){ ?>
+            <?php 
+
+          if(empty($user['first_name']) || empty($user['last_name']) || empty($user['genre']) || empty($user['Lieu_naissance']) || empty($user['date_naissance']) || empty($user['pays']) || empty($user['phone']) || empty($user['ville']) || empty($user['region']) /*|| empty($membre['code_postal'])*/){ ?>
                    <div class="col-xl-12 col-12">
                         <div class="row">
                             <div class="col-md-12 col-12">

@@ -8,6 +8,16 @@
                     
                 </div>
             </div>
+
+             <?php
+               if($this->session->flashdata('message_erreur') !== null){
+                   echo '<div class="alert alert-danger" role="alert">Erreur: ' .$this->session->flashdata('message_erreur').'</div>';
+               }
+                 
+               elseif(validation_errors() !== ''){
+                   echo '<div class="alert alert-danger" role="alert">Erreur: ' .validation_errors().'</div>';
+               }
+             ?>
             
             <div class="row">
                 <!-- lien pour completer ses donnees -->
@@ -27,7 +37,7 @@
                     </div>
                 <?php } ?>
                 <?php if($mescomptes!=0){ ?>
-                <!-- mes comptes -->
+                <?php //var_dump($compactmatrice);die; ?>
                 <h2><?=ucwords(get_phrase("mes comptes"))?></h2><br>
 
                 <div class="row">
@@ -36,13 +46,22 @@
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title text-center"><?=ucwords(get_phrase("compte matrice"))?></h3>
-                            <h3 class="card-title text-center"><?php echo number_format($compactmatrice['montant'], 0, ' ', ' ');?> $</h3>
+                            <h3 class="card-title text-center"><?php echo number_format(trim($compactmatrice['montant']), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
-                                <a href="#">
-                                    <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
+                                <?php if(trim($compactmatrice['montant']) == 0){
+
+                                        $lien = "onclick='retrun false'";
+                                        $title = ucfirst(get_phrase("votre crédit ne vous permet pas d'effectuer cette opération"));
+                                }else
+                                {
+                                    $lien = "onclick='retrun true'";
+                                    $title = ucfirst(get_phrase("cette opération vous permet de retirer un montant sur votre compte"));
+                                } ?>
+                                <a href="<?php echo site_url(trim($this->session->userdata('language')).'/retrait/'.$compactmatrice['id']);?>" <?=$lien?> title='<?=$title?>'>
+                                  <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
                                 </a>
-                                <a href="#">
+                                <a href="">
                                     <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("transferer"))?></button>
                                 </a>
                             </div>
@@ -54,7 +73,7 @@
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title text-center"><?=ucwords(get_phrase("compte bonus"))?></h3>
-                            <h3 class="card-title text-center"><?php echo number_format($compactbonus['montant'], 0, ' ', ' ');?> $</h3>
+                            <h3 class="card-title text-center"><?php echo number_format(trim($compactbonus['montant']), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
                                 <a href="#">
@@ -71,8 +90,8 @@
                     <div class="col-lg-4 col-4">
                         <div class="card">
                           <div class="card-body">
-                            <h3 class="card-title text-center"><?=get_phrase("Compte Investissement")?></h3>
-                            <h3 class="card-title text-center"><?php echo number_format($compactinvest['montant'], 0, ' ', ' ');?> $</h3>
+                            <h3 class="card-title text-center"><?=ucwords(get_phrase("compte operations"))?></h3>
+                            <h3 class="card-title text-center"><?php echo number_format(trim($compactinvest['montant']), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
                                 <a href="#">
@@ -313,7 +332,7 @@
               </div>
             </div>
           </div>
-       </div>                  
+        </div>                  
      
      
         

@@ -204,7 +204,7 @@ class UserModel extends CI_Model {
         }
         $this->db->select('*');
         $this->db->from($this->Table);
-        $this->db->where('pseudo_parrain',$pseudo);
+        $this->db->where('pseudo_parrain', trim($pseudo));
         $this->db->order_by('created_on','DESC');
         $query = $this->db->get();
         if($query->num_rows() > 0){

@@ -240,8 +240,8 @@ $route["backoffice/operation_financiere"] = 'backoffice/dashboard/operation_fina
 $route["(fr|en)/backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne/$1';
 $route["backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne';
 
-$route["(fr|en)/backoffice/souscription"] = 'backoffice/dashboard/souscription/$1';
-$route["backoffice/souscription"] = 'backoffice/dashboard/souscription';
+$route["(fr|en)/backoffice/subscription"] = 'backoffice/dashboard/subscription/$1';
+$route["backoffice/subscription"] = 'backoffice/dashboard/subscription';
 
 $route["(fr|en)/backoffice/messagerie"] = 'backoffice/dashboard/messagerie/$1';
 $route["backoffice/messagerie"] = 'backoffice/dashboard/messagerie';
