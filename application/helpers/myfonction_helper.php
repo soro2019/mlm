@@ -121,12 +121,12 @@ function countFilleulByMatrice($pseudo, $matrice)
     do
     {
       $query = $CI->Crud_model->select_filleuls(trim($pseudo), trim($matrice));
-      if($query["pseudo_filleulGauche"] !="")
+      if($query["pseudo_filleulGauche"] !=null) 
       {
         $i++;
         array_push($filleuls, trim($query["pseudo_filleulGauche"]));
       }
-      if($query["pseudo_filleulDroit"] !="")
+      if($query["pseudo_filleulDroit"] !=null)
       {
         $i++;
         array_push($filleuls, trim($query["pseudo_filleulDroit"]));
@@ -137,6 +137,13 @@ function countFilleulByMatrice($pseudo, $matrice)
     }while(count($filleuls) != 0);
 
     return $i;
+}
+
+//$matrice doit etre une chaine de characteres
+function matriceSuivante($matrice)
+{
+  $niveau = intval(substr($matrice, -1))+1;
+  return $niveau==11 ? null : 'matrice'.$niveau; 
 }
  
       

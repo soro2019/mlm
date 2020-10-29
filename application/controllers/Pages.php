@@ -13,77 +13,166 @@
             $this->load->model(['Crud_model']);
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
         private function compte_filleuls($parrain, $matrice)
         {
             $filleuls = $this->Crud_model->select_filleuls($parrain, $matrice);
-            if($filleuls['pseudo_filleulGauche'] == "")
-            {
-                return 0;
-            }
-            elseif($filleuls['pseudo_filleulDroit'] == "")
-            {
-                return 1;
-            }
-            else{
-                return 2;
-            }
+            if($filleuls['pseudo_filleulGauche'] == null) return 0;
+            if($filleuls['pseudo_filleulDroit'] == null) return 1;
+            return 2;
         }
 
         private function compte_descendants($parrain, $matrice)
         {
-            $nb = 0;
+            $nb = $this->compte_filleuls($parrain, $matrice);
             $parrains_a_compter = array();
+
             do{
                 $filleuls = $this->Crud_model->select_filleuls($parrain, $matrice);
-                if($filleuls['pseudo_filleulGauche'] != "")
+                if($filleuls['pseudo_filleulGauche'] != null)
                 {
                     array_push($parrains_a_compter, $filleuls['pseudo_filleulGauche']);
                 }
-                if($filleuls['pseudo_filleulDroit'] != "")
+                if($filleuls['pseudo_filleulDroit'] != null)
                 {
                     array_push($parrains_a_compter, $filleuls['pseudo_filleulDroit']);
                 }
                 $parrain = array_shift($parrains_a_compter);
-                $nb+=$this->compte_filleuls($parrain, $matrice);
-
+                $nb+=$this->compte_filleuls($parrain, $matrice);                
             }while(count($parrains_a_compter) != 0);
             return $nb;
         }
 
-        private function choix_filleul($fg, $fd, $niveau)
+        private function choix_filleul($fg, $fd, $matrice)
         {
-          return $this->compte_descendants($fg, $niveau) >= $this->compte_descendants($fg, $niveau) ? $fg : $fd;
+          return $this->compte_descendants($fg, $matrice) <= $this->compte_descendants($fd, $matrice) ? $fg : $fd;
         }
-
+        
         private function definir_parrain_de_matrice($pseudo_user,$parrain,$matrice)
         {
             $filleuls = $this->Crud_model->select_filleuls($parrain,$matrice);
-            //var_dump($filleuls['pseudo_filleulGauche']);die;
-            if($filleuls['pseudo_filleulGauche'] == "")
+            if($filleuls['pseudo_filleulGauche'] == null)
             {
                 ////mettre comme filleulGauche
-                // Insérer une donnée dans la table "mytable"
-
-                $data_parrain = array(
-                    'pseudo_filleulGauche' => $pseudo_user);
-                $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice));
-                $this->db->update('matrices', $data_parrain); 
+                $this->Crud_model->updateGen(
+                    array('pseudo_user' => $parrain),
+                    array('pseudo_filleulGauche' => trim($pseudo_user)),
+                    $matrice
+                );
             }
-            elseif($filleuls['pseudo_filleulDroit'] == "")
+            elseif($filleuls['pseudo_filleulDroit'] == null)
             {
                 ////insertion comme filleulDroit
-                $data_parrain = array(
-                    'pseudo_filleulDroit' => trim($pseudo_user));
-                $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice));
-                $this->db->update('matrices', $data_parrain); 
+                $this->Crud_model->updateGen(
+                    array('pseudo_user' => $parrain),
+                    array('pseudo_filleulDroit' => trim($pseudo_user)),
+                    $matrice
+                );
+                if($ancetre = $this->fin_matrice($parrain, $matrice))
+                {
+                    $this->db->select('pseudo_user,clone');
+                    $this->db->from($matrice);
+                    $this->db->where(array('pseudo_user' => $ancetre));
+                    $query = $this->db->get();
+                    $row_ancetre = $query->row_array();  
+                    $this->migration($row_ancetre, $matrice);
+                }
             }
             else{
                 ////prendre celui qui a le moins de descandants
                 $filleulChoisis = $this->choix_filleul($filleuls['pseudo_filleulGauche'],$filleuls['pseudo_filleulDroit'], $matrice);
-                $this->definir_parrain_de_matrice($pseudo_user, $filleulChoisis, $matrice);
+                $this->definir_parrain_de_matrice($pseudo_user, $filleulChoisis, $matrice);   
+            }
+        }
+
+        private function fin_matrice($pseudo_ParrainNvFilleul, $matrice)
+        {
+            $flag=6;
+            $ancetre = $this->Crud_model->select_parrain($pseudo_ParrainNvFilleul, $matrice);
+
+            if(!empty($ancetre))
+            {
+                $nb_filleuls = $this->compte_filleuls($ancetre['pseudo_user'], $matrice);
+                if( $nb_filleuls< 2) return false;
+                $flag-=$nb_filleuls;
+                $flag-= $ancetre['pseudo_filleulGauche'] == null ? 0 : $this->compte_filleuls($ancetre['pseudo_filleulGauche'], $matrice);
+                $flag-= $ancetre['pseudo_filleulDroit'] == null ? 0 : $this->compte_filleuls($ancetre['pseudo_filleulDroit'], $matrice);
+                return $flag == 0 ? $ancetre['pseudo_user'] : false;
+                
+            }
+        }
+
+        private function ajout_clone($row_user, $matrice)
+        {
+
+            $reel_pseudo = $row_user['clone'] == null ? $row_user['pseudo_user'] : $this->Crud_model->recup_reelPseudo($row_user['pseudo_user'], $matrice) ;
+            $clone_pseudo = $this->Crud_model->pseudo_clone($reel_pseudo, $matrice);//pseudoDuClone
+
+            $data = array(
+                'pseudo_user' => $clone_pseudo,
+                'clone' => 1,
+                'date_migration' => time());
+            $this->db->insert($matrice, $data);
+
+            $this->definir_parrain_de_matrice($clone_pseudo,$row_user['pseudo_user'],$matrice);
+
+            $data = array(
+                'clone_pseudo' => $clone_pseudo,
+                'reel_pseudo' => $reel_pseudo,
+                'create_date' => time()
+            );
+            $this->db->insert('clones_'.$matrice, $data);
+        }
+
+        private function migration($row_user, $matrice)
+        {
+            $matrice_suivante = matriceSuivante($matrice);
+            if($matrice_suivante != null || $row_user['clone'] != 1)
+            {
+                $pseudo_user = trim($row_user['pseudo_user']);
+                $data = array(
+                    'pseudo_user' => $pseudo_user,
+                    'date_migration' => time());
+                $this->db->insert($matrice_suivante, $data);
+                $this->Crud_model->updateGen(
+                    array('pseudo' => $pseudo_user),
+                    array('niveau' => intval(substr($matrice_suivante,-1) )),
+                    'users');
+
+                //chercher son parrain
+                $parrain = $this->Crud_model->select_parrain($pseudo_user,$matrice);
+                if( $this->Crud_model->nameExist($matrice_suivante,'pseudo_user',$parrain['pseudo_user']))
+                {
+                    $this->definir_parrain_de_matrice($row_user['pseudo_user'],$parrain['pseudo_user'],$matrice_suivante);
+                }
+
+                //chercher ses filleuls
+                $filleuls = $this->Crud_model->select_filleuls($pseudo_user,$matrice);
+                if($this->Crud_model->nameExist($matrice_suivante,'pseudo_user',$filleuls['pseudo_filleulGauche']))
+                {
+                    $this->definir_parrain_de_matrice($filleuls['pseudo_filleulGauche'],$row_user['pseudo_user'],$matrice_suivante);
+                }
+                if($this->Crud_model->nameExist($matrice_suivante,'pseudo_user',$filleuls['pseudo_filleulDroit']))
+                {
+                    $this->definir_parrain_de_matrice($filleuls['pseudo_filleulDroit'],$row_user['pseudo_user'],$matrice_suivante);
+                }
             }
 
+            //ajout d'un clone
+            $this->ajout_clone($row_user, $matrice);
         }
+
         /*fuction page home*/
         public function home($lang=''){
             $this->data['titre'] = 'home';
@@ -98,6 +187,7 @@
 
         public function inscription($lang='')
         {
+            //var_dump($this->Crud_model->nameExist('matrice2','pseudo_user','aguisso'));die;
           $this->data['titre'] = get_phrase('registration');
           $this->data['meta_keywords'] = 'SHAPPINVEST, investment on rentals, source of happiness';
           $this->data['page_title'] = strtoupper(get_phrase('registration'));
@@ -150,12 +240,11 @@
 
                     if($this->ion_auth->register($pseudo, $password, $mail, $additional_data, $group_ids))
                     {
-                        $matrice = 1;
+                        $matrice = 'matrice1';
                         $data_filleul = array(
-                            'niveau' => trim($matrice),
                             'pseudo_user' => trim($pseudo),
-                            'date' => time());
-                        $this->db->insert('matrices', $data_filleul);
+                            'date_migration' => time());
+                        $this->db->insert($matrice, $data_filleul);
                         $this->definir_parrain_de_matrice($pseudo, $parrain, $matrice);
                         for($i=1; $i <=3 ; $i++){ 
                            $this->db->insert('comptes', ['pseudo_propio'=> $pseudo, 'typecompte'=> $i,  'montant' => 0]);
