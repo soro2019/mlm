@@ -152,7 +152,6 @@ class Dashboard extends Backoffice_Controller
                   </div>
                   ';
 
-                  
         echo json_encode($result);
   }
 
@@ -216,6 +215,9 @@ class Dashboard extends Backoffice_Controller
             $data['dateopration'] = time();
             $data['motif_oprt'] = $motif;
             $data['modpaiement'] = $modepaie;
+            $data['montant'] = $prod['prix_vente'];
+            $leMois = lesMois(date('m'));
+            $data['mois_annee'] = $leMois.' '.date('Y');
 
             if($this->Crud_model->insertion_('operations', $data))
             {

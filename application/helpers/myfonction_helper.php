@@ -20,9 +20,16 @@ function countElement($value, $table)
   return $nb;
 }
 
-function lesMois()
+function lesMois($numMois="")
 {
-  return ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'decembre'];
+  $mois = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'decembre'];
+  if($numMois !="")
+  {
+    return $mois[(int)$numMois-1];
+  }else
+  {
+    return $mois;
+  }
 }
 
 function formtageDate22($data)

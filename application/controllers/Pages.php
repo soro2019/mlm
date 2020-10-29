@@ -13,18 +13,6 @@
             $this->load->model(['Crud_model']);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
         private function compte_filleuls($parrain, $matrice)
         {
             $filleuls = $this->Crud_model->select_filleuls($parrain, $matrice);
@@ -104,7 +92,7 @@
             if(!empty($ancetre))
             {
                 $nb_filleuls = $this->compte_filleuls($ancetre['pseudo_user'], $matrice);
-                if( $nb_filleuls< 2) return false;
+                if( $nb_filleuls < 2) return false;
                 $flag-=$nb_filleuls;
                 $flag-= $ancetre['pseudo_filleulGauche'] == null ? 0 : $this->compte_filleuls($ancetre['pseudo_filleulGauche'], $matrice);
                 $flag-= $ancetre['pseudo_filleulDroit'] == null ? 0 : $this->compte_filleuls($ancetre['pseudo_filleulDroit'], $matrice);
@@ -152,7 +140,7 @@
 
                 //chercher son parrain
                 $parrain = $this->Crud_model->select_parrain($pseudo_user,$matrice);
-                if( $this->Crud_model->nameExist($matrice_suivante,'pseudo_user',$parrain['pseudo_user']))
+                if($this->Crud_model->nameExist($matrice_suivante,'pseudo_user',$parrain['pseudo_user']))
                 {
                     $this->definir_parrain_de_matrice($row_user['pseudo_user'],$parrain['pseudo_user'],$matrice_suivante);
                 }

@@ -11,11 +11,11 @@
 
              <?php
                if($this->session->flashdata('message_erreur') !== null){
-                   echo '<div class="alert alert-danger" role="alert">Erreur: ' .$this->session->flashdata('message_erreur').'</div>';
-               }
-                 
-               elseif(validation_errors() !== ''){
+                   echo '<div class="alert alert-danger" role="alert">'.ucfirst(get_phrase('succes:')).' '.$this->session->flashdata('message_erreur').'</div>';
+               }elseif(validation_errors() !== ''){
                    echo '<div class="alert alert-danger" role="alert">Erreur: ' .validation_errors().'</div>';
+               }elseif($this->session->flashdata('message_success') !== null){
+                echo '<div class="alert alert-success" role="alert">'.ucfirst(get_phrase('succes:')).' '.$this->session->flashdata('message_success').'</div>';
                }
              ?>
             
