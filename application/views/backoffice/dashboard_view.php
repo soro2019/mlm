@@ -46,7 +46,7 @@
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title text-center"><?=ucwords(get_phrase("compte matrice"))?></h3>
-                            <h3 class="card-title text-center"><?php echo number_format(trim($compactmatrice['montant']), 0, ' ', ' ');?> $</h3>
+                            <h3 class="card-title text-center"><?php echo number_format(floatval(trim($compactmatrice['montant'])), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
                                 <?php if(trim($compactmatrice['montant']) == 0){
@@ -73,7 +73,7 @@
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title text-center"><?=ucwords(get_phrase("compte bonus"))?></h3>
-                            <h3 class="card-title text-center"><?php echo number_format(trim($compactbonus['montant']), 0, ' ', ' ');?> $</h3>
+                            <h3 class="card-title text-center"><?php echo number_format(floatval(trim($compactbonus['montant'])), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
                                 <a href="#">
@@ -91,7 +91,7 @@
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title text-center"><?=ucwords(get_phrase("compte operations"))?></h3>
-                            <h3 class="card-title text-center"><?php echo number_format(trim($compactinvest['montant']), 0, ' ', ' ');?> $</h3>
+                            <h3 class="card-title text-center"><?php echo number_format(floatval(trim($compactinvest['montant'])), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
                                 <a href="#">

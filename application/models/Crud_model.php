@@ -97,11 +97,20 @@ class Crud_model extends CI_Model {
 
     public function select_filleuls($parrain, $matrice)
     {
-        $this->db->select('*');
-        $this->db->from('matrices');
-        $this->db->where(array('pseudo_user' => $parrain, 'niveau' => $matrice));
-        $query = $this->db->get();
-        return $query->row_array();           
+      $this->db->select('*');
+      $this->db->from($matrice);
+      $this->db->where(array('pseudo_user' => $parrain));
+      $query = $this->db->get();
+      return $query->row_array();           
+    }
+    public function select_parrain($filleul, $matrice)
+    {
+      $this->db->select('*');
+      $this->db->from($matrice);
+      $this->db->where('pseudo_filleulGauche',$filleul);
+      $this->db->or_where('pseudo_filleulDroit',$filleul);
+      $query = $this->db->get();
+      return $query->row_array();           
     }
 
 
@@ -152,5 +161,64 @@ class Crud_model extends CI_Model {
       $this->db->insert($tablename, $data);
       return $this->db->insert_id();
     }
+
+    public function nameExist($table, $field, $name)
+    {
+        $this->db->select('*'); 
+        $this->db->from($table);
+        $this->db->where(array($field => $name));
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+            return $query->row_array();
+        }else{
+            return false;
+        }        
+    }
+    public function delete_row($table,$where)
+    {
+      $this->db->where($where);
+      $this->db->delete($table);
+      return true;
+    }
+
+    public function updateGen($key, $data, $table)
+    {
+      //key est de la forme array('nom colonne' => $valeur)
+      //idem pour data
+      foreach($data as $at => $val)
+      {
+          $this->db->set($at,$val) ;
+      }
+      foreach($key as $at => $val)
+      {
+          $this->db->where($at,$val);
+      }
+      $this->db->update($table);
+
+      return true;
+    }
+
+    public function recup_reelPseudo($clone_pseudo, $matrice)
+    {
+        $this->db->select('reel_pseudo');
+        $this->db->from('clones_'.$matrice);
+        $this->db->where(array('clone_pseudo' => $clone_pseudo));
+        $query = $this->db->get();
+        $row = $query->row_array();
+        return $row['reel_pseudo'];
+    }
+
+    public function pseudo_clone($reel_pseudo, $matrice)
+    {
+        $this->db->select('*');
+        $this->db->from('clones_'.$matrice);
+        $this->db->where(array('reel_pseudo' => $reel_pseudo));
+        $query = $this->db->get();
+        $nb = $query->num_rows() +1;
+
+        return 'clone'.$nb.'_'.$reel_pseudo;
+    }
+
+
 
 }
