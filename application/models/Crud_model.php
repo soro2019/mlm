@@ -116,6 +116,18 @@ class Crud_model extends CI_Model {
         }else return 0;
     }
 
+
+    public function selectAllTypeOp()
+    {
+        $this->db->select('*');
+        $this->db->from('typeoperation');
+        $this->db->order_by('lib', 'ASC');
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+          return $query->result_array();
+        }else return 0;
+    }
+
     public function GetProductDataById($id)
     {
         $this->db->select('*');

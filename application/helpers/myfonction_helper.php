@@ -20,6 +20,11 @@ function countElement($value, $table)
   return $nb;
 }
 
+function lesMois()
+{
+  return ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'decembre'];
+}
+
 function formtageDate22($data)
 {
   if(stripos($data, '-') && strlen($data) == 10)

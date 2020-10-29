@@ -8,7 +8,7 @@ class Dashboard extends Backoffice_Controller
   function __construct()
   {
     parent::__construct();
-    $this->load->model(['UserModel', 'Crud_model']);
+    $this->load->model(['UserModel', 'Crud_model', 'DatatableModel']);
 
     $this->data['pseudo'] = trim($this->session->userdata('identity'));
     $membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
@@ -59,7 +59,7 @@ class Dashboard extends Backoffice_Controller
   {
       if(!$this->ion_auth->logged_mlm_in())
       {
-         redirect('connexion');
+         redirect(trim($_SESSION['language']).'/connexion');
       }
       $user = $this->UserModel->GetUserDataById($_POST['id']);
       //var_dump($user);die;
@@ -161,7 +161,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -244,7 +244,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -256,22 +256,90 @@ class Dashboard extends Backoffice_Controller
     $this->render('backoffice/matrice_view');
   }
 
+
   public function operation_financiere($lang='')
   {
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = ucwords(get_phrase('mes opérations finacières'));
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = ucfirst(get_phrase('mes opérations finacières'));
+    $this->data['page_author'] = ucfirst(get_phrase('mes opérations finacières'));
+
+    $this->data['typeOp'] = $this->Crud_model->selectAllTypeOp();
     
     $this->render('backoffice/operation_financiere_view');
       
+  }
+
+  public function dataOperations()
+  {
+
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect(trim($_SESSION['language']).'/connexion');
+    }
+
+    $data = array();
+        
+    $op = $this->DatatableModel->getRows();
+
+    var_dump($op);die;
+    
+    $i = isset($_POST['start'])?$_POST['start']:0;
+
+    foreach($op as $op){
+
+        //$champs = $this->Crud_model->selectChampProduct();
+        
+        $i++; 
+        $identifiant = $op['identifiant_genered'];   
+        $nom_prenoms =$op['nom_prenoms'];   
+        $date_naissance = formtageDate22($op['date_naissance']);   
+        $contact = $op['contact'];   
+        $quartier = $op['quartier'];   
+        $ayant_droit = $op['ayant_droit'];   
+        $message_envoyer = $op['message_envoyer'];  
+        $date_envoie = $op['date_envoie'];
+        $date_ = "";
+        if($date_envoie != 0 && $message_envoyer != 0){
+          $date_ = formtageDate22($date_envoie);
+        }
+        $status = "Identifiant reçu";
+        $action = '<span class="dropdown"><a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true"> <i class="la la-ellipsis-h"></i>  </a> <div class="dropdown-menu dropdown-menu-right">';
+
+               if($op['message_envoyer']==0)
+                {
+                    $action .= '<a class="dropdown-item" href="'.site_url("/main/envoieid/").$op['identifiant_genered'].'"><i class="la la-leaf"></i> Envoyer son identifiant</a>';
+                    $status = "Pas encore reçu";
+                }
+
+               $action .= '<a class="dropdown-item" href="'.site_url("/main/pdf/").$op['id'].'" target="_blank"><i class="la la-print"></i> Imprimé fiche</a>
+
+                  <a class="dropdown-item" href="'.site_url("/main/voir/").$op['id'].'"><i class="la la-leaf"></i> Voir détail</a> 
+
+                  <a class="dropdown-item" href="'.site_url("/main/modifier/").$op['id'].'"><i class=" la la-edit"></i> Modifier</a>  </div>  </span>';
+
+        $data[] = array($i,$identifiant,$nom_prenoms,$date_naissance,$contact,$quartier,$ayant_droit,$status,$date_,$action);
+                              
+    }
+
+    //var_dump($data);die;
+    
+    $output = array(
+        "draw" => isset($_POST['draw'])?$_POST['draw']:10,
+        "recordsTotal" => $this->DatatableModel->countAll(),
+        "recordsFiltered" => $this->DatatableModel->countFiltered($_POST),
+        "data" => $data
+    );
+    
+    // Output to JSON format
+    echo json_encode($output);
   }
   
   public function transferts_interne($lang='')
@@ -279,7 +347,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -299,7 +367,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -317,7 +385,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -335,7 +403,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -353,7 +421,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -371,7 +439,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -389,7 +457,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -407,7 +475,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -425,7 +493,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -443,7 +511,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -461,7 +529,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -479,7 +547,7 @@ class Dashboard extends Backoffice_Controller
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
-      redirect('connexion');
+      redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
@@ -496,7 +564,7 @@ class Dashboard extends Backoffice_Controller
   // {
   //     if(!$this->ion_auth->logged_mlm_in())
   //     {
-  //       redirect('connexion');
+  //       redirect(trim($_SESSION['language']).'/connexion');
   //     }
   //     $this->data['page_title'] = 'Mon réseau';
   //     $this->data['titre'] = 'reseau';
@@ -512,7 +580,7 @@ class Dashboard extends Backoffice_Controller
   {
       if(!$this->ion_auth->logged_mlm_in())
       {
-        redirect('connexion');
+        redirect(trim($_SESSION['language']).'/connexion');
       }
       $this->data['page_title'] = 'Mon arbre généalogique';
       $this->data['titre'] = 'arbre';
@@ -528,7 +596,7 @@ class Dashboard extends Backoffice_Controller
   {
       if(!$this->ion_auth->logged_mlm_in())
       {
-        redirect('connexion');
+        redirect(trim($_SESSION['language']).'/connexion');
       }
       $this->data['page_title'] = 'Mes commissions';
       $this->data['titre'] = 'commissions';
@@ -544,7 +612,7 @@ class Dashboard extends Backoffice_Controller
   {
       if(!$this->ion_auth->logged_mlm_in())
       {
-        redirect('connexion');
+        redirect(trim($_SESSION['language']).'/connexion');
       }
       $this->data['page_title'] = 'Mon parrain';
       $this->data['titre'] = 'parrain';

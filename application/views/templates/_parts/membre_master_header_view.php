@@ -18,6 +18,9 @@
    
     <!-- toast CSS -->
     <link href="<?php echo site_url('assets/member/vendor_components/jquery-toast-plugin-master/src/jquery.toast.css');?>" rel="stylesheet">
+
+    <!-- Data Table-->
+	<link rel="stylesheet" type="text/css" href="<?php echo site_url('assets/member/vendor_components/datatable/datatables.min.css');?>"/>
 	
 	<!-- theme style -->
 	<link rel="stylesheet" href="<?php echo site_url('assets/member/css/style.css');?>">
@@ -195,7 +198,7 @@
 						</a>
 						<ul class="treeview-menu">
 							<li <?php if($titre == 'New partners registration') echo 'class="active"';?>>
-								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/operation_financiere');?>">
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/my-operation');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("mes opérations financières"))?>
 								</a>

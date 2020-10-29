@@ -234,8 +234,12 @@ $route["backoffice/my-network"] = 'backoffice/dashboard/mon_reseau/en';
 $route["(fr|en)/backoffice/matrice/(:num)"] = 'backoffice/dashboard/matrice/$1/$2';
 $route["backoffice/matrice/(:num)"] = 'backoffice/dashboard/matrice/en/$1';
 
-$route["(fr|en)/backoffice/operation_financiere"] = 'backoffice/dashboard/operation_financiere/$1';
-$route["backoffice/operation_financiere"] = 'backoffice/dashboard/operation_financiere';
+$route["(fr|en)/backoffice/my-operation"] = 'backoffice/dashboard/operation_financiere/$1';
+$route["backoffice/my-operation"] = 'backoffice/dashboard/operation_financiere/en';
+
+$route["(fr|en)/backoffice/dataOperations"] = 'backoffice/dashboard/dataOperations/$1';
+
+
 
 $route["(fr|en)/backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne/$1';
 $route["backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne';

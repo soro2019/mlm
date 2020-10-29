@@ -53,6 +53,11 @@
 	<!-- apexcharts -->
 	<script src="<?php echo site_url('assets/member/vendor_components/apexcharts-bundle/irregular-data-series.js')?>"></script>
 	<script src="<?php echo site_url('assets/member/vendor_components/apexcharts-bundle/dist/apexcharts.js')?>"></script>
+
+  <!-- This is data table -->
+    <script src="<?php echo site_url('assets/member/vendor_components/datatable/datatables.min.js')?>"></script>
+
+    <script src="<?php echo site_url('assets/member/js/pages/data-table.js')?>"></script>
 	
 	<!-- toast -->
 	<script src="<?php echo site_url('assets/member/vendor_components/jquery-toast-plugin-master/src/jquery.toast.js')?>"></script>
@@ -146,7 +151,51 @@
              
           }
     </script> 
+   <script type="text/javascript">
+    var operationTable;
+    var base_url = "<?php echo base_url(''); ?>";
 
+    $(document).ready(function() {
+        $("#languageNav").addClass('active');
+            
+        // initialize the datatable 
+        var base_url = "<?php echo base_url('main/');?>"; // You can use full url here but I prefer like this
+        operationTable = $('#operation-table').DataTable({
+            
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            /*'ordering': true,*/
+            'info': true,
+            'responsive': false,
+            /* Processing indicator */
+            "processing": true,
+            "pageLength" : 10,
+            "serverSide": true,
+            "order": [],
+            "ajax":{
+              dataType: "JSON",
+              url :  base_url+'dataImpetrant2',
+              type : 'POST',
+              
+              data: function(data){
+                   data.identifiant_genered = $('#identifiant_genered').val();
+                   data.nom_prenoms = $('#nom_prenoms').val();
+                   data.date_envoie = $('#date_envoie').val();
+                }
+            },
+
+        });
+
+       $('#identifiant_genered, #nom_prenoms, #date_envoie').change(function(){
+          operationTable.draw();
+       });
+       $('#identifiant_genered, #nom_prenoms, #date_envoie').keyup(function(){
+          operationTable.draw();
+       });
+
+    });
+ </script>
          
 </body>
 </html>
