@@ -188,7 +188,7 @@
 						</ul>
 					</li> 
 
-					<li class="treeview <?php if($titre == get_phrase('faire l\'achat initial') or $titre == 'Partners list' or $titre == 'Your level') echo 'active';?>">
+					<li class="treeview <?php if($titre == get_phrase('faire l\'achat initial') or $titre == get_phrase('mes opérations finacières') or $titre == 'Your level') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= get_phrase("Finance")?></span>
@@ -197,7 +197,7 @@
 							</span>
 						</a>
 						<ul class="treeview-menu">
-							<li <?php if($titre == 'New partners registration') echo 'class="active"';?>>
+							<li <?php if($titre == get_phrase('mes opérations finacières')) echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/my-operation');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("mes opérations financières"))?>
