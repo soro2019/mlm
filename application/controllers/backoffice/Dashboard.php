@@ -52,6 +52,18 @@ class Dashboard extends Backoffice_Controller
 
       $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
       $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$matrice);
+
+      if($this->input->post())
+      {
+        if($this->input->post('c-matrice')!=NULL)
+        {
+          var_dump($this->input->post());die;
+        }
+      }
+
+
+
+
       $this->render('backoffice/dashboard_view');
   }
 
