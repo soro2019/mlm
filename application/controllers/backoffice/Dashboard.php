@@ -36,7 +36,7 @@ class Dashboard extends Backoffice_Controller
       $this->data['titre'] = get_phrase('dashboard');
 
       $this->data['page_description'] = get_phrase('dashboard');
-      $this->data['page_author'] = get_phrase('dashboard');
+      $this->data['page_author'] = 'dashboard';
       
       $this->data['mesFieulles'] = $this->UserModel->selectMesFieulles($this->session->userdata('identity'), 3);
 
@@ -167,7 +167,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['titre'] = get_phrase('mon réseau');
 
     $this->data['page_description'] = get_phrase('mon réseau');
-    $this->data['page_author'] = get_phrase('mon réseau');
+    $this->data['page_author'] = 'mon_reseau';
     
     $this->render('backoffice/reseau_view');
   }
@@ -184,7 +184,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['titre'] = get_phrase('faire l\'achat initial');
 
     $this->data['page_description'] = get_phrase('achat initial');
-    $this->data['page_author'] = get_phrase('achat initial');
+    $this->data['page_author'] = 'subscription';
     $this->data['products'] = $this->Crud_model->selectAllProduct();
 
     if($this->input->post())
@@ -271,7 +271,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['titre'] = ucwords(get_phrase('mes opérations finacières'));
 
     $this->data['page_description'] = ucfirst(get_phrase('mes opérations finacières'));
-    $this->data['page_author'] = ucfirst(get_phrase('mes opérations finacières'));
+    $this->data['page_author'] = "operation_financiere";
 
     $this->data['typeOp'] = $this->Crud_model->selectAllTypeOp();
     

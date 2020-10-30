@@ -152,14 +152,14 @@
 
 				<li class="header nav-small-cap"><?=strtoupper(get_phrase('menu principal'))?></li> 
 
-					<li <?php if($titre == 'dashboard') echo 'class="active"';?>>
+					<li <?php if($page_author == 'dashboard') echo 'class="active"';?>>
 						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice');?>">
 							<i class="fa fa-dashboard"></i>
 							<span><?=get_phrase('dashboard')?></span>
 						</a>
 					</li> 
 
-					<li class="treeview <?php if($titre == 'mon réseau') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'mon_reseau') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?=ucfirst(get_phrase("mon réseau"))?></span>
@@ -168,7 +168,7 @@
 							</span>
 						</a>
 						<ul class="treeview-menu">
-							<li <?php if($titre == 'mon réseau') echo 'class="active"';?>>
+							<li <?php if($page_author == 'mon_reseau') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/my-network');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("mon reseau actuel"))?>
@@ -178,7 +178,7 @@
 							 for($i=1; $i <= $niveau; $i++)
 							 {
 							?>
-							<li <?php if($titre == 'matrice') echo 'class="active"';?>>
+							<li <?php if($page_author == 'matrice') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/matrice/'.$i);?>">
 									<i class="ti-more"></i>
 									<?=ucfirst(get_phrase("matrice"))?> <?=$i?> 
@@ -188,36 +188,36 @@
 						</ul>
 					</li> 
 
-					<li class="treeview <?php if($titre == get_phrase('faire l\'achat initial') or $titre == get_phrase('mes opérations finacières') or $titre == 'Your level') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'subscription' or $page_author == 'operation_financiere' or $page_author == 'Your level') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
-							<span><?= get_phrase("Finance")?></span>
+							<span><?=ucfirst(get_phrase("finance"))?></span>
 							<span class="pull-right-container">
 							<i class="fa fa-angle-right pull-right"></i>
 							</span>
 						</a>
 						<ul class="treeview-menu">
-							<li <?php if($titre == get_phrase('mes opérations finacières')) echo 'class="active"';?>>
+							<li <?php if($page_author == 'operation_financiere') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/my-operation');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("mes opérations financières"))?>
 								</a>
 							</li>
-							<li <?php if($titre == 'Partners list') echo 'class="active"';?>>
+							<li <?php if($page_author == 'Partners list') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/transferts_interne');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("transferts interne"))?>
 								</a>
 							</li>
 							<?php if($achat_ini != 1){ ?>
-							<li <?php if($titre == get_phrase('faire l\'achat initial')) echo 'class="active"';?>>
+							<li <?php if($page_author == 'subscription') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/subscription');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("faire l'achat initial"))?>
 								</a>
 							</li>
 						   <?php } ?>
-							<li <?php if($titre == get_phrase('notre boutique')) echo 'class="active"';?>>
+							<li <?php if($page_author == get_phrase('notre boutique')) echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/boutique');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("notre boutique"))?>
@@ -226,14 +226,14 @@
 							
 						</ul>
 					</li>  
-					<li <?php if($titre == 'messagerie') echo 'class="active"';?>>
+					<li <?php if($page_author == 'messagerie') echo 'class="active"';?>>
 						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/messagerie');?>">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("messagerie"))?></span>
 						</a>
 					</li>
 
-					<li class="treeview <?php if($titre == 'Profile data' or $titre == 'Security') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'Profile data' or $page_author == 'Security') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("données personnelles"))?></span>
@@ -242,13 +242,13 @@
 							</span>
 						</a>
 						<ul class="treeview-menu">
-							<li <?php if($titre == 'Profile data') echo 'class="active"';?>>
+							<li <?php if($page_author == 'Profile data') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/my-info');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("mon Profil"))?>
 								</a>
 							</li>
-							<li <?php if($titre == 'Security') echo 'class="active"';?>>
+							<li <?php if($page_author == 'Security') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/securite');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("sécurité"))?>
@@ -258,14 +258,14 @@
 						</ul>
 					</li> 
 
-					<li <?php if($titre == 'Promotional materials') echo 'class="active"';?>>
+					<li <?php if($page_author == 'Promotional materials') echo 'class="active"';?>>
 						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/materiel_marketing');?>">
 							<i class="ti-dashboard"></i>
 							<span><?=ucfirst(get_phrase("matériels marketing"))?></span>
 						</a>
 					</li>
 
-					<li <?php if($titre == 'Signup new partner') echo 'class="active"';?>>
+					<li <?php if($page_author == 'Signup new partner') echo 'class="active"';?>>
 						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/nouveau_partenaire');?>">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("ajouter un nouveau partenaire"))?></span>
