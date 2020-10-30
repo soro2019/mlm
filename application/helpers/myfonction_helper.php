@@ -55,8 +55,71 @@ function test_inputValide($data)
    $data = trim($data);
    $data = stripslashes($data);
    $data = htmlspecialchars($data);
-  // $data = mysqli_real_escape_string($data);
    return $data;
+}
+
+
+function nbAccessLienParrain()
+{
+  $CI =& get_instance();
+  $page = $CI->uri->segment(2)!=NULL ? $CI->uri->segment(2) : $CI->uri->segment(1);
+
+  $parrain = explode('/', $_SERVER['REQUEST_URI']);
+
+  if($page=="registration")
+  {
+    $pseudo = trim(end($parrain));
+    if($pseudo == "registration")
+    {
+      $pseudo = trim("usermlm");
+    }
+  }else
+  {
+    return false;
+  }
+  $data_user = $CI->UserModel->GetUserDataByPseudo($pseudo);
+  //var_dump($data_user);die;
+  if(!is_bool($data_user) && is_array($data_user))
+  {
+    $nb = $data_user['nbperson_accede_lien'] + 1;
+    $CI->Crud_model->update_where('users', ['nbperson_accede_lien' => $nb], $pseudo, 'pseudo');
+    return true;
+  }else
+  {
+    return 0;
+  }
+}
+
+function inscritViaLienParrain()
+{
+  
+  $CI =& get_instance();
+  $page = $CI->uri->segment(2)!=NULL ? $CI->uri->segment(2) : $CI->uri->segment(1);
+
+  $parrain = explode('/', $_SERVER['REQUEST_URI']);
+
+  if($page=="registration")
+  {
+    $pseudo = trim(end($parrain));
+    if($pseudo == "registration")
+    {
+      $pseudo = trim("usermlm");
+    }
+  }else
+  {
+    return false;
+  }
+  $data_user = $CI->UserModel->GetUserDataByPseudo($pseudo);
+  //var_dump($data_user);die;
+  if(!is_bool($data_user) && is_array($data_user))
+  {
+    $nb = $data_user['nbperson_inscrit_via_lien'] + 1;
+    $CI->Crud_model->update_where('users', ['nbperson_inscrit_via_lien' => $nb], $pseudo, 'pseudo');
+    return true;
+  }else
+  {
+    return 0;
+  }
 }
 
 if ( !function_exists('defineLanguage'))

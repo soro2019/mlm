@@ -67,16 +67,17 @@
 		<div class="box box-body pb-10 bl-4 border-danger pull-up" style="height: 108px;">
 		  <h6 class="text-uppercase"><?=ucfirst(get_phrase("ceux ayant acheté"))?></h6>
 		  <div class="d-flex justify-content-between">
-			<span class=" font-size-30">4</span>
+			<span class=" font-size-30"><?=$this->UserModel->nbFilleulsAchat($membre['pseudo'])?></span>
 			<span class="font-size-30 text-danger mdi mdi-city"></span>
 		  </div>
 		</div><br>
-	</div>				
+	</div>
+
 	<div class="col-xl-3 col-12">
 		<div class="box box-body pb-10 bl-4 border-warning pull-up" style="height: 108px;">
 		  <h6 class="text-uppercase"><?=ucfirst(get_phrase("ceux n'ayant pas acheté"))?></h6>
 		  <div class="d-flex justify-content-between">
-			<span class=" font-size-30">3</span>
+			<span class=" font-size-30"><?php echo ($membre['nbperson_inscrit_via_lien'] - $this->UserModel->nbFilleulsAchat($membre['pseudo'])); ?></span>
 			<span class="font-size-30 text-warning mdi mdi-home"></span>
 		  </div>
 		</div>

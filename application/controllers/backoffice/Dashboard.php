@@ -171,6 +171,7 @@ class Dashboard extends Backoffice_Controller
     
     $this->render('backoffice/reseau_view');
   }
+  
 
   public function subscription($lang='')
   {

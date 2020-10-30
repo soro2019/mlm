@@ -215,7 +215,6 @@ class Crud_model extends CI_Model {
         $this->db->where(array('reel_pseudo' => $reel_pseudo));
         $query = $this->db->get();
         $nb = $query->num_rows() +1;
-
         return 'clone'.$nb.'_'.$reel_pseudo;
     }
 

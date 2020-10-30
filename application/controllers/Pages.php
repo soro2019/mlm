@@ -11,6 +11,7 @@
             $this->load->library('form_validation');
             $this->load->helper('form');
             $this->load->model(['Crud_model']);
+            nbAccessLienParrain();
         }
 
         private function compte_filleuls($parrain, $matrice)
@@ -234,6 +235,7 @@
                             'date_migration' => time());
                         $this->db->insert($matrice, $data_filleul);
                         $this->definir_parrain_de_matrice($pseudo, $parrain, $matrice);
+                        inscritViaLienParrain();
                         for($i=1; $i <=3 ; $i++){ 
                            $this->db->insert('comptes', ['pseudo_propio'=> $pseudo, 'typecompte'=> $i,  'montant' => 0]);
                         }

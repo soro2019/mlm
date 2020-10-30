@@ -213,6 +213,17 @@ class UserModel extends CI_Model {
              return 0;
          }
     }
+
+
+    public function nbFilleulsAchat($pseudo)
+    {
+      $this->db->select('*');
+      $this->db->from($this->Table);
+      $this->db->where('pseudo_parrain', trim($pseudo));
+      $this->db->where('achat_ini', 1);
+      $query = $this->db->get();
+      return $query->num_rows();
+    }
     
     public function getdateInscription($pseudo)
 	{  
