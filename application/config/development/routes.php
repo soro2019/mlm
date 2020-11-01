@@ -241,8 +241,8 @@ $route["(fr|en)/backoffice/dataOperations"] = 'backoffice/dashboard/dataOperatio
 
 
 
-$route["(fr|en)/backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne/$1';
-$route["backoffice/transferts_interne"] = 'backoffice/dashboard/transferts_interne';
+$route["(fr|en)/backoffice/internal-transfer"] = 'backoffice/dashboard/transferts_interne/$1';
+$route["backoffice/internal-transfer"] = 'backoffice/dashboard/transferts_interne/en';
 
 $route["(fr|en)/backoffice/subscription"] = 'backoffice/dashboard/subscription/$1';
 $route["backoffice/subscription"] = 'backoffice/dashboard/subscription';

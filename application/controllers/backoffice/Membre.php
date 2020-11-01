@@ -19,6 +19,8 @@ class Membre extends MY_Controller
     $this->data['dateInscription'] = $membre['created_on'];
     $this->data['email_membre'] = $membre['email'];
     $this->data['img_membre'] = $membre['img_profil'];
+    $this->data['achat_ini'] = $membre['achat_ini'];
+    $this->data['niveau'] = $membre['niveau'];
   
       $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
       /*$this->data['mesbons'] = $this->MesBonsModel->mesbons($this->session->userdata('identity'));

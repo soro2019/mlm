@@ -38,7 +38,7 @@
 					  <div class="col-sm-6">
 					  	<label><?=ucfirst(get_phrase('type opération'))?></label>
 					  	<select class="form-control" name="type" id='type'>
-					  		<option value=""><?=ucfirst(get_phrase('type opération'))?></option>
+					  		<option value=""><?=ucfirst(get_phrase('selectionner une opération'))?></option>
 					  		<?php foreach ($typeOp as $type) { ?>
 					  		  <option value="<?=$type['id']?>"><?=ucfirst($type['lib'])?></option>
 					  		<?php } ?>

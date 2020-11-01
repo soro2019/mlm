@@ -18,6 +18,12 @@ class Dashboard extends Backoffice_Controller
     $this->data['dateInscription'] = $membre['created_on'];
     $this->data['email_membre'] = $membre['email'];
     $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
+    $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
+    $cMatrice = $this->data['compactmatrice'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 1);
+
+    $cBonus = $this->data['compactbonus'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 2);
+
+    $cOperation = $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
     $this->data['niveau'] = $membre['niveau'];
     $this->data['achat_ini'] = $membre['achat_ini'];
   }
@@ -46,23 +52,85 @@ class Dashboard extends Backoffice_Controller
 
       $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
 
-      $this->data['compactmatrice'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 1);
+      
 
-      $this->data['compactbonus'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 2);
-
-      $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
       $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$matrice);
 
       if($this->input->post())
       {
         if($this->input->post('c-matrice')!=NULL)
         {
-          var_dump($this->input->post());die;
+          $montant = (int) $this->input->post('montant');
+          if(empty($montant) || $montant == 0)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }elseif((int)$cMatrice["montant"] <= $montant)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
+          }else
+          {
+            $reste = (int)$cMatrice["montant"] - $montant;
+            if($this->Crud_model->update_where('comptes', ['montant' => $reste], $cMatrice["id"], 'id'))
+            {
+              $newSolde = (int)$cOperation["montant"] + $montant;
+              $this->Crud_model->update_where('comptes', ['montant' => $newSolde], $cOperation["id"], 'id');
+              $modepaie = 'Avec le Compte Matrice';
+              $data['comptdestinataire'] = $cMatrice["id"];
+              $motif = ucfirst(get_phrase("transfert interne"));
+              $data['typeoperation'] = 4;
+              $data['pseudodestinataire'] = $this->session->userdata('identity');
+              $data['dateopration'] = time();
+              $data['motif_oprt'] = ucfirst(get_phrase("transfert interne du compte matrice vers le compte d'opération"));
+              $data['modpaiement'] = $modepaie;
+              $data['montant'] = $montant;
+              $leMois = lesMois(date('m'));
+              $data['mois_annee'] = $leMois.' '.date('Y');
+              $data['pseudo_receveur'] = $this->session->userdata('identity');
+              $data['comptereceveur'] = $cOperation["id"];
+              $this->Crud_model->insertion_('operations', $data);
+              $this->session->set_flashdata('message_success', ucfirst(get_phrase("transfert effectué avec succès")));
+              redirect(trim($_SESSION['language']).'/backoffice');
+            }
+          }
+        }
+
+        if($this->input->post('c-bonus')!=NULL)
+        {
+          $montant = (int) $this->input->post('montant');
+          if(empty($montant) || $montant == 0)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }elseif((int)$cBonus["montant"] <= $montant)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
+          }else
+          {
+            $reste = (int)$cBonus["montant"] - $montant;
+            if($this->Crud_model->update_where('comptes', ['montant' => $reste], $cBonus["id"], 'id'))
+            {
+              $newSolde = (int)$cOperation["montant"] + $montant;
+              $this->Crud_model->update_where('comptes', ['montant' => $newSolde], $cOperation["id"], 'id');
+
+              $modepaie = 'Avec le Compte Bonus';
+              $data['comptdestinataire'] = $cBonus["id"];
+              $motif = ucfirst(get_phrase("transfert interne"));
+              $data['typeoperation'] = 4;
+              $data['pseudodestinataire'] = $this->session->userdata('identity');
+              $data['dateopration'] = time();
+              $data['motif_oprt'] = ucfirst(get_phrase("transfert interne du compte bonus vers le compte d'opération"));
+              $data['modpaiement'] = $modepaie;
+              $data['montant'] = $montant;
+              $leMois = lesMois(date('m'));
+              $data['mois_annee'] = $leMois.' '.date('Y');
+              $data['pseudo_receveur'] = $this->session->userdata('identity');
+              $data['comptereceveur'] = $cOperation["id"];
+              $this->Crud_model->insertion_('operations', $data);
+              $this->session->set_flashdata('message_success', ucfirst(get_phrase("transfert effectué avec succès")));
+              redirect(trim($_SESSION['language']).'/backoffice');
+            }
+          }
         }
       }
-
-
-
 
       $this->render('backoffice/dashboard_view');
   }
@@ -289,7 +357,6 @@ class Dashboard extends Backoffice_Controller
     $this->data['typeOp'] = $this->Crud_model->selectAllTypeOp();
     
     $this->render('backoffice/operation_financiere_view');
-      
   }
 
   public function dataOperations()
@@ -366,13 +433,67 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = get_phrase('internal transfer');
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = get_phrase('internal transfer');
+    $this->data['page_author'] = 'transferts_interne';
+
+    if($this->input->post())
+    {
+
+      if(empty($this->input->post('pseudo_partenaire')) || empty($this->input->post('montant')) || empty($this->input->post('compte')))
+      {
+        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('veuillez remplir correctement le formulaire')));
+      }elseif($this->input->post('montant')==0)
+      {
+        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('le montant saisi n\'est pas valable')));
+      }elseif(!$this->UserModel->PseudoExiste($this->input->post('pseudo_partenaire')))
+      {
+        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('le pseudo de votre partenaire n\'existe pas dans notre base')));
+
+      }elseif($this->session->userdata('identity')==$this->input->post('pseudo_partenaire'))
+      {
+        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("impossible d'effectuer cette opération via cet interface")));
+      }else
+      {
+        $compteSelect = $this->Crud_model->moncompteById((int)$this->input->post('compte'));
+        if($compteSelect['montant'] <= (int)$this->input->post('montant'))
+        {
+         $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
+        }else
+        { 
+            $montant = (int)$this->input->post('montant');
+            $reste = (int)$compteSelect["montant"] - $montant;
+
+            if($this->Crud_model->update_where('comptes', ['montant' => $reste], $compteSelect["id"], 'id'))
+            {
+              $cOpPart = $this->Crud_model->moncomptes($this->input->post('pseudo_partenaire'),3);
+              $newSolde = (int)$cOpPart["montant"] + $montant;
+              $this->Crud_model->update_where('comptes', ['montant' => $newSolde], $cOpPart["id"], 'id');
+              $name = $this->db->get_where('typecompte', ['id' => $compteSelect['typecompte']])->row_array()['libelle'];
+              $modepaie = 'Avec le Compte '.$name;
+              $data['comptdestinataire'] = $compteSelect["id"];
+              $motif = ucfirst(get_phrase("transfert interne vers le partenaire")).' '.$this->input->post('pseudo_partenaire');
+              $data['typeoperation'] = 4;
+              $data['pseudodestinataire'] = $this->session->userdata('identity');
+              $data['dateopration'] = time();
+              $data['motif_oprt'] = $motif;
+              $data['modpaiement'] = $modepaie;
+              $data['montant'] = $montant;
+              $data['message_au_receveur'] = test_inputValide($this->input->post('message'));
+              $data['comptereceveur'] = $cOpPart["id"];
+              $data['pseudo_receveur'] = $this->input->post('pseudo_partenaire');
+              $leMois = lesMois(date('m'));
+              $data['mois_annee'] = $leMois.' '.date('Y');
+              $this->Crud_model->insertion_('operations', $data);
+              $this->session->set_flashdata('message_success', ucfirst(get_phrase("transfert effectué avec succès")));
+              redirect(trim($_SESSION['language']).'/backoffice/internal-transfer');
+            }
+        }
+      }
+    }
     
     $this->render('backoffice/transferts_interne_view');
-      
   }
   
   

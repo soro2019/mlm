@@ -188,7 +188,7 @@
 						</ul>
 					</li> 
 
-					<li class="treeview <?php if($page_author == 'subscription' or $page_author == 'operation_financiere' or $page_author == 'Your level') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'subscription' or $page_author == 'operation_financiere' or $page_author == 'transferts_interne') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?=ucfirst(get_phrase("finance"))?></span>
@@ -203,8 +203,8 @@
 									<?= ucfirst(get_phrase("mes opérations financières"))?>
 								</a>
 							</li>
-							<li <?php if($page_author == 'Partners list') echo 'class="active"';?>>
-								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/transferts_interne');?>">
+							<li <?php if($page_author == 'transferts_interne') echo 'class="active"';?>>
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/internal-transfer');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("transferts interne"))?>
 								</a>
