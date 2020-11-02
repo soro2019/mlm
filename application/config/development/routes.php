@@ -263,16 +263,16 @@ $route["(fr|en)/backoffice/webinar"] = 'backoffice/dashboard/webinaire/$1';
 $route["backoffice/webinar"] = 'backoffice/dashboard/webinaire/en';
 
 $route["(fr|en)/backoffice/conferences"] = 'backoffice/dashboard/conferences/$1';
-$route["backoffice/conferences"] = 'backoffice/dashboard/conferences';
+$route["backoffice/conferences"] = 'backoffice/dashboard/conferences/en';
 
-$route["(fr|en)/backoffice/actualites"] = 'backoffice/dashboard/actualites/$1';
-$route["backoffice/actualites"] = 'backoffice/dashboard/actualites';
+$route["(fr|en)/backoffice/news"] = 'backoffice/dashboard/actualites/$1';
+$route["backoffice/news"] = 'backoffice/dashboard/actualites/en';
 
 $route["(fr|en)/backoffice/support_technique"] = 'backoffice/dashboard/support_technique/$1';
 $route["backoffice/support_technique"] = 'backoffice/dashboard/support_technique';
 
 $route["(fr|en)/backoffice/faq"] = 'backoffice/dashboard/faq/$1';
-$route["backoffice/faq"] = 'backoffice/dashboard/faq';
+$route["backoffice/faq"] = 'backoffice/dashboard/faq/en';
 
 $route["(fr|en)/backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite/$1';
 $route["backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite';

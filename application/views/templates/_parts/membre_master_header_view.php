@@ -46,8 +46,12 @@
     	}
 
         .theme-purple a:hover, .theme-purple a:active, .theme-purple a:focus {
-            color: white !important;
+           /* color: white !important;*/
         }
+
+   /*     .theme-purple a:hover, .theme-purple a:active, .theme-purple a:focus {
+    color: orange !important;
+}*/
             
     </style>
   </head>
@@ -271,7 +275,7 @@
 							<span><?= ucfirst(get_phrase("ajouter un nouveau partenaire"))?></span>
 						</a>
 					</li> 
-					<li class="treeview <?php if($page_author == 'webinaire') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'webinaire' || $page_author == 'conferences' || $page_author == 'actualites' || $page_author == 'faq') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("extra"))?></span>
@@ -284,13 +288,13 @@
 										<?=ucfirst(get_phrase("webinaire"))?>
 									</a>
 								</li>
-								<li>
+								<li <?php if($page_author == 'conferences') echo 'class="active"';?>>
 									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/conferences');?>" class="ti-more">
 										<?= ucfirst(get_phrase("conférences"))?>
 									</a>
 								</li>
-								<li>
-									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/actualites');?>" class="ti-more">
+								<li <?php if($page_author == 'actualites') echo 'class="active"';?>>
+									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/news');?>" class="ti-more">
 										<?= ucfirst(get_phrase("actualités"))?>
 									</a>
 								</li>
@@ -299,7 +303,7 @@
 										<?= ucfirst(get_phrase("support technique"))?>
 									</a>
 								</li>
-								<li>
+								<li <?php if($page_author == 'faq') echo 'class="active"';?>>
 									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/faq');?>" class="ti-more">
 										<?=strtoupper(get_phrase("faq"))?>
 									</a>

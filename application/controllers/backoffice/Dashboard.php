@@ -642,13 +642,13 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('webinaire');
+    $this->data['titre'] = get_phrase('webinaires en ligne');
 
     $this->data['page_description'] = get_phrase('webinaire');
     $this->data['page_author'] = 'webinaire';
+    $this->data['webinaires'] = $this->Crud_model->selectArticle(3);
     
     $this->render('backoffice/webinaire');
-      
   }
 
   public function conferences($lang='')
@@ -660,13 +660,13 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = get_phrase('nos conférences');
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = get_phrase('conférences');
+    $this->data['page_author'] = 'conferences';
+    $this->data['conferneces'] = $this->Crud_model->selectArticle(2);
     
-    $this->render('backoffice/conferences');
-      
+    $this->render('backoffice/conferences');    
   }
 
   public function actualites($lang='')
@@ -678,10 +678,11 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = get_phrase('nos actualités');
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = get_phrase('nos actualités');
+    $this->data['page_author'] = 'actualites';
+    $this->data['actualites'] = $this->Crud_model->selectArticle(1);
     
     $this->render('backoffice/actualites');
       
@@ -714,10 +715,10 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = get_phrase('faq');
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = get_phrase('faq');
+    $this->data['page_author'] = 'faq';
     
     $this->render('backoffice/faq');
       

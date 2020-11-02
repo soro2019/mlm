@@ -240,20 +240,6 @@ class Crud_model extends CI_Model {
         $nb = $query->num_rows() +1;
         return 'clone'.$nb.'_'.$reel_pseudo;
     }
-    public function cloneExist($pseudo,$matrice)
-    {
-      //matrice est une chaine de characteres
-        $this->db->select('*'); 
-        $this->db->from('clones_'.$matrice);
-        $this->db->where(array('reel_pseudo' => $pseudo));
-        $this->db->order_by('clone_pseudo', 'DESC');
-        $query = $this->db->get();
-        if($query->num_rows() > 0){
-            return $query->row_array();
-        }else{
-            return false;
-        }        
-    }
 
 
 
