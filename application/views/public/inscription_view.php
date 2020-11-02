@@ -47,8 +47,15 @@
                                 } ?>
                             </h1>
                             <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; margin-bottom:15px;color:#02799c;"> <?=get_phrase('S\'inscrire')?></h1>
-                            <?php if($pseudo = $this->uri->segment(3)){}else{ $pseudo = "usermlm";} ?>
-                             <?=get_phrase('Votre parrain est')?> : <?=$pseudo?>
+                            <?php
+                                $parrain = explode('/', $_SERVER['REQUEST_URI']);
+                                $pseudo = trim(end($parrain));
+                                if($pseudo == "registration")
+                                {
+                                  $pseudo = trim("usermlm");
+                                }
+                            ?>
+                             <?=get_phrase('votre parrain est')?> : <?=$pseudo?>
                             <input type="hidden" name="parrain" value="<?=$pseudo?>">
                             <input type="text" id="user-name" class="form-control" placeholder="<?=ucfirst(get_phrase('votre pseudo'))?>" required autofocus=""  title="<?=ucfirst(get_phrase('votre pseudo'))?>" name="pseudo" value="<?=isset_value('pseudo')?>">
 
