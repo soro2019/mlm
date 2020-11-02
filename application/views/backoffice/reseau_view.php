@@ -1,5 +1,10 @@
 <style type="text/css">
 	 h6{font-size: 10px !important;}
+   .btn-default:hover, .btn-default:active, .btn-default:focus, .btn-default.active {
+    background-color: #cccccc !important; 
+    border-color: #cccccc !important;
+    color: #2f363c;
+  }
 </style>
 
 <div class="content-header">
@@ -105,18 +110,13 @@
       </ul>
       <!-- Tab panes -->
       <div class="tab-content">
-        <?php //for($j=1; $j<=$niveau; $j++){/* $active =""; if($j==$niveau){$active = "active";}*/
-        //$matrice = 'matrice'.$j;
-         //$data = selectFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$j);
-         //var_dump(selectFilleulByMatrice('usermlm', 'matrice1'));
-
-         //var_dump(selectFilleulByMatrice('usermlm', 'matrice2'));
-
-       //}
+        <?php for($j=1; $j<=$niveau; $j++){ $active =""; if($j==$niveau){$active = "active";}
+         $matrice = 'matrice'.$j;
+         $data = selectFilleulByMatrice($this->session->userdata('identity'), $matrice);
        ?>
-        <div class="tab-pane <?//=$active?>" id="matrice<?//=$j?>" role="tabpanel">
+        <div class="tab-pane <?=$active?>" id="matrice<?=$j?>" role="tabpanel">
           <div class="p-15">
-            <h3><?=ucfirst(get_phrase('information sur la matrice'))?></h3>
+            <h3><?=ucfirst(get_phrase('information sur la matrice')).' '.$j?></h3>
             <p>
              <div class="table-responsive">
                 <table id="operation-table" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
@@ -125,19 +125,61 @@
                     <th>N<sup>o</sup></th>
                     <th><?=ucwords(get_phrase('pseudo'))?></th>
                     <th><?=ucwords(get_phrase('nom & prénoms'))?></th>
+                    <th><?php echo ucfirst(get_phrase("achat initial")); ?></th>
                     <th><?=ucwords(get_phrase('date inscription'))?></th>
                     <th><?=ucwords(get_phrase('actions'))?></th>
                   </tr>
                 </thead>
                 <tbody>
-                 
+                <?php if(!empty($data)){ for ($i=0; $i < count($data) ; $i++) {
+                  $pseudo = $data[$i];
+                    if(stristr($pseudo, 'clone')==TRUE)
+                    {
+                      $pseudo = trim(explode('_', $pseudo)[1]);
+                    }
+                  $user = $this->UserModel->GetUserDataByPseudo($pseudo);
+
+                  $achat_ini = '<span class="badge badge-pill badge-danger">'.ucfirst(get_phrase('non')).'</span>';
+
+                  if($user['achat_ini'] == 1)
+                  {
+                    $achat_ini = '<span class="badge badge-pill badge-success">'.ucfirst(get_phrase('oui')).'</span>';
+                  }
+                ?>
+            <tr>
+              <td><?=($i+1)?></td>
+              <td><?=$pseudo?></td>
+              <td><?=ucwords($user['first_name'])?> <?=ucfirst($user['last_name'])?></td>
+              <td><?=$achat_ini?></td>
+              <td><span class="text-muted"><i class="fa fa-clock-o"></i> <?=date('M d, Y', $user['created_on'])?></span> </td>
+              <td>
+                <div class="btn-group mb-5">
+                <button style="height: 30px; font-size: 10px;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><?=ucfirst(get_phrase('actions'))?></button>
+                <div class="dropdown-menu">
+                  <a href="#" data-backdrop="static" data-toggle="modal" class="dropdown-item" data-target="#userinfo" data-toggle="modal" onclick="infouser(<?=trim($user['id'])?>)">
+                       <?=ucfirst(get_phrase('information mon filleule'))?>
+                      </a>
+                  <a href="#" data-backdrop="static" data-toggle="modal" class="dropdown-item" data-target="#reseauinfo" data-toggle="modal" onclick="reseauinfo(<?=trim($user['id'])?>, <?=trim($j)?>)">
+                       <?=ucfirst(get_phrase('information sur son réseau'))?>
+                      </a>
+                </div>
+              </div>
+              </td>
+            </tr>
+              <?php } }else{ ?>
+                <tr>
+                  <td colspan="6">
+                    <?php echo ucfirst(get_phrase('vous n\'avez pas encore de filleule dans cette matrice')); ?>
+                  </td>
+                </tr>
+              <?php } ?>
                 </tbody>          
               </table>
               </div>
             </p>
           </div>
         </div>
-       <?php //} ?>
+       <?php } ?>
       </div>
     </div>
   </div>

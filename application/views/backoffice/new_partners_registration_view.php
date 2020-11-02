@@ -60,7 +60,7 @@
 	          		<div class="row">
 	          			<div class="col-md-6">
 	          				<label><b><?=ucfirst(get_phrase('pseudo'))?></b></label>
-	          				<input type="text" id="user-name" class="form-control" placeholder="<?=ucfirst(get_phrase('pseudo du partenaire'))?>" required name="pseudo" value="<?=isset_value('pseudo')?>">
+	          				<input type="text" id="user-name" class="form-control" placeholder="<?=ucfirst(get_phrase('pseudo du partenaire'))?>" required name="pseudo" autofocus=""  value="<?=isset_value('pseudo')?>">
 	          			</div>
 	          			<div class="col-md-6">
 	          				<label><b><?=ucfirst(get_phrase('email'))?></b></label>
@@ -70,7 +70,7 @@
 	          		<div class="row">
 	          			<div class="col-md-6">
 	          				<label><b><?=ucfirst(get_phrase('nom'))?></b></label>
-	          				<input type="text" id="user-name" class="form-control" placeholder="<?=ucfirst(get_phrase('nom du partenaire'))?>" required autofocus=""  title="<?=ucfirst(get_phrase('nom du partenaire'))?>" name="nom" value="<?=isset_value('nom')?>">
+	          				<input type="text" id="user-name" class="form-control" placeholder="<?=ucfirst(get_phrase('nom du partenaire'))?>" required title="<?=ucfirst(get_phrase('nom du partenaire'))?>" name="nom" value="<?=isset_value('nom')?>">
 	          			</div>
 	          			<div class="col-md-6">
 	          				<label><b><?=ucfirst(get_phrase('prénoms'))?></b></label>
