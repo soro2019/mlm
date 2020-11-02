@@ -9,13 +9,7 @@ class MY_Controller extends CI_Controller
     $this->data['page_title'] = 'SHAPP INVEST - Source of Happiness Investment';
     $this->data['before_head'] = '';
     $this->data['before_body'] ='';
-    
     $this->load->library('ion_auth');
-    $this->load->model('UserModel');
-    $this->load->model('MesFilleulsModel');
-    $this->load->model('MesBonsModel');
-    $this->load->model('MessenkaModel');
-    $this->load->model('AgenceModel');
   }
  
   protected function render($the_view = NULL, $template = 'master')
@@ -76,10 +70,10 @@ class Backoffice_Controller extends MY_Controller
     if (!$this->ion_auth->logged_mlm_in())
     {
       //redirect them to the login page
-      redirect('connexion', 'refresh');
+      redirect('en/connexion', 'refresh');
     }
       
-    $this->data['page_title'] = 'Shappinvest - Backoffice';
+    $this->data['page_title'] = 'Social-Coop - Backoffice';
   }
     
   protected function render($the_view = NULL, $template = 'backoffice_master')

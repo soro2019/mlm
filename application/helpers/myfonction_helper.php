@@ -219,9 +219,41 @@ function compte_filleuls($parrain, $matrice)
     $CI  =&  get_instance();
     $CI->load->database();
     $filleuls = $CI->Crud_model->select_filleuls($parrain, $matrice);
-    if($filleuls['pseudo_filleulGauche'] == null) return 0;
-    if($filleuls['pseudo_filleulDroit'] == null) return 1;
+    if(trim($filleuls['pseudo_filleulGauche']) == null) return 0;
+    if(trim($filleuls['pseudo_filleulDroit']) == null) return 1;
     return 2;
+}
+
+function selectFilleulByMatrice($parrain, $matrice)
+{
+    $CI  =&  get_instance();
+    $CI->load->database();
+    $parrains_a_compter = array();
+    $data = array();
+    $i = 0;
+    do{
+        $filleuls = $CI->Crud_model->select_filleuls($parrain, $matrice);
+        if(trim($filleuls['pseudo_filleulGauche']) != null)
+        {
+          $i++;
+            array_push($parrains_a_compter, trim($filleuls['pseudo_filleulGauche']));
+            array_push($data, trim($filleuls['pseudo_filleulGauche']));
+        }
+        if(trim($filleuls['pseudo_filleulDroit']) != null)
+        {
+          $i++;
+            array_push($parrains_a_compter, trim($filleuls['pseudo_filleulDroit']));
+            array_push($data, trim($filleuls['pseudo_filleulDroit']));
+        }
+        $parrain = array_shift($parrains_a_compter);
+ 
+        if($i == 6)
+        { //arrêt de la fonction lorsque le nombre de filleule atteint 6
+          $parrains_a_compter = [];
+        }
+
+    }while(count($parrains_a_compter) != 0);
+    return $data;
 }
 
 function compte_descendants($parrain, $matrice)
@@ -233,13 +265,13 @@ function compte_descendants($parrain, $matrice)
     $parrains_a_compter = array();
     do{
         $filleuls = $CI->Crud_model->select_filleuls($parrain, $matrice);
-        if($filleuls['pseudo_filleulGauche'] != null)
+        if(trim($filleuls['pseudo_filleulGauche']) != null)
         {
-            array_push($parrains_a_compter, $filleuls['pseudo_filleulGauche']);
+            array_push($parrains_a_compter, trim($filleuls['pseudo_filleulGauche']));
         }
-        if($filleuls['pseudo_filleulDroit'] != null)
+        if(trim($filleuls['pseudo_filleulDroit']) != null)
         {
-            array_push($parrains_a_compter, $filleuls['pseudo_filleulDroit']);
+            array_push($parrains_a_compter, trim($filleuls['pseudo_filleulDroit']));
         }
         $parrain = array_shift($parrains_a_compter);
         $nb+=compte_filleuls($parrain, $matrice);                
@@ -258,11 +290,10 @@ function fin_matrice($pseudo_ParrainNvFilleul, $matrice)
     $CI->load->database();
     $flag=6;
     $ancetre = $CI->Crud_model->select_parrain($pseudo_ParrainNvFilleul, $matrice);
-
     if(!empty($ancetre))
     {
         $nb_filleuls = compte_filleuls($ancetre['pseudo_user'], $matrice);
-        if( $nb_filleuls < 2) return false;
+        if($nb_filleuls < 2) return false;
         $flag-=$nb_filleuls;
         $flag-= $ancetre['pseudo_filleulGauche'] == null ? 0 : compte_filleuls($ancetre['pseudo_filleulGauche'], $matrice);
         $flag-= $ancetre['pseudo_filleulDroit'] == null ? 0 : compte_filleuls($ancetre['pseudo_filleulDroit'], $matrice);
@@ -280,7 +311,7 @@ function definir_parrain_de_matrice($pseudo_user, $parrain, $matrice)
         $parrain = $row_clone['clone_pseudo'];
     }   
     $filleuls = $CI->Crud_model->select_filleuls($parrain,$matrice);
-    if($filleuls['pseudo_filleulGauche'] == null)
+    if(trim($filleuls['pseudo_filleulGauche']) == null)
     {
         ////mettre comme filleulGauche
         $CI->Crud_model->updateGen(
@@ -289,7 +320,7 @@ function definir_parrain_de_matrice($pseudo_user, $parrain, $matrice)
             $matrice
         );
     }
-    elseif($filleuls['pseudo_filleulDroit'] == null)
+    elseif(trim($filleuls['pseudo_filleulDroit']) == null)
     {
         ////insertion comme filleulDroit
         $CI->Crud_model->updateGen(
@@ -309,7 +340,7 @@ function definir_parrain_de_matrice($pseudo_user, $parrain, $matrice)
     }
     else{
         ////prendre celui qui a le moins de descandants
-        $filleulChoisis = choix_filleul($filleuls['pseudo_filleulGauche'],$filleuls['pseudo_filleulDroit'], $matrice);
+        $filleulChoisis = choix_filleul(trim($filleuls['pseudo_filleulGauche']),trim($filleuls['pseudo_filleulDroit']), $matrice);
         definir_parrain_de_matrice($pseudo_user, $filleulChoisis, $matrice);   
     }
 }
@@ -363,13 +394,13 @@ function migration($row_user, $matrice)
 
         //chercher ses filleuls
         $filleuls = $CI->Crud_model->select_filleuls($pseudo_user,$matrice);
-        if($CI->Crud_model->nameExist($matrice_suivante,'pseudo_user',$filleuls['pseudo_filleulGauche']))
+        if($CI->Crud_model->nameExist($matrice_suivante,'pseudo_user',trim($filleuls['pseudo_filleulGauche'])))
         {
-            definir_parrain_de_matrice($filleuls['pseudo_filleulGauche'],$row_user['pseudo_user'],$matrice_suivante);
+            definir_parrain_de_matrice(trim($filleuls['pseudo_filleulGauche']),$row_user['pseudo_user'],$matrice_suivante);
         }
-        if($CI->Crud_model->nameExist($matrice_suivante,'pseudo_user',$filleuls['pseudo_filleulDroit']))
+        if($CI->Crud_model->nameExist($matrice_suivante,'pseudo_user',trim($filleuls['pseudo_filleulDroit'])))
         {
-            $CI->definir_parrain_de_matrice($filleuls['pseudo_filleulDroit'],$row_user['pseudo_user'],$matrice_suivante);
+            $CI->definir_parrain_de_matrice(trim($filleuls['pseudo_filleulDroit']),$row_user['pseudo_user'],$matrice_suivante);
         }
     }
 
@@ -377,34 +408,34 @@ function migration($row_user, $matrice)
     ajout_clone($row_user, $matrice);
 }
 
-function selectFilleulByMatrice($pseudo, $matrice)
+/*function selectFilleulByMatrice($pseudo, $matrice)
 {
   $CI  =&  get_instance();
   $CI->load->database();
   $filleuls = [];
-  $data = '';
+  $data = [];
   $i = 0;
    while($i < 6)
    {
-     $query = $CI->Crud_model->select_filleuls(trim($pseudo), trim($matrice));
-     if($query["pseudo_filleulGauche"] != null) 
+     $query = $CI->Crud_model->select_filleuls($pseudo, $matrice);
+
+     if(trim($query["pseudo_filleulGauche"]) != null) 
       {
         $i++;
         array_push($filleuls, trim($query["pseudo_filleulGauche"]));
-        $data = $data.'|'.$query["pseudo_filleulGauche"];
+        array_push($data, trim($query["pseudo_filleulGauche"]));
       }
-      if($query["pseudo_filleulDroit"] != null)
+      if(trim($query["pseudo_filleulDroit"]) != null)
       {
         $i++;
         array_push($filleuls, trim($query["pseudo_filleulDroit"]));
-        $data = $data.'|'.$query["pseudo_filleulDroit"];
+        array_push($data, trim($query["pseudo_filleulDroit"]));
       }
       
       $pseudo = array_shift($filleuls);
    }
-
     return $data;
-}
+}*/
 
 
 //$matrice doit etre une chaine de characteres

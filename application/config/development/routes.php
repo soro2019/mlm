@@ -231,8 +231,8 @@ $route['backoffice/my-profile'] = 'backoffice/membre/profil/en';
 $route["(fr|en)/backoffice/my-network"] = 'backoffice/dashboard/mon_reseau/$1';
 $route["backoffice/my-network"] = 'backoffice/dashboard/mon_reseau/en';
 
-$route["(fr|en)/backoffice/matrice/(:num)"] = 'backoffice/dashboard/matrice/$1/$2';
-$route["backoffice/matrice/(:num)"] = 'backoffice/dashboard/matrice/en/$1';
+$route["(fr|en)/backoffice/matrix/(:num)"] = 'backoffice/dashboard/matrice/$1/$2';
+$route["backoffice/matrix/(:num)"] = 'backoffice/dashboard/matrice/en/$1';
 
 $route["(fr|en)/backoffice/my-operation"] = 'backoffice/dashboard/operation_financiere/$1';
 $route["backoffice/my-operation"] = 'backoffice/dashboard/operation_financiere/en';

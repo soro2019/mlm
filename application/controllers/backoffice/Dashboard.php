@@ -200,6 +200,60 @@ class Dashboard extends Backoffice_Controller
         echo json_encode($result);
   }
 
+  public function modalinforeseau()
+  {
+      if(!$this->ion_auth->logged_mlm_in())
+      {
+         redirect(trim($_SESSION['language']).'/connexion');
+      }
+      $user = $this->UserModel->GetUserDataById($_POST['id']);
+      $matrice = 'matrice'.$_POST['niveau'];
+      $reseau = selectFilleulByMatrice($user['pseudo'], $matrice);
+      $result = '<div class="modal-body">
+                  <div class="box-body no-padding">
+                   <div class="table-responsive">
+                    <table class="table table-hover">
+                      <tr>
+                        <th>N<sup>o</sup></th>
+                        <th>'.ucfirst(get_phrase('pseudo')).'</th>
+                        <th>'.ucfirst(get_phrase('nom')).' '.ucfirst(get_phrase('prénoms')).'</th>
+                        <th>'.ucfirst(get_phrase("achat initial")).'</th>
+                        <th>'.ucfirst(get_phrase("date d'entrer")).'</th>
+                      </tr>';
+      if(!empty($reseau))
+      {
+        for ($i=0; $i < count($reseau) ; $i++){
+          $pseudo = $reseau[$i];
+          if(stristr($pseudo, 'clone') == TRUE)
+          {
+            $pseudo = trim(explode('_', $pseudo)[1]);
+          }
+          $filleul = $this->UserModel->GetUserDataByPseudo($pseudo);
+          $achat_ini = '<span class="badge badge-pill badge-danger">'.ucfirst(get_phrase('non')).'</span>';
+          if($filleul['achat_ini'] == 1)
+          {
+           $achat_ini = '<span class="badge badge-pill badge-success">'.ucfirst(get_phrase('oui')).'</span>';
+          }
+
+          $result .= '<tr>
+                        <td>'.($i+1).'</td>
+                        <td>'.$reseau[$i].'</td>
+                        <td>'.ucwords($filleul['first_name']).' '.ucfirst($filleul['last_name']).'</td>
+                        <td>'.$achat_ini.'</td>
+                        <td><span class="text-muted"><i class="fa fa-clock-o"></i> '.date('M d, Y', $filleul['created_on']).'</span> </td>
+                      </tr>';
+        }
+        
+      }else
+      {
+        $result .='<tr>
+                  <td colspan="6">'.ucfirst(get_phrase('ce membre n\'a pas encore de filleule dans cette matrice')).'</td>
+                </tr>';
+      }
+      $result .= '</table></div></div></div>';
+      echo json_encode($result);
+  }
+
   public function modaldProduit()
   {
       if(!$this->ion_auth->logged_mlm_in())
@@ -325,7 +379,7 @@ class Dashboard extends Backoffice_Controller
     $this->render('backoffice/souscription_view');
   }
     
-  public function matrice($lang='',$nieme)
+  public function matrice($lang='', $nieme)
   {
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
@@ -333,12 +387,19 @@ class Dashboard extends Backoffice_Controller
       redirect(trim($_SESSION['language']).'/connexion');
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-    
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = get_phrase('matrice');
+    $this->data['nieme'] = (int) $nieme;
+    $this->data['page_description'] = get_phrase('matrice');
+    $this->data['page_author'] = 'matrice'.$this->data['nieme'];
+    $this->data['page_author2'] = 'matrice';
+    //var_dump($this->data['nieme']);die;
+    if($nieme > $this->data['niveau'])
+    {
+     $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('votre plus grand niveau de matrice est '.$this->data['niveau'].' et non '.$nieme)));
+      redirect(trim($_SESSION['language']).'/backoffice');
+    }
+    $this->data['r'] = selectFilleulByMatrice($this->session->userdata('identity'), $this->data['page_author']);
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
-    
     $this->render('backoffice/matrice_view');
   }
 
@@ -684,8 +745,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['page_author'] = 'actualites';
     $this->data['actualites'] = $this->Crud_model->selectArticle(1);
     
-    $this->render('backoffice/actualites');
-      
+    $this->render('backoffice/actualites');   
   }
 
   public function support_technique($lang='')
@@ -702,8 +762,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['page_description'] = get_phrase('dashboard');
     $this->data['page_author'] = get_phrase('dashboard');
     
-    $this->render('backoffice/support_technique');
-      
+    $this->render('backoffice/support_technique');      
   }
 
   public function faq($lang='')
@@ -720,8 +779,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['page_description'] = get_phrase('faq');
     $this->data['page_author'] = 'faq';
     
-    $this->render('backoffice/faq');
-      
+    $this->render('backoffice/faq');     
   }
 
   public function politique_confidentialite($lang='')
@@ -738,8 +796,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['page_description'] = get_phrase('dashboard');
     $this->data['page_author'] = get_phrase('dashboard');
     
-    $this->render('backoffice/politique_confidentialite');
-      
+    $this->render('backoffice/politique_confidentialite');    
   }
 
   public function mention_legale($lang='')
@@ -756,8 +813,7 @@ class Dashboard extends Backoffice_Controller
     $this->data['page_description'] = get_phrase('dashboard');
     $this->data['page_author'] = get_phrase('dashboard');
     
-    $this->render('backoffice/mention_legale');
-      
+    $this->render('backoffice/mention_legale');   
   }
 
   //  public function mon_reseau()

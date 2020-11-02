@@ -21,7 +21,26 @@
         </div>
       </div>
     </div>
-  </div> 
+  </div>
+
+   <div class="modal fade bs-example-modal-lg" style="left: 140px !important;" id="reseauinfo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myLargeModalLabel"><?=ucfirst(get_phrase('information sur son réseau'))?></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div id="inforeseau">
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
   <footer class="main-footer">
     <div class="pull-right d-none d-sm-inline-block">
         <ul class="nav nav-primary nav-dotted nav-dot-separated justify-content-center justify-content-md-end">
@@ -150,6 +169,22 @@
                 });
              
           }
+
+          function reseauinfo(id, niveau){
+
+            //alert(pseudo);
+            var base_url = "<?php echo base_url('backoffice/dashboard/');?>";
+            $.ajax({
+                    url: base_url+'modalinforeseau/',
+                    type: 'POST',
+                    data : {id : id, niveau : niveau},
+                    dataType: 'json',
+                    success:function(response) {
+                        document.getElementById('inforeseau').innerHTML=response;
+                    }
+                });
+          }
+          
 
           function infoachat(id){
 

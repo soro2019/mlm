@@ -163,7 +163,7 @@
 						</a>
 					</li> 
 
-					<li class="treeview <?php if($page_author == 'mon_reseau') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'mon_reseau' || (isset($page_author2)))echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?=ucfirst(get_phrase("mon réseau"))?></span>
@@ -182,8 +182,8 @@
 							 for($i=1; $i <= $niveau; $i++)
 							 {
 							?>
-							<li <?php if($page_author == 'matrice') echo 'class="active"';?>>
-								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/matrice/'.$i);?>">
+							<li <?php if($page_author == 'matrice'.$i) echo 'class="active"';?>>
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/matrix/'.$i);?>">
 									<i class="ti-more"></i>
 									<?=ucfirst(get_phrase("matrice"))?> <?=$i?> 
 								</a>

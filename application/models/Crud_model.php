@@ -98,8 +98,8 @@ class Crud_model extends CI_Model {
     public function select_filleuls($parrain, $matrice)
     {
       $this->db->select('*');
-      $this->db->from($matrice);
-      $this->db->where(array('pseudo_user' => $parrain));
+      $this->db->from(trim($matrice));
+      $this->db->where(array('pseudo_user' => trim($parrain)));
       $query = $this->db->get();
       return $query->row_array();           
     }
