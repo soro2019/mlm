@@ -143,11 +143,16 @@ class Dashboard extends Backoffice_Controller
       }
       $user = $this->UserModel->GetUserDataById($_POST['id']);
       //var_dump($user);die;
-      $genre = $user['genre'] == 'H' ? 'Homme' : ($user['genre'] == 'F') ? 'Femme' : '';
-      /*if($user['genre']=='F')
+      if(trim($user['genre']) == 'F')
       {
         $genre = "Femme";
-      }*/
+      }elseif(trim($user['genre']) == 'H')
+      {
+        $genre = "Homme";
+      }else
+      {
+        $genre = "";
+      }
       $result = '<div class="modal-body">
                    <div class="row">
                        <div class="col-sm-5">'.ucfirst(get_phrase('pseudo')).' : <b>'.trim($user['pseudo']).'</b>                         
