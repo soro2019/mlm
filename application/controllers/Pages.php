@@ -10,7 +10,7 @@
             parent::__construct();
             $this->load->library('form_validation');
             $this->load->helper('form');
-            $this->load->model(['Crud_model']);
+            $this->load->model(['Crud_model', 'UserModel']);
             nbAccessLienParrain();
         }
 
