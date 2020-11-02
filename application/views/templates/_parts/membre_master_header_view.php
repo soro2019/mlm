@@ -271,7 +271,7 @@
 							<span><?= ucfirst(get_phrase("ajouter un nouveau partenaire"))?></span>
 						</a>
 					</li> 
-					<li class=treeview>
+					<li class="treeview <?php if($page_author == 'webinaire') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("extra"))?></span>
@@ -279,8 +279,8 @@
 							<i class="fa fa-angle-right pull-right"></i>
 							</span>
 							<ul class="treeview-menu">
-								<li>
-									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/webinaire');?>" class="ti-more">
+								<li <?php if($page_author == 'webinaire') echo 'class="active"';?>>
+									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/webinar');?>" class="ti-more">
 										<?=ucfirst(get_phrase("webinaire"))?>
 									</a>
 								</li>
