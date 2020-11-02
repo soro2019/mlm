@@ -274,6 +274,11 @@ function definir_parrain_de_matrice($pseudo_user, $parrain, $matrice)
 {
     $CI  =&  get_instance();
     $CI->load->database();
+
+    if($row_clone = $CI->Crud_model->cloneExist($parrain,$matrice))
+    {
+        $parrain = $row_clone['clone_pseudo'];
+    }   
     $filleuls = $CI->Crud_model->select_filleuls($parrain,$matrice);
     if($filleuls['pseudo_filleulGauche'] == null)
     {
