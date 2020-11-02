@@ -3,6 +3,25 @@
 	  </div>
   </div>
   <!-- /.content-wrapper -->
+
+  <div class="modal center-modal fade" id="userinfo" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><?=ucfirst(get_phrase('information sur le user'))?></h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="infouser">
+           
+        </div>
+        <div class="modal-footer modal-footer-uniform">
+          <button type="button" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+        </div>
+      </div>
+    </div>
+  </div> 
   <footer class="main-footer">
     <div class="pull-right d-none d-sm-inline-block">
         <ul class="nav nav-primary nav-dotted nav-dot-separated justify-content-center justify-content-md-end">
@@ -147,6 +166,7 @@
                 });
              
           }
+
     </script>          
 </body>
 </html>

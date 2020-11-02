@@ -137,6 +137,29 @@ class Crud_model extends CI_Model {
         }else return 0;
     }
 
+    public function selectTypeOpById($id)
+    {
+        $this->db->select('*');
+        $this->db->from('typeoperation');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+          return $query->row_array();
+        }else return 0;
+    }
+
+    public function selectAllOperationByPseudo($pseudo)
+    {
+        $this->db->select('*');
+        $this->db->from('operations');
+        $this->db->where('pseudodestinataire', $pseudo);
+        $this->db->order_by('dateopration', 'DESC');
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+          return $query->result_array();
+        }else return 0;
+    }
+
     public function GetProductDataById($id)
     {
         $this->db->select('*');

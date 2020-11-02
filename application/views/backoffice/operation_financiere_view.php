@@ -46,9 +46,15 @@
 					  </div>
 					  <div class="col-sm-3">
 					  	<label><?=ucfirst(get_phrase('pseudo du receveur'))?></label>
-					  	 <input type="text" id="pseudo_r" name="pseudo_r" class="form-control">
+					  	 <input type="text" onkeyup="myFunction();" id="pseudo_r" name="pseudo_r" class="form-control">
 					  </div>
-					</div><br><br>
+					</div><br>
+					<div class="row">
+						<div class="col-sm-6">
+							<button type="submit" class="btn btn-primary"><?=ucfirst(get_phrase('filtrer'))?></button>
+						</div>
+					</div>
+					<br>
 					<div class="table-responsive">
 					  <table id="operation-table" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
 						<thead>
@@ -59,9 +65,25 @@
 								<th><?=ucfirst(get_phrase('motif'))?></th>
 								<th><?=ucfirst(get_phrase('date'))?></th>
 								<th><?=ucfirst(get_phrase('receveur'))?></th>
+								<th><?=ucfirst(get_phrase('mois année'))?></th>
 							</tr>
 						</thead>
 						<tbody>
+						<?php /*var_dump($mesoperations);die;*/ if(is_array($mesoperations)){ $i =1;?>
+						  <?php foreach ($mesoperations as $monoperation) { 
+						  	$name = $this->Crud_model->selectTypeOpById($monoperation['typeoperation'])['lib'];
+						  ?>
+							<tr>
+							  <td><?=$i?></td>
+							  <td><?=$name?></td>
+							  <td><?php echo number_format(floatval(trim($monoperation['montant'])), 0, ' ', ' ');?> $</td>
+							  <td><?=$monoperation['motif_oprt']?></td>
+							  <td><?=date('d/m/Y', $monoperation['dateopration'])?></td>
+							  <td><?=empty($monoperation['pseudo_receveur']) ? "master" : $monoperation['pseudo_receveur']?></td>
+							  <td><?=$monoperation['mois_annee']?></td>
+							</tr>
+						  <?php $i++;} ?>
+					    <?php } ?>
 						</tbody>				  
 					</table>
 					</div>              
@@ -70,3 +92,28 @@
 			  </div>
  </div>
 </div>
+
+
+<script>
+function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("pseudo_r");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("operation-table");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>

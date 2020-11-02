@@ -192,8 +192,6 @@ class Dashboard extends Backoffice_Controller
                     </div><br>
                   </div>
                   ';
-
-                  
         echo json_encode($result);
   }
 
@@ -355,6 +353,8 @@ class Dashboard extends Backoffice_Controller
     $this->data['page_author'] = "operation_financiere";
 
     $this->data['typeOp'] = $this->Crud_model->selectAllTypeOp();
+
+    $this->data['mesoperations'] = $this->Crud_model->selectAllOperationByPseudo($this->session->userdata('identity'));
     
     $this->render('backoffice/operation_financiere_view');
   }
@@ -561,13 +561,71 @@ class Dashboard extends Backoffice_Controller
     }
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = get_phrase('ajouter un nouveau partenaire');
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = ucfirst(get_phrase('ajouter un nouveau partenaire'));
+    $this->data['page_author'] = 'nouveau_partenaire';
+
+     if($this->input->post())
+     {
+        $codepays = substr($this->input->post('phonenumber'),0,2);
+        if(empty($this->input->post('pseudo')) || empty($this->input->post('usermail')) || empty($this->input->post('phonenumber')) || empty($this->input->post('userpass')) || empty($this->input->post('userconfpass')))
+        {
+          $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('aucun champs ne doit être vide')));
+        }elseif($this->UserModel->PseudoExiste($this->input->post('pseudo')))
+        {
+          $this->session->set_flashdata('message_erreur',ucfirst(get_phrase('désolé! Ce pseudo est déjà pris.')));
+        }elseif($this->UserModel->EmailExiste($this->input->post('usermail')))
+        {
+          $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet adresse email est déjà utilisée.')));
+        }elseif($this->UserModel->PhoneExiste($this->input->post('phonenumber')))
+        {
+          $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet numéro de téléphone est déjà utilisée.')));
+        }elseif($this->UserModel->NomExiste2($this->input->post('nom')) && $this->UserModel->PrenomsExiste2($this->input->post('prenoms')))
+        {
+          $this->session->set_flashdata('message_erreur', get_phrase('Le nom et prénoms saisie sont déjà utilisée par un autre utilisateur'));
+
+        }elseif(stripos($codepays, '+') || stripos($codepays, "00"))
+        {
+         $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('veuillez ajouter l\'indicateur de votre pays à votre contact en utilisant "+"')));
+        }
+        elseif(!$this->input->post('userpass')===$this->input->post('userconfpass'))
+        {
+          $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Les deux mots de passe ne correspondent pas.')));
+        }else
+        {
+            $group_ids = [2];
+            $pseudo = test_inputValide($this->input->post('pseudo'));
+            $password = test_inputValide($this->input->post('userpass'));
+            $mail = test_inputValide(strtolower($this->input->post('usermail')));
+
+            $parrain = test_inputValide($this->session->userdata('identity'));
+            $additional_data = array(
+                    'pseudo_parrain' => $parrain,
+                    'phone' => test_inputValide($this->input->post('phonenumber')),
+                    'company' => "MEMBRE",
+                    'created_on' => time(),
+                    'niveau' => 1,
+                );
+
+            if($this->ion_auth->register($pseudo, $password, $mail, $additional_data, $group_ids))
+            {
+                $matrice = 'matrice1';
+                $data_filleul = array(
+                    'pseudo_user' => trim($pseudo),
+                    'date_migration' => time());
+                $this->db->insert($matrice, $data_filleul);
+                definir_parrain_de_matrice($pseudo, $parrain, $matrice);
+                for($i=1; $i <=3 ; $i++){ 
+                   $this->db->insert('comptes', ['pseudo_propio'=> $pseudo, 'typecompte'=> $i,  'montant' => 0]);
+                }
+                $this->session->set_flashdata('message_success', ucfirst(get_phrase('partenaire ajouté avec succès.')));
+                redirect(trim($_SESSION['language']).'/backoffice/new-partner','refresh');
+            }
+        }
+     }
     
-    $this->render('backoffice/nouveau_partenaire_view');
-      
+    $this->render('backoffice/new_partners_registration_view');
   }
 
   public function webinaire($lang='')

@@ -111,6 +111,32 @@ class UserModel extends CI_Model {
 			 return false;
 		 }
 	}
+
+    public function NomExiste2($nom){
+         
+         $this->db->select('first_name'); 
+         $this->db->from($this->Table);
+         $this->db->where(array('first_name' => $nom));
+         $query = $this->db->get();
+         if ($query->num_rows() != 0) {
+              return true;
+         } else {
+             return false;
+         }
+    }
+
+    public function PrenomsExiste2($prenoms){
+         
+         $this->db->select('last_name'); 
+         $this->db->from($this->Table);
+         $this->db->where(array('last_name' => $prenoms));
+         $query = $this->db->get();
+         if ($query->num_rows() != 0) {
+              return true;
+         } else {
+             return false;
+         }
+    }
     
     public function PrenomsExiste($prenoms, $id){
 		 
@@ -156,7 +182,7 @@ class UserModel extends CI_Model {
 	{  
  		$this->db->select('*');
 		$this->db->from($this->Table);
-		$this->db->where("pseudo", $pseudo);
+		$this->db->where("pseudo", trim($pseudo));
 		$this->db->limit(1);
   		$query = $this->db->get();
  		if ($query) {

@@ -233,7 +233,7 @@
 						</a>
 					</li>
 
-					<li class="treeview <?php if($page_author == 'Profile data' or $page_author == 'Security') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'modifier_profil' or $page_author == 'Security' or $page_author == 'profil') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("données personnelles"))?></span>
@@ -242,7 +242,7 @@
 							</span>
 						</a>
 						<ul class="treeview-menu">
-							<li <?php if($page_author == 'Profile data') echo 'class="active"';?>>
+							<li <?php if($page_author == 'modifier_profil' || $page_author == 'profil') echo 'class="active"';?>>
 								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/my-info');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("mon Profil"))?>
@@ -265,8 +265,8 @@
 						</a>
 					</li>
 
-					<li <?php if($page_author == 'Signup new partner') echo 'class="active"';?>>
-						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/nouveau_partenaire');?>">
+					<li <?php if($page_author == 'nouveau_partenaire') echo 'class="active"';?>>
+						<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/new-partner');?>">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("ajouter un nouveau partenaire"))?></span>
 						</a>

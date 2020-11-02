@@ -21,6 +21,7 @@ class Membre extends MY_Controller
     $this->data['img_membre'] = $membre['img_profil'];
     $this->data['achat_ini'] = $membre['achat_ini'];
     $this->data['niveau'] = $membre['niveau'];
+    $this->data['membre'] = $membre;
   
       $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
       /*$this->data['mesbons'] = $this->MesBonsModel->mesbons($this->session->userdata('identity'));
@@ -55,9 +56,9 @@ class Membre extends MY_Controller
       }
       defineLanguage($lang);
       $this->data['listepays'] = $this->Crud_model->listePays();
-      $this->data['page_title'] = get_phrase('My profile');
+      $this->data['titre'] = get_phrase('my profile');
       $this->data['page_description'] = get_phrase('information in member');
-      $this->data['titre'] = 'My profile';
+      $this->data['page_author'] = 'profil';
       $user = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
       $this->data['user'] = $user;
       $this->render('backoffice/profil_view','backoffice_master');
@@ -73,9 +74,9 @@ class Membre extends MY_Controller
         redirect('connexion');
       }
       $this->data['page_title'] = get_phrase('Modifier mon profil');
-      $this->data['titre'] = get_phrase('profil');
+      $this->data['titre'] =ucwords(get_phrase('mon profil'));
       $this->data['page_description'] = get_phrase('Modifier mon profil');
-      $this->data['page_author'] = get_phrase('Modifier mon profil');
+      $this->data['page_author'] = 'modifier_profil';
       $user = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
       $this->data['user'] = $user;
       if ($user['social_reseau']==""){$user['social_reseau']='{"facebook": "" ,"skype": "" ,"twitter": ""}'; }
@@ -128,6 +129,7 @@ class Membre extends MY_Controller
         }
   
       }
+
 
       $this->render('backoffice/modif_informations','backoffice_master');
   }

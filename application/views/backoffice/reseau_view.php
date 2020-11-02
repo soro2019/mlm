@@ -7,7 +7,6 @@
         <div class="d-md-block d-none">
             <h3 class="page-title br-0"><?php echo ucwords($titre); ?></h3>
         </div>
-        
     </div>
 </div><br>
 <div class="row">
@@ -36,7 +35,12 @@
             <h3 class="card-title text-center">
              <?=ucfirst(get_phrase("pseudo"))?>	: <span style="color: orange;"><?=$membre['pseudo_parrain']?></span>
             </h3>
-            <a href="#" data-backdrop="static" data-toggle="modal" class="btn btn-primary" data-target="#userinfo" data-toggle="modal">
+            <?php
+              $parrain = $this->UserModel->GetUserDataByPseudo(strtolower($membre['pseudo_parrain']));
+
+              //var_dump($parrain);die;
+            ?>
+            <a href="#" data-backdrop="static" data-toggle="modal" class="btn btn-primary" data-target="#userinfo" data-toggle="modal" onclick="infouser(<?=trim($parrain['id'])?>)">
              <?=ucfirst(get_phrase("détails"))?>
             </a>
             <br>
@@ -87,144 +91,62 @@
 <div class="col-xl-12 col-12">
   <div class="box">
 	<div class="box-header with-border">
-	  <h4 class="box-title"><?php echo ucfirst(get_phrase('mon réreau')); ?></h4>
+	  <h4 class="box-title"><?=ucwords(get_phrase('mon réseau'))?></h4>
 	</div>
 	<!-- /.box-header -->
-	<div class="box-body">
-		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" id="myTab" role="tablist">
-			
-			<li class="nav-item"> <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home5" role="tab" aria-controls="home5" aria-expanded="true"><span class="hidden-sm-up"><i class="ion-home"></i></span> <span class="hidden-xs-down">Home</span></a> </li>
+	<?php //var_dump(selectFilleulByMatrice('usermlm', 'matrice1'));die; ?>
+  <div class="box-body">
+    <!-- Nav tabs -->
+    <div class="vtabs">
+      <ul class="nav nav-tabs tabs-vertical" role="tablist">
+        <?php for($i=1; $i <= $niveau ; $i++){ $active=""; if($i==$niveau){ $active = "active";} ?>
+         <li class="nav-item"> <a class="nav-link <?=$active?>" data-toggle="tab" href="#matrice<?=$i?>" role="tab"><span><i class="ion-person mr-15"></i><?=ucfirst(get_phrase('matrice')).$i?></span></a> </li>
+        <?php } ?>
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <?php //for($j=1; $j<=$niveau; $j++){/* $active =""; if($j==$niveau){$active = "active";}*/
+        //$matrice = 'matrice'.$j;
+         //$data = selectFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$j);
+         //var_dump(selectFilleulByMatrice('usermlm', 'matrice1'));
 
-			<li class="nav-item"> <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile5" role="tab" aria-controls="profile"><span class="hidden-sm-up"><i class="ion-person"></i></span> <span class="hidden-xs-down">Profile</span></a></li>
+         //var_dump(selectFilleulByMatrice('usermlm', 'matrice2'));
 
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-					<span class="hidden-sm-up"><i class="ion-email"></i></span> <span class="hidden-xs-down">Dropdown</span>
-				</a>
-				<div class="dropdown-menu"> <a class="dropdown-item" id="dropdown1-tab" href="#dropdown1" role="tab" data-toggle="tab" aria-controls="dropdown1">@fat</a> <a class="dropdown-item" id="dropdown2-tab" href="#dropdown2" role="tab" data-toggle="tab" aria-controls="dropdown2">@mdo</a> </div>
-			</li>
-		</ul>
-		<!-- Tab panes -->
-		<div class="tab-content tabcontent-border p-15" id="myTabContent">
-			<div role="tabpanel" class="tab-pane fade show active" id="home5" aria-labelledby="home-tab">
-				<p> <div class="col-12">
-					<div class="box">
-						<div class="box-header with-border">
-						  <h4 class="box-title">Property Overview</h4>
-						</div>
-						<div class="box-body">
-							<div class="table-responsive">
-								<table class="table product-overview">
-									<thead>
-										<tr>
-											<th>Customer</th>
-											<th>Order ID</th>
-											<th>Property</th>
-											<th>Type</th>
-											<th>Date</th>
-											<th>Status</th>
-											<th>Actions</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>Minol Jov</td>
-											<td>#8457125</td>
-											<td>Shop</td>
-											<td>Sold</td>
-											<td>10-7-2019</td>
-											<td> <span class="label label-success">Paid</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td>Adem Kalp</td>
-											<td>#96523154</td>
-											<td>Shop</td>
-											<td>On Rent</td>
-											<td>09-7-2019</td>
-											<td> <span class="label label-warning">Pending</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td>Mical Don</td>
-											<td>#95487512</td>
-											<td>Dupelx</td>
-											<td>On Rent</td>
-											<td>08-7-2019</td>
-											<td> <span class="label label-success">Paid</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td>Johen Doe</td>
-											<td>#75485426</td>
-											<td>Shop</td>
-											<td>Sold</td>
-											<td>02-7-2019</td>
-											<td> <span class="label label-danger">Failed</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td>Minol Jov</td>
-											<td>#8457125</td>
-											<td>Shop</td>
-											<td>Sold</td>
-											<td>10-7-2019</td>
-											<td> <span class="label label-success">Paid</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td>Adem Kalp</td>
-											<td>#96523154</td>
-											<td>Shop</td>
-											<td>On Rent</td>
-											<td>09-7-2019</td>
-											<td> <span class="label label-warning">Pending</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td>Mical Don</td>
-											<td>#95487512</td>
-											<td>Dupelx</td>
-											<td>On Rent</td>
-											<td>08-7-2019</td>
-											<td> <span class="label label-success">Paid</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td>Johen Doe</td>
-											<td>#75485426</td>
-											<td>Shop</td>
-											<td>Sold</td>
-											<td>02-7-2019</td>
-											<td> <span class="label label-danger">Failed</span> </td>
-											<td><a href="javascript:void(0)" class="text-dark pr-10" data-toggle="tooltip" title="" data-original-title="Edit"><i class="ti-marker-alt"></i></a> <a href="javascript:void(0)" class="text-dark" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash"></i></a></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div></p>
-			</div>
-			<div class="tab-pane fade" id="profile5" role="tabpanel" aria-labelledby="profile-tab">
-				<p>Fusce porta eros a nisl varius, non molestie metus mollis. Pellentesque tincidunt ante sit amet ornare lacinia. Duis vitae feugiat purus. Nulla facilisi. Ut vitae euismod lorem. Donec sed pellentesque mi. Nullam quam urna, tincidunt eu metus sed, pretium luctus tellus. Integer viverra turpis urna, ut facilisis nulla luctus vitae. Maecenas blandit turpis pretium sollicitudin facilisis. Nam vitae aliquet massa, vel posuere tortor.</p>
-			</div>
-			<div class="tab-pane fade" id="dropdown1" role="tabpanel" aria-labelledby="dropdown1-tab">
-				<p>Donec vitae laoreet neque, id convallis ante. Phasellus a tellus molestie, varius massa in, suscipit diam. Nulla vulputate, nisi eget porttitor semper, quam justo volutpat lacus, in pretium augue tortor at leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at nisl fringilla, malesuada quam eu, eleifend odio. Nulla nunc orci, aliquam quis ligula vel, porttitor tempus nibh. Praesent semper fermentum massa. Proin id maximus metus, vitae ultricies ante. Duis tempus, arcu a vulputate congue, purus ex rutrum elit, at imperdiet nisi nibh at purus. Nunc in fringilla erat.</p>
-			</div>
-			<div class="tab-pane fade" id="dropdown2" role="tabpanel" aria-labelledby="dropdown2-tab">
-				<p>Morbi ac mi vel tellus condimentum semper. In nec finibus erat. Sed ultrices ligula mi, a euismod metus egestas in. Nulla imperdiet neque at massa fringilla dignissim a id orci. Nam faucibus, ipsum interdum bibendum rutrum, libero odio vestibulum purus, non sollicitudin risus nunc et odio. Vestibulum volutpat, ante sit amet dignissim imperdiet, diam diam sodales orci, in gravida lorem erat eu diam. Nulla lorem nunc, ultrices ac dignissim et, dignissim nec lacus. Praesent euismod lorem eget justo lacinia rutrum sed at mi. Fusce commodo eros a vulputate accumsan.</p>
-			</div>
-		</div>
-	</div>
+       //}
+       ?>
+        <div class="tab-pane <?//=$active?>" id="matrice<?//=$j?>" role="tabpanel">
+          <div class="p-15">
+            <h3><?=ucfirst(get_phrase('information sur la matrice'))?></h3>
+            <p>
+             <div class="table-responsive">
+                <table id="operation-table" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                <thead>
+                  <tr>
+                    <th>N<sup>o</sup></th>
+                    <th><?=ucwords(get_phrase('pseudo'))?></th>
+                    <th><?=ucwords(get_phrase('nom & prénoms'))?></th>
+                    <th><?=ucwords(get_phrase('date inscription'))?></th>
+                    <th><?=ucwords(get_phrase('actions'))?></th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>          
+              </table>
+              </div>
+            </p>
+          </div>
+        </div>
+       <?php //} ?>
+      </div>
+    </div>
+  </div>
 	<!-- /.box-body -->
   </div>
   <!-- /.box -->
-</div>			  <!-- /.box -->
+</div>
 <br><br>
-
- <div class="modal center-modal fade" id="userinfo" tabindex="-1">
+ <div class="modal center-modal fade" id="userinfoyyy" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">

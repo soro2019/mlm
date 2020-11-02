@@ -256,8 +256,8 @@ $route["backoffice/securite"] = 'backoffice/dashboard/securite';
 $route["(fr|en)/backoffice/materiel_marketing"] = 'backoffice/dashboard/materiel_marketing/$1';
 $route["backoffice/materiel_marketing"] = 'backoffice/dashboard/materiel_marketing';
 
-$route["(fr|en)/backoffice/nouveau_partenaire"] = 'backoffice/dashboard/nouveau_partenaire/$1';
-$route["backoffice/nouveau_partenaire"] = 'backoffice/dashboard/nouveau_partenaire';
+$route["(fr|en)/backoffice/new-partner"] = 'backoffice/dashboard/nouveau_partenaire/$1';
+$route["backoffice/new-partner"] = 'backoffice/dashboard/nouveau_partenaire/en';
 
 $route["(fr|en)/backoffice/webinaire"] = 'backoffice/dashboard/webinaire/$1';
 $route["backoffice/webinaire"] = 'backoffice/dashboard/webinaire';
