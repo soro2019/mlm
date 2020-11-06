@@ -32,8 +32,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               echo form_open("administrator~shappinvest/change_the_theme/updates_lien_reseau", $attributes);
             ?>
               <div class="box-header">
-                <h3 class="box-title"><?php echo get_phrase('Reseau sociaux'); ?></h3>
-                <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal-insert"><?php echo get_phrase('clique pour inserer un nouveau'); ?></button>
+                <h3 class="box-title"><?php echo ucfirst(get_phrase('reseau sociaux')); ?></h3>
+                <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal-insert"><?php echo ucfirst(get_phrase('clique pour inserer un nouveau')); ?></button>
               </div>
 
               <div class="box-body">
@@ -64,7 +64,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <input type="submit" name="position" class="btn btn-success text-center col-md-12 col-xs-12" value="<?php echo get_phrase('clique pour modifier'); ?>"/>
+                <input type="submit" name="position" class="btn btn-success text-center col-md-12 col-xs-12" value="<?php echo ucfirst(get_phrase('clique pour modifier')); ?>"/>
               </div>
             <?php echo form_close(); ?>
           </div>
@@ -86,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
                     <center>
-                        <h2 class="box-title"><?php echo get_phrase('Nouveau reseau'); ?></h2>
+                        <h2 class="box-title"><?php echo ucfirst(get_phrase('nouveau reseau')); ?></h2>
                     </center>
                 </h4>
             </div>
@@ -122,7 +122,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="modal-footer box box-success">
                         <button type="reset" class="btn btn-success pull-left" data-dismiss="modal"><?php echo get_phrase('Fermer'); ?></button>
-                        <input type="submit" id="valider2" value="<?php echo get_phrase('enregistrer'); ?>" class="btn btn-success" name="envoi" />
+                        <input type="submit" id="valider2" value="<?php echo ucfirst(get_phrase('enregistrer')); ?>" class="btn btn-success" name="envoi" />
               
                     </div>
                 <?php echo form_close() ; ?>
@@ -286,8 +286,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </button>
                 <h4 class="modal-title">
                     <center>
-                        <h2 class="box-title"><?php echo get_phrase('Voulez-vous vraiment le supprimer?'); ?></h2>
-                        <h4><?php echo get_phrase('Si oui entrer le code de validation et cliquer sur supprimer'); ?></h4>
+                        <h2 class="box-title"><?php echo ucfirst(get_phrase('voulez-vous vraiment le supprimer?')); ?></h2>
+                        <h4><?php echo ucfirst(get_phrase('si oui entrer le code de validation et cliquer sur supprimer')); ?></h4>
                     </center>
                 </h4>
             </div>
@@ -300,14 +300,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 ?>
                     <div class="box-body">                        
                         <div class="form-group col-md-12">
-                            <input type="password" class="form-control" name="verifcationcode" title="<?php echo get_phrase('pour la verification de votre identite'); ?>" placeholder="<?php echo get_phrase('Entrer le code de validation'); ?>" required >
+                            <input type="password" class="form-control" name="verifcationcode" title="<?php echo ucfirst(get_phrase('pour la verification de votre identite')); ?>" placeholder="<?php echo ucfirst(get_phrase('entrer le code de validation')); ?>" required >
                         </div>
                         <input type="hidden" name="codeverifinconf" id="lieu">
                         <input type="hidden" name="verifcode" id="verifcode">
                     </div>
                     <div class="modal-footer box box-danger">
                         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><?php echo get_phrase('Fermer'); ?></button>
-                        <input type="submit" id="valider3" value="<?php echo get_phrase('Supprimer'); ?>" class="btn btn-danger" name="envoi" />
+                        <input type="submit" id="valider3" value="<?php echo ucfirst(get_phrase('supprimer')); ?>" class="btn btn-danger" name="envoi" />
 
                     </div>
                 <?php echo form_close() ; ?>

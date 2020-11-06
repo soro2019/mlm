@@ -195,18 +195,19 @@ function countFilleulByMatrice($pseudo, $matrice)
     do
     {
       $query = $CI->Crud_model->select_filleuls(trim($pseudo), trim($matrice));
-      if($query["pseudo_filleulGauche"] !=null) 
+      if($query["pseudo_filleulGauche"] != null) 
       {
         $i++;
         array_push($filleuls, trim($query["pseudo_filleulGauche"]));
       }
-      if($query["pseudo_filleulDroit"] !=null)
+      if($query["pseudo_filleulDroit"] != null)
       {
         $i++;
         array_push($filleuls, trim($query["pseudo_filleulDroit"]));
       }
 
       $pseudo = array_shift($filleuls);
+      
     }while(count($filleuls) != 0);
 
     return $i;

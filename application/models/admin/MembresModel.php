@@ -1,187 +1,114 @@
 <?php
-/*
- * Ce script est libre de droit.
- */
- 
-/**
- * Modèle construit pour interagir avec Datatable
- *
- * @author JemDesign Team
- *
- * @email  jmedesign7@gmail.com
- */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
- 
-class MembresModel extends CI_Model {
- 
-    private $_order_id;
-    private $_pseudo;
-    private $_nom;
-    private $_prenoms;
-    private $_mes_bons;
-    private $_mon_niveau;
-    private $_startDate;
-    private $_endDate;
- 
-    public function setOrderID($order_id) {
-        $this->_order_id = $order_id;
-    }
-    public function setPseudo($pseudo) {
-        $this->_pseudo = $pseudo;
-    } 
-    public function setNom($nom) {
-        $this->_nom = $nom;
-    } 
-    public function setPrenoms($prenoms) {
-        $this->_prenoms = $prenoms;
-    } 
-    public function setMesBons($mes_bons) {
-        $this->_mes_bons = $mes_bons;
-    } 
-    public function setMonNiveau($mon_niveau) {
-        $this->_mon_niveau = $mon_niveau;
-    }    
-    public function setStartDate($startDate) {
-        $this->_startDate = $startDate;
-    }
-    public function setEndDate($endDate) {
-        $this->_endDate = $endDate;
+class MembresModel extends CI_Model{
+    
+    function __construct() {
+        // Set table name
+        $this->table = 'users';
+        // Set orderable column fields
+        $this->column_order = array(null,'users.pseudo','users.first_name','users.last_name','users.pseudo_parrain','users.phone', 'users.genre' , 'users.ville', 'users.niveau', 'users.created_on');
+        // Set searchable column fields
+        $this->column_search = array('users.pseudo', 'users.pseudo_parrain','users.niveau','users.created_on2','users.first_name');
+        // Set default order
+        $this->order = array('users.created_on2' => 'DESC', 'users.pseudo' => 'ASC');
     }
     
-    // get Users List
-    public function getUsers() {        
-        $this->db->select(array('o.pseudo', 'o.nom', 'o.prenoms', 'o.telephone', 'o.created_on','b.gains', 'n.mon_niveau'));
-        $this->db->from('users o');
-        $this->db->where('pseudo !=','administrateur2018');
-        $this->db->where('pseudo !=','xxxemaster');
-        if(empty($this->_mes_bons)){
-            $this->db->join('mes_bons b', 'b.pseudo_utilisateur = o.pseudo', 'left');
-        } 
-        if(empty($this->_mon_niveau)){
-            $this->db->join('mon_niveau n', 'n.pseudo_utilisateur = o.pseudo', 'left');
-        }    
-        if(!empty($this->_startDate) && !empty($this->_endDate)) {
-            $this->db->where("created_on BETWEEN $this->_startDate AND $this->_endDate");
-        }        
-        if(!empty($this->_order_id)){
-            $this->db->where('o.order_id', $this->_order_id);
-        }        
-        if(!empty($this->_pseudo)){            
-            $this->db->like('o.pseudo', $this->_pseudo, 'both');
+    /*
+     * Fetch members data from the database
+     * @param $_POST filter data based on the posted parameters
+     */
+    public function getRows(){
+        $postData = $this->input->post();
+        $this->_get_datatables_query($postData);
+        if(isset($postData['length']) && $postData['length'] != -1){
+            $this->db->limit($postData['length'], $postData['start']);
         }
-        if(!empty($this->_nom)){            
-            $this->db->like('o.nom', $this->_nom, 'both');
-        }
-        if(!empty($this->_prenoms)){            
-            $this->db->like('o.prenoms', $this->_prenoms, 'both');
-        }
-        if(!empty($this->_mes_bons)){   
-            $this->db->join('mes_bons b', 'b.pseudo_utilisateur = o.pseudo', 'left');      
-            $this->db->like('b.gains', $this->_mes_bons, 'both');
-        }
-        if(!empty($this->_mon_niveau)){            
-            $this->db->join('mon_niveau n', 'n.pseudo_utilisateur = o.pseudo', 'left');      
-            $this->db->like('n.mon_niveau', $this->_mon_niveau, 'both');
-        }       
-        $this->db->order_by('o.created_on', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
+    /*
+     * Count all records
+     */
+    public function countAll(){
+        $this->db->from($this->table);
+        return $this->db->count_all_results();
+    }
     
     /*
-        ADMINISTRATION GIE
-    */
+     * Count records based on the filter params
+     * @param $_POST filter data based on the posted parameters
+     */
+    public function countFiltered($postData){
+        $this->_get_datatables_query($postData);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
     
-    //
- 	public function NombreDeMembres() 
-	{   		
-		return $this->db->count_all_results('users') - 2;
-  	}
-    
-  	public function MontantTotalRecolte() 
-	{  	 	 
-		$compte = ($this->db->count_all_results('users') - 2) * 12600;
-		$valeur_recolte = number_format($compte, 0, ',', ' ');
-        return $valeur_recolte;
-  	}
-    
-  	//Recherche des utilisateur inscrite ce jour
-  	public function MembreInscritAuJourdHui() 
-	{  	 	 
-		$DateDujour = mktime(0,0,0,date("m"),date("d"),date("Y"));
-		$this->db->select('created_on'); 
-		$this->db->from('users');
-		$this->db->where('created_on',$DateDujour);
-		$query = $this->db->get();
-		$Compt = $query->num_rows();
-		return $Compt;
+    /*
+     * Perform the SQL queries needed for an server-side processing requested
+     * @param $_POST filter data based on the posted parameters
+     */
+    private function _get_datatables_query($postData){
 
-  	}
-    
-  	//Recherche des utilisateur inscrite cette semaine
-  	public function MembreInscritCetteSemaine() 
-	{  	 	 
-		$DateDuJour = mktime(0,0,0,date("m"),date("d"),date("Y"));
-		$DateDuJour_7 = mktime(0,0,0,date("m"),date("d")-7,date("Y"));
-		$this->db->select('created_on'); 
-		$this->db->from('users');
-		$this->db->where('created_on <=',$DateDuJour);
-		$this->db->where('created_on >=',$DateDuJour_7);
-		$query = $this->db->get();
-		$Compt = $query->num_rows();
-		return $Compt;
+        $this->db->select('*');
 
-  	}
-    
-  	//Recherche des utilisateur inscrite ce mois
-  	public function MembreInscritDeCeMois() 
-	{  	 	 
-		$DateDuJour = mktime(0,0,0,date("m"),date("d"),date("Y"));
-		$DateDuJour_Mois_1 = mktime(0,0,0,date("m")-1,date("d"),date("Y"));
-		$this->db->select('created_on'); 
-		$this->db->from('users');
-		$this->db->where('created_on <=',$DateDuJour);
-		$this->db->where('created_on >=',$DateDuJour_Mois_1);
-		$query = $this->db->get();
-		$Compt = $query->num_rows();
-		return $Compt;
+        $this->db->from($this->table);
 
-  	}
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
- 
+        // Custom search filter 
+         
+        if(isset($postData['pseudo']) && $postData['pseudo'] != ''){
+            $this->db->like('users.pseudo', $postData['pseudo']);
+        }
+
+        if(isset($postData['parrain']) && $postData['parrain'] != ''){
+            $this->db->like('users.pseudo_parrain', $postData['parrain']);
+        }
+
+        if(isset($postData['nom']) && $postData['nom'] != ''){
+            $this->db->like('users.first_name', $postData['nom_prenoms']);
+            $this->db->or_like('users.last_name', $postData['nom']);
+        }
+
+        if(isset($postData['niveau']) && $postData['niveau'] != ''){
+            $this->db->like('users.niveau', $postData['niveau']);
+        }
+
+        if((isset($postData['order_start_date']) && $postData['order_start_date'] != '') && isset($postData['order_end_date']) && $postData['order_end_date'] != '')
+        {
+            $this->db->where('users.created_on2 >=', $postData['order_start_date']);
+            $this->db->where('users.created_on2 <=', $postData['order_end_date']);
+        }
+
+        $i = 0;
+        // loop searchable columns 
+        foreach($this->column_search as $item){
+            // if datatable send POST for search
+            if(isset($postData['search']['value'])){
+                // first loop
+                if($i===0){
+                    // open bracket
+                    $this->db->group_start();
+                    $this->db->like($item, $postData['search']['value']);
+                }else{
+                    $this->db->or_like($item, $postData['search']['value']);
+                }
+                
+                // last loop
+                if(count($this->column_search) - 1 == $i){
+                    // close bracket
+                    $this->db->group_end();
+                }
+            }
+            $i++;
+        }
+         
+        if(isset($postData['order'])){
+            $this->db->order_by($this->column_order[$postData['order']['0']['column']], $postData['order']['0']['dir']);
+        }else if(isset($this->order)){
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
+    }
 }
-?>

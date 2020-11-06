@@ -160,7 +160,7 @@
 						<div class="card-body">
 							<h3 class="card-title text-center"><?=ucwords(get_phrase("mon niveau"))?></h3>
 							
-							<h3 class="card-title text-center">Matrice <?=trim(ucfirst($membre['niveau']));?></h3>
+							<h3 class="card-title text-center"><?=ucfirst(get_phrase('matrice'))?> <?=trim(ucfirst($membre['niveau']));?></h3>
 							<h3 class="card-title text-center"><?=$nbfilleulByMatrice?>/6</h3>
 
 						</div>
@@ -337,21 +337,14 @@
                            <div class="row">
                              <div class="col-md-6">
                                 <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
-                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" value="">
+                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a transferé'))?>" value="">
                                 <input type="hidden" name="c-matrice" value="1">
                              </div>
+                             <div class="col-md-6">
+                                <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                                <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                             </div>
                            </div><br><br>
-                           <div class="row" style="">
-                                <div class="col-sm-5"> 
-                                    <label for="w3-captcha"><?php echo get_phrase("Saisie dans captcha"); ?></label>
-                                    <div id="captcha">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="w3-captcha"><?php echo get_phrase("Securité"); ?></label>
-                                        <input type="text" class="form-control" placeholder="Captcha" id="cpatchaTextBox"/>
-                                </div>
-                         </div><br>
                     </div>
                   <div class="modal-footer modal-footer-uniform">
                     <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
@@ -381,21 +374,14 @@
                            <div class="row">
                              <div class="col-md-6">
                                 <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
-                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" value="">
+                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a transferé'))?>" value="">
                                 <input type="hidden" name="c-bonus" value="1">
                              </div>
-                           </div><!-- <br><br>
-                           <div class="row" style="">
-                                <div class="col-sm-5"> 
-                                    <label for="w3-captcha"><?php echo get_phrase("Saisie dans captcha"); ?></label>
-                                    <div id="captcha2">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="w3-captcha"><?php echo get_phrase("Securité"); ?></label>
-                                        <input type="text" class="form-control" placeholder="Captcha" id="cpatchaTextBox"/>
-                                </div>
-                         </div><br> -->
+                             <div class="col-md-6">
+                                <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                                <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                             </div>
+                           </div>
                     </div>
                   <div class="modal-footer modal-footer-uniform">
                     <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>

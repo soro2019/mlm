@@ -7,23 +7,34 @@
                     
                 </div>
             </div>
-            <?php 
+            <?php
+               if($this->session->flashdata('message_erreur') !== null){
+                   echo '<div class="alert alert-danger" role="alert">'.ucfirst(get_phrase('erreur:')).' '.$this->session->flashdata('message_erreur').'</div>';
+               }elseif(validation_errors() !== ''){
+                   echo '<div class="alert alert-danger" role="alert">Erreur: ' .validation_errors().'</div>';
+               }elseif($this->session->flashdata('message_success') !== null){
+                echo '<div class="alert alert-success" role="alert">'.ucfirst(get_phrase('succes:')).' '.$this->session->flashdata('message_success').'</div>';
+               }
+             ?>
 
-          if(empty($user['first_name']) || empty($user['last_name']) || empty($user['genre']) || empty($user['Lieu_naissance']) || empty($user['date_naissance']) || empty($user['pays']) || empty($user['phone']) || empty($user['ville']) || empty($user['region']) /*|| empty($membre['code_postal'])*/){ ?>
-                   <div class="col-xl-12 col-12">
-                        <div class="row">
-                            <div class="col-md-12 col-12">
-                                <div class="alert alert-danger alert-dismissible">
-                                    <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
-                                    <h4>
-                                    <i class="icon fa fa-check"></i><?=get_phrase('Information')?>
-                                    </h4>
-                                    <a href="<?=site_url(trim($_SESSION['language']).'/backoffice/my-info')?>" style="text-decoration: none;"><?=ucfirst(get_phrase('pour bénéficier entièrement des avantages du réseau merci de compléter vos informations'));?></a>
+            <div class="row">
+              <?php 
+              if(empty($user['first_name']) || empty($user['last_name']) || empty($user['genre']) || empty($user['Lieu_naissance']) || empty($user['date_naissance']) || empty($user['pays']) || empty($user['phone']) || empty($user['ville']) || empty($user['region']) || empty($user['email'])){ ?>
+                       <div class="col-xl-12 col-12">
+                            <div class="row">
+                                <div class="col-md-12 col-12">
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
+                                        <h4>
+                                        <i class="icon fa fa-check"></i><?=get_phrase('Information')?>
+                                        </h4>
+                                        <a href="<?=site_url(trim($_SESSION['language']).'/backoffice/my-info')?>" style="text-decoration: none;"><?=ucfirst(get_phrase('pour bénéficier entièrement des avantages du réseau merci de compléter vos informations'));?></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php } ?>
+                    <?php } ?>
+            </div>
 
             <div class="row">
                 <div class="col-12">
@@ -41,12 +52,12 @@
 
                       <ul class="box-body flexbox flex-justified text-center" data-overlay="4">
                         <li>
-                          <span class="opacity-60">Followers</span><br>
-                          <span class="font-size-20">8.6K</span>
+                          <span class="opacity-60"><?=ucfirst(get_phrase('matrice actuel'))?></span><br>
+                          <span class="font-size-20"><?=trim($user['niveau'])?></span>
                         </li>
                         <li>
                           <span class="opacity-60"><?=ucfirst(get_phrase('mes filleuls'))?></span><br>
-                          <span class="font-size-20"><?=$membrereseauperso?></span>
+                          <span class="font-size-20"><?=$nbfilleulByMatrice?></span>
                         </li>
                         <li>
                           <span class="opacity-60">Tweets</span><br>
@@ -60,27 +71,10 @@
                 <ul class="nav nav-tabs">
                    <!--  <li><a href="#Module" data-toggle="tab">Module</a></li> -->
                     <li><a href="#settings" data-toggle="tab"><?=ucwords(get_phrase('profil settings'))?></a></li>
+                    <li><a href="#settings-payement" data-toggle="tab"><?=ucwords(get_phrase('payement settings'))?></a></li>
                 </ul>
 
                 <div class="tab-content">
-
-                <!-- <div class="tab-pane" id="Module">
-                    <div class="publisher publisher-multi bg-white b-1 mb-30">
-                      <textarea class="publisher-input auto-expand" rows="4" placeholder="Write something"></textarea>
-                      <div class="flexbox">
-                        <div class="gap-items">
-                          <span class="publisher-btn file-group">
-                            <i class="fa fa-image file-browser"></i>
-                            <input type="file">
-                          </span>
-                          <a class="publisher-btn" href="#"><i class="fa fa-map-marker"></i></a>
-                          <a class="publisher-btn" href="#"><i class="fa fa-smile-o"></i></a>
-                        </div>
-
-                        <button class="btn btn-sm btn-bold btn-primary">Post</button>
-                      </div>
-                    </div> 
-                  </div>   -->  
 
                   <div class="tab-pane active" id="settings">  
                     <div class="box p-15">      
@@ -89,7 +83,7 @@
                             <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('nom'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="text" name="first_name" class="form-control" id="inputName" value="<?=trim($user['first_name']);?>">
+                              <input type="text" required name="first_name" class="form-control" id="inputName" value="<?php if(isset($_POST['first_name'])){ echo $_POST['first_name'];}else{ echo trim($user['first_name']); } ?>">
                             </div>
                           </div>
 
@@ -97,7 +91,7 @@
                             <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('prenom'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="text" name="last_name" class="form-control" id="inputName" value="<?=trim($user['last_name']);?>">
+                              <input type="text" required name="last_name" class="form-control" id="inputName" value="<?php if(isset($_POST['last_name'])){ echo $_POST['last_name'];}else{ echo trim($user['last_name']); } ?>">
                             </div>
                           </div>
 
@@ -105,7 +99,7 @@
                             <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('date naissance'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="date" name="date_naissance" class="form-control" id="inputName" value="<?=trim($user['date_naissance']);?>">
+                              <input type="date" required name="date_naissance" class="form-control" id="inputName" value="<?php if(isset($_POST['date_naissance'])){ echo $_POST['date_naissance'];}else{ echo trim($user['date_naissance']); } ?>">
                             </div>
                           </div>
 
@@ -113,7 +107,7 @@
                             <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('lieu naissance'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="text" name="Lieu_naissance" class="form-control" id="inputName" value="<?=trim($user['Lieu_naissance']);?>">
+                              <input type="text" required name="Lieu_naissance" class="form-control" id="inputName" value="<?php if(isset($_POST['Lieu_naissance'])){ echo $_POST['Lieu_naissance'];}else{ echo trim($user['Lieu_naissance']); } ?>">
                             </div>
                           </div>
 
@@ -121,7 +115,7 @@
                             <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('genre'))?></label>
 
                             <div class="col-sm-10">
-                              <select name="genre" class="form-control" id="w3-don" required="">
+                              <select name="genre" required class="form-control" id="w3-don" required="">
                                   <option value="H" <?= $user['genre'] == 'H' ? 'selected':'' ?> ><?= get_phrase("Homme") ?></option>
                                   <option value="F" <?= $user['genre'] == 'F' ? 'selected':'' ?> ><?=get_phrase("Femme") ?></option>
                               </select>
@@ -132,21 +126,21 @@
                             <label for="inputEmail" class="col-sm-2 control-label"><?=ucfirst(get_phrase('email'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="email" class="form-control" id="inputEmail" value="<?=trim($user['email']);?>">
+                              <input type="email" required name="email" class="form-control" id="inputEmail" value="<?php if(isset($_POST['email'])){ echo $_POST['email'];}else{ echo trim($user['email']); } ?>">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputPhone" class="col-sm-2 control-label"><?=ucfirst(get_phrase('phone'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="tel" name="phone" class="form-control" id="inputPhone" value="<?=trim($user['phone']);?>">
+                              <input type="tel" required name="phone" class="form-control" id="inputPhone" value="<?php if(isset($_POST['phone'])){ echo $_POST['phone'];}else{ echo trim($user['phone']); } ?>">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputExperience" class="col-sm-2 control-label"><?=ucfirst(get_phrase('code postal'))?></label>
 
                             <div class="col-sm-10">
-                               <input type="tel" name="code_postal" class="form-control" id="inputPhone" value="<?=trim($user['code_postal']);?>">
+                               <input type="tel" name="code_postal" class="form-control" id="inputPhone" value="<?php if(isset($_POST['code_postal'])){ echo $_POST['code_postal'];}else{ echo trim($user['code_postal']); } ?>">
                             </div>
                           </div>
 
@@ -154,7 +148,7 @@
                             <label for="inputSkills" class="col-sm-2 control-label"><?=ucfirst(get_phrase('pays'))?></label>
 
                             <div class="col-sm-10">
-                              <input name="pays" type="text" list="pays" class="form-control" id="inputSkills"  value="<?php if(isset($_POST['pays'])){ echo $_POST['pays'];}else{ echo trim($this->Crud_model->selectPaysById($user['pays'])); } ?>">
+                              <input name="pays" type="text" list="pays" class="form-control" id="inputSkills" required  value="<?php if(isset($_POST['pays'])){ echo $_POST['pays'];}else{ echo trim($this->Crud_model->selectPaysById($user['pays'])); } ?>">
                                 <datalist id="pays">
                                    <?php foreach ($listepays as $elmt) {?>
                                      <option value="<?=$elmt['name']?>"></option>
@@ -167,24 +161,59 @@
                             <label for="inputSkills" class="col-sm-2 control-label"><?=ucfirst(get_phrase('ville'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="text" name="ville" class="form-control" id="inputSkills" value="<?=trim($user['ville']);?>">
+                              <input type="text" name="ville" class="form-control" id="inputSkills" required value="<?php if(isset($_POST['ville'])){ echo $_POST['ville'];}else{ echo trim($user['ville']); } ?>">
                             </div>
                           </div>
                           <div class="form-group row">
                             <label for="inputSkills" class="col-sm-2 control-label"><?=ucfirst(get_phrase('region'))?></label>
 
                             <div class="col-sm-10">
-                              <input type="text" name="region" class="form-control" id="inputSkills" value="<?=trim($user['region']);?>">
+                              <input type="text" required name="region" class="form-control" id="inputSkills" value="<?php if(isset($_POST['region'])){ echo $_POST['region'];}else{ echo trim($user['region']); } ?>">
                             </div>
                           </div>
                           <div class="form-group row">
                             <div class="ml-auto col-sm-10">
-                              <button type="submit" class="btn btn-rounded btn-primary"><?=ucfirst(get_phrase('modifier'))?></button>
+                              <input type="submit" name="settings" class="btn btn-rounded btn-primary" value="<?=ucfirst(get_phrase('modifier'))?>" />
                             </div>
                           </div>
                         </form>
                     </div>            
                   </div>
+                  <?php $readonly =""; if(is_array($compte_ex)){ $readonly = "readonly";} ?>
+                  <div class="tab-pane" id="settings-payement">
+                    <div class="box p-15">      
+                        <form class="form-horizontal form-element col-12" method="POST" action="">
+                          <div class="form-group row">
+                            <label><b><?=ucfirst(get_phrase('merci de donner les passerelles de vos differents comptes suivants'))?></b></label>
+                          </div>
+                          <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('bitcoin'))?></label>
+                            <div class="col-sm-10">
+                              <input type="text" <?=$readonly?> name="bitcoin" class="form-control" id="inputName" placeholder="<?=ucfirst(get_phrase('passerelles de ce compte'))?>" value="<?php if(is_array($compte_ex)){ echo $compte_ex['par_bitcoin']; }?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucfirst(get_phrase('payeer'))?></label>
+                            <div class="col-sm-10">
+                              <input type="text" name="payeer" class="form-control" id="inputName" placeholder="<?=ucfirst(get_phrase('passerelles de ce compte'))?>" <?=$readonly?> value="<?php if(is_array($compte_ex)){ echo $compte_ex['par_payeer']; }?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 control-label"><?=ucwords(get_phrase('perfect money'))?></label>
+                            <div class="col-sm-10">
+                              <input type="text" <?=$readonly?> placeholder="<?=ucfirst(get_phrase('passerelles de ce compte'))?>" name="perfect_money" class="form-control" id="inputName" value="<?php if(is_array($compte_ex)){ echo $compte_ex['par_perfect_money']; }?>">
+                            </div>
+                          </div>
+                          <?php if(!is_array($compte_ex)){ ?>
+                          <div class="form-group row">
+                            <div class="ml-auto col-sm-10">
+                              <input type="submit" name="settings-payement" class="btn btn-rounded btn-primary" value="<?=ucfirst(get_phrase('je valide'))?>" />
+                            </div>
+                          </div>
+                        <?php } ?>
+                        </form>
+                    </div> 
+                  </div>  
                   <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->

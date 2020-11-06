@@ -111,7 +111,7 @@
           defineLanguage($lang);
           $this->data['titre'] = ucwords(get_phrase('login/sign up'));
           $this->data['meta_keywords'] = 'SHAPP INVEST, investment on rentals, source of happiness';
-          $this->data['page_title'] = 'LOGIN / SIGN UP';
+          $this->data['page_title'] = ucwords(get_phrase('login/sign up'));
           $this->data['meta_description'] = 'SHAPP INVEST _ Source of Happiness Investment is the investment funds specialize in microrentals investment management for particulars in the world.';
               if($this->ion_auth->logged_mlm_in())
               {

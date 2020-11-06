@@ -10,6 +10,7 @@ class MY_Controller extends CI_Controller
     $this->data['before_head'] = '';
     $this->data['before_body'] ='';
     $this->load->library('ion_auth');
+    $this->load->model(['Crud_model', 'UserModel']);
   }
  
   protected function render($the_view = NULL, $template = 'master')
@@ -39,18 +40,19 @@ class Admin_Controller extends MY_Controller
       
     $this->data['pseudo'] = $this->session->userdata('identity');
     $noms_membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-    $this->data['nom_membre'] = $noms_membre['nom'];
-    $this->data['prenom_membre'] = $noms_membre['prenoms'];
-    $this->data['dateInscription'] = $noms_membre['creele'];
+    $this->data['nom_membre'] = $noms_membre['first_name'];
+    $this->data['prenom_membre'] = $noms_membre['last_name'];
+    $this->data['dateInscription'] = date("d-m-Y à H:i:s", $noms_membre['created_on']);
+    $this->data['monType'] = ucfirst(get_phrase("administrateur"));
       
-    if(!$this->ion_auth->logged_mlm_in())
+      if(!$this->ion_auth->logged_mlm_in())
       {
-        redirect('administrator~shappinvest/connexion');
+        redirect('admin/login');
       }
       else if (!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
         {
             // redirect them to the home page because they must be an administrator to view this
-            return show_error('Vous devez être administrateur pour voir cette page.');
+            return show_error(ucfirst(get_phrase('vous devez être administrateur pour voir cette page.')));
         }
   }
     
@@ -71,9 +73,24 @@ class Backoffice_Controller extends MY_Controller
     {
       //redirect them to the login page
       redirect('en/connexion', 'refresh');
+    }else
+    {
+     $membre = $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+       $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
+      $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
+      $this->data['compactmatrice'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 1);
+
+      $this->data['compactbonus'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 2);
+
+      $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
+      $this->data['niveau'] = $membre['niveau'];
+      $this->data['achat_ini'] = $membre['achat_ini'];
+
+      $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$membre['niveau']);
     }
-      
     $this->data['page_title'] = 'Social-Coop - Backoffice';
+    $this->data['compte_ex'] = $this->Crud_model->GetCompteExterneByPseudo($this->session->userdata('identity'));
+
   }
     
   protected function render($the_view = NULL, $template = 'backoffice_master')

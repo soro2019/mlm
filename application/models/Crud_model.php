@@ -70,6 +70,18 @@ class Crud_model extends CI_Model {
       }else return 0;
     }
 
+
+    public function verifParserelCompte($pseudo)
+    {
+      $this->db->select('*');
+      $this->db->from('comptes');
+      $this->db->where(array('pseudo_propio' => trim($pseudo), 'codepin' => null));
+      $query = $this->db->get();
+      if($query){
+          return $query->num_rows();
+      }
+    }
+
     public function moncomptes($pseudo, $type)
     {
       $this->db->select('*');
@@ -172,9 +184,33 @@ class Crud_model extends CI_Model {
     }
 
 
-    public function update_where($table, $data, $condition, $where)
+    public function GetCompteExterneByPseudo($pseudo)
     {
-      $this->db->where($where, $condition);
+        $this->db->select('*');
+        $this->db->from('comptes_externes');
+        $this->db->where(array('pseudo_proprio' => trim($pseudo)));
+        $query = $this->db->get();
+        if($query->num_rows() == 1){
+          return $query->row_array();
+        }else return false;
+    }
+
+
+    public function verifCodePinCompte($compte, $codepin)
+    {
+        $this->db->select('*');
+        $this->db->from('comptes');
+        $this->db->where(array('id' => trim($compte), 'codepin' => sha1($codepin)));
+        $query = $this->db->get();
+        if($query->num_rows() == 1){
+          return true;
+        }else return false;
+    }
+
+
+    public function update_where($table, $data, $condition, $field)
+    {
+      $this->db->where($field, $condition);
       $this->db->update($table, $data);
       return true;
     }
