@@ -885,10 +885,10 @@ class Dashboard extends Backoffice_Controller
       redirect(trim($_SESSION['language']).'/connexion');
     }
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = ucfirst(get_phrase('politique de confidentialité'));
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = ucfirst(get_phrase('politique de confidentialité'));
+    $this->data['page_author'] = 'politique_confidentialite';
     
     $this->render('backoffice/politique_confidentialite');    
   }
@@ -901,10 +901,10 @@ class Dashboard extends Backoffice_Controller
       redirect(trim($_SESSION['language']).'/connexion');
     }
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = ucfirst(get_phrase('metion légale'));
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = ucfirst(get_phrase('metion légale'));
+    $this->data['page_author'] = 'mention_legale';
     
     $this->render('backoffice/mention_legale');   
   }

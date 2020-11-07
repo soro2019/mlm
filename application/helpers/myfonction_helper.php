@@ -207,6 +207,11 @@ function countFilleulByMatrice($pseudo, $matrice)
       }
 
       $pseudo = array_shift($filleuls);
+
+        if($i == 6)
+        { //arrêt de la fonction lorsque le nombre de filleule atteint 6
+          $filleuls = [];
+        }
       
     }while(count($filleuls) != 0);
 

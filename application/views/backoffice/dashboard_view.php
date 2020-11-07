@@ -162,7 +162,6 @@
 							
 							<h3 class="card-title text-center"><?=ucfirst(get_phrase('matrice'))?> <?=trim(ucfirst($membre['niveau']));?></h3>
 							<h3 class="card-title text-center"><?=$nbfilleulByMatrice?>/6</h3>
-
 						</div>
 					</div>
                 </div>

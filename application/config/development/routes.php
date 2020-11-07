@@ -195,11 +195,11 @@ $route["backoffice/support_technique"] = 'backoffice/dashboard/support_technique
 $route["(fr|en)/backoffice/faq"] = 'backoffice/dashboard/faq/$1';
 $route["backoffice/faq"] = 'backoffice/dashboard/faq/en';
 
-$route["(fr|en)/backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite/$1';
-$route["backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite/en';
+$route["(fr|en)/backoffice/privacy-policy"] = 'backoffice/dashboard/politique_confidentialite/$1';
+$route["backoffice/privacy-policy"] = 'backoffice/dashboard/politique_confidentialite/en';
 
-$route["(fr|en)/backoffice/mention_legale"] = 'backoffice/dashboard/mention_legale/$1';
-$route["backoffice/mention_legale"] = 'backoffice/dashboard/mention_legale/en';
+$route["(fr|en)/backoffice/legal-notice"] = 'backoffice/dashboard/mention_legale/$1';
+$route["backoffice/legal-notice"] = 'backoffice/dashboard/mention_legale/en';
 
 
 $route['404_override'] = 'errors/error404';

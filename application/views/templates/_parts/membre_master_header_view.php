@@ -329,7 +329,7 @@
 							<span><?= ucfirst(get_phrase("ajouter un nouveau partenaire"))?></span>
 						</a>
 					</li> 
-					<li class="treeview <?php if($page_author == 'webinaire' || $page_author == 'conferences' || $page_author == 'actualites' || $page_author == 'faq') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'webinaire' || $page_author == 'conferences' || $page_author == 'actualites' || $page_author == 'faq' || $page_author == 'politique_confidentialite' || $page_author == 'mention_legale') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("extra"))?></span>
@@ -362,13 +362,14 @@
 										<?=strtoupper(get_phrase("faq"))?>
 									</a>
 								</li>
-								<li>
-									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/politique_confidentialite');?>" class="ti-more">
+								<li <?php if($page_author == 'politique_confidentialite') echo 'class="active"';?>>
+									
+									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/privacy-policy');?>" class="ti-more">
 										<?= ucfirst(get_phrase("politique de confidentialité"))?>
 									</a>
 								</li>
-								<li>
-									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/mention_legale');?>" class="ti-more">
+								<li <?php if($page_author == 'mention_legale') echo 'class="active"';?>>
+									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/legal-notice');?>" class="ti-more">
 										<?= ucfirst(get_phrase("mention légales"))?>
 									</a>
 								</li>
