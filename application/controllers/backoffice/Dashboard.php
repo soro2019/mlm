@@ -563,8 +563,12 @@ class Dashboard extends Backoffice_Controller
   
   
   
-  public function messagerie($lang='')
+  public function messagerie($lang='',$innerPage)
   {
+    if($innerPage =="")
+    {
+      $innerPage='message_home';
+    }
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
@@ -573,11 +577,12 @@ class Dashboard extends Backoffice_Controller
     $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('dashboard');
+    $this->data['message_inner_page_name'] = $innerPage;
 
     $this->data['page_description'] = get_phrase('dashboard');
     $this->data['page_author'] = get_phrase('dashboard');
     
-    $this->render('backoffice/messagerie_view');
+    $this->render('backoffice/messagerie_view');  
       
   }
   

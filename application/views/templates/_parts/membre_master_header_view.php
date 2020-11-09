@@ -9,6 +9,16 @@
     <link rel="icon" href="<?php echo site_url('assets/member/images/favicon.png');?>">
 
     <title><?php echo $page_title;?></title>
+
+	<link rel="stylesheet" href="<?php echo base_url('assets/member/js/jquery-ui-1.10.3.custom.min.css');?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/custom.css');?>">
+	<script src="<?php echo base_url('assets/member/js/jquery-1.11.0.min.js');?>"></script>
+
+
+	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/entypo.css');?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/neon-core.css');?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/neon-theme.css');?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/neon-forms.css');?>">
     
 	<!-- Bootstrap 4.0-->
 	<link rel="stylesheet" href="<?php echo site_url('assets/member/vendor_components/bootstrap/dist/css/bootstrap.css');?>">
