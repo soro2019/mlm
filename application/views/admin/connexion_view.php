@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><?php echo $page_title;?></title>
+  <title><?php echo ucwords($page_title);?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -38,38 +38,36 @@
 
     <?php echo form_open('',array());?>
       <div class="form-group has-feedback">
-        <?php echo form_input(array('name'=>'identity', 'placeholder'=>'Votre pseudo', 'class'=>'form-control'));?>
+        <?php echo form_input(array('name'=>'identity', 'placeholder'=> ucfirst(get_phrase('votre pseudo')), 'class'=>'form-control'));?>
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <?php echo form_password(array('name'=>'password', 'placeholder'=>'Mot de passe', 'class'=>'form-control'));?>
+        <?php echo form_password(array('name'=>'password', 'placeholder'=>ucfirst(get_phrase('mot de passe')), 'class'=>'form-control'));?>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
         <div class="col-xs-7">
           <div class="checkbox icheck">
             <label>
-              <?php echo form_checkbox('souvenir','1',FALSE);?> Se souvenir de moi
+              <?php echo form_checkbox(ucfirst(get_phrase('souvenir')),'1',FALSE);?> <?=ucfirst(get_phrase('se souvenir de moi'))?>
             </label>
           </div>
         </div>
         <!-- /.col -->
         <div class="col-xs-5">
-          <?php echo form_submit('submit', 'CONNEXION', 'class="btn btn-primary btn-block btn-flat"');?>
+          <?php echo form_submit('submit', strtoupper(get_phrase('connexion')), 'class="btn btn-primary btn-block btn-flat"');?>
         </div>
         <!-- /.col -->
       </div>
     <?php echo form_close();?>
 
-    <div class="social-auth-links text-center">
+    <!-- <div class="social-auth-links text-center">
       <p>- OU ENCORE -</p>
       <a href="<?php echo site_url('administrator~gie2018/inscription');?>" class="btn btn-block btn-social btn-facebook btn-flat"> AJOUTER UN NOUVEAU MEMBRE </a>
       
-    </div>
+    </div> -->
     <!-- /.social-auth-links -->
-
-    <a href="#">J'ai oublié mon mot de passe</a><br>
-
+    <a href="#"><?=ucfirst(get_phrase('j\'ai oublié mon mot de passe'))?></a><br>
   </div>
   <!-- /.login-box-body -->
 </div>

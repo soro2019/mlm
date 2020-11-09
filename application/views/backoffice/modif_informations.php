@@ -19,14 +19,14 @@
              ?>
               <div class="row">
                 <!-- lien pour completer ses donnees -->
-                <?php if(empty($membre['first_name']) || empty($membre['last_name']) || empty($membre['genre']) || empty($membre['Lieu_naissance']) || empty($membre['date_naissance']) || empty($membre['pays']) || empty($membre['phone']) || empty($membre['ville']) || empty($membre['region']) /*|| empty($membre['code_postal'])*/){ ?>
+                <?php if(empty($membre['first_name']) || empty($membre['last_name']) || empty($membre['genre']) || empty($membre['Lieu_naissance']) || empty($membre['date_naissance']) || empty($membre['pays']) || empty($membre['phone']) || empty($membre['ville']) || empty($membre['region']) || empty($membre['email'])){ ?>
                    <div class="col-xl-12 col-12">
                         <div class="row">
                             <div class="col-md-12 col-12">
                                 <div class="alert alert-danger alert-dismissible">
                                     <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
                                     <h4>
-                                    <i class="icon fa fa-check"></i><?=get_phrase('Information')?>
+                                    <i class="icon fa fa-check"></i><?= ucfirst(get_phrase('information'))?>
                                     </h4>
                                     <a href="<?=site_url(trim($_SESSION['language']).'/backoffice/my-info')?>" style="text-decoration: none;"><?=ucfirst(get_phrase('pour bénéficier entièrement des avantages du réseau merci de compléter vos informations'));?></a>
                                 </div>
@@ -53,45 +53,45 @@
 
                           <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
                             <fieldset>
-                                <legend><?= get_phrase("Information Compte") ?></legend>  
+                                <legend><?=  ucwords(get_phrase("information compte")) ?></legend>  
                                 <div class="form-group mb-none">
                                     <div class="row">
                                         <div class="col-sm-12 mb-lg">
-                                            <label for="w3-parrain"><?= get_phrase("Pseudo du Parrain") ?></label>
-                                            <input type="text" class="form-control" name="pseudo_parrain" value="<?=$user['pseudo_parrain']?>" placeholder=<?= get_phrase("Parrain")?> readonly>
+                                            <label for="w3-parrain"><?=  ucwords(get_phrase("pseudo du parrain"))?></label>
+                                            <input type="text" class="form-control" name="pseudo_parrain" required value="<?=$user['pseudo_parrain']?>" placeholder=<?=  ucfirst(get_phrase("parrain"))?> readonly>
                                         </div>    
                                     </div>
                                 </div>
                                 <div class="form-group mb-none">
                                     <div class="row">
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-username"><?= get_phrase("Pseudo") ?></label>
-                                            <input type="text" class="form-control" value="<?=$user['pseudo']?>" readonly>
+                                            <label for="w3-username"><?=  ucfirst(get_phrase("pseudo")) ?></label>
+                                            <input type="text" required class="form-control" value="<?=$user['pseudo']?>" readonly>
                                         </div>
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-email"><?= get_phrase("Email") ?></label>
-                                            <input type="email" class="form-control" name="email" value="<?=$user['email']?>" placeholder="Email">
+                                            <label for="w3-email"><?=  ucfirst(get_phrase("email")) ?></label>
+                                            <input type="email" required class="form-control" name="email" value="<?php if(isset($_POST['email'])){ echo $_POST['email'];}else{ echo trim($user['email']); } ?>" placeholder="Email">
                                         </div>    
                                     </div>
                                 </div>
                             </fieldset><br>
                             <fieldset>
-                                <legend><?= get_phrase("Information Membre"); ?></legend>
+                                <legend><?=  ucfirst(get_phrase("information Membre")); ?></legend>
                                 <div class="row">
                                     <div class="col-sm-6 mb-lg">
                                     <label for="w3-name1"><?= get_phrase("Nom"); ?></label>
-                                    <input type="text" class="form-control" name="nom" value="<?=$user['first_name']?>" placeholder=<?= get_phrase("Nom")?>>
+                                    <input type="text" required class="form-control" name="nom" value="<?php if(isset($_POST['nom'])){ echo $_POST['nom'];}else{ echo trim($user['first_name']); } ?>" placeholder=<?= ucfirst(get_phrase("nom"))?>>
                                     </div>
                                     <div class="col-sm-6 mb-lg">
-                                    <label for="w3-name1"><?= get_phrase("Prenom(s)"); ?></label>
-                                    <input type="text" class="form-control" name="prenoms" value="<?=$user['last_name']?>" placeholder="<?= get_phrase("Prénoms")?>">
+                                    <label for="w3-name1"><?=  ucfirst(get_phrase("prenom(s)")); ?></label>
+                                    <input type="text" required class="form-control" name="prenoms" value="<?php if(isset($_POST['prenoms'])){ echo $_POST['prenoms'];}else{ echo trim($user['last_name']); } ?>" placeholder="<?=  ucfirst(get_phrase("prénoms"))?>">
                                     </div>
                                 </div><br>
                                 <div class="form-group mb-none">
                                     <div class="row">
                                          <div class="col-sm-12 mb-lg">
-                                            <label for="w3-bithday"><?= get_phrase("Lieu de naissance"); ?></label>
-                                            <input type="text" class="form-control" name="lieu_naissance" value="<?=$user['Lieu_naissance']?>" placeholder="<?= get_phrase("Lieu de naissance")?>">
+                                            <label for="w3-bithday"><?=  ucfirst(get_phrase("lieu de naissance")); ?></label>
+                                            <input type="text" required class="form-control" name="lieu_naissance" value="<?php if(isset($_POST['lieu_naissance'])){ echo $_POST['lieu_naissance'];}else{ echo trim($user['Lieu_naissance']); } ?>" placeholder="<?=  ucfirst(get_phrase("lieu de naissance"))?>">
                                         </div>
                                        
                                     </div>
@@ -99,14 +99,14 @@
                                 <div class="form-group mb-none">
                                     <div class="row">
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-bithday"><?= get_phrase("Date de naissance"); ?></label>
-                                            <input type="date" class="form-control" name="date" value="<?=$user['date_naissance']?>" placeholder="<?= get_phrase("Date de naissance")?>">
+                                            <label for="w3-bithday"><?=  ucfirst(get_phrase("date de naissance")); ?></label>
+                                            <input type="date" required class="form-control" name="date" value="<?php if(isset($_POST['date'])){ echo $_POST['date'];}else{ echo trim($user['date_naissance']); } ?>" placeholder="<?=  ucfirst(get_phrase("date de naissance"))?>">
                                         </div>
                                          <div class="col-sm-6 mb-lg">
-                                            <label for="w3-don"><?= get_phrase("Genre"); ?></label>
-                                            <select name="genre" class="form-control" id="w3-don" required="">
-                                                <option value="H" <?= $user['genre'] == 'H' ? 'selected':'' ?> ><?= get_phrase("Homme") ?></option>
-                                                <option value="F" <?= $user['genre'] == 'F' ? 'selected':'' ?> ><?=get_phrase("Femme") ?></option>
+                                            <label for="w3-don"><?=  ucfirst(get_phrase("genre")); ?></label>
+                                            <select required name="genre" class="form-control" id="w3-don" required="">
+                                                <option value="H" <?= $user['genre'] == 'H' ? 'selected':'' ?> ><?=  ucfirst(get_phrase("homme")) ?></option>
+                                                <option value="F" <?= $user['genre'] == 'F' ? 'selected':'' ?> ><?= ucfirst(get_phrase("femme")) ?></option>
                                             </select>
                                         </div>
                                     </div>
@@ -114,8 +114,8 @@
                                 <div class="form-group mb-none">
                                     <div class="row">
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-country" required=""><?= get_phrase("Pays actuel"); ?></label>
-                                            <input name="pays" type="text" list="pays" class="form-control" id="w3-pays"  value="<?php if(isset($_POST['pays'])){ echo $_POST['pays'];}else{ echo trim($this->Crud_model->selectPaysById($user['pays'])); } ?>">
+                                            <label for="w3-country" required=""><?=  ucfirst(get_phrase("pays actuel")); ?></label>
+                                            <input name="pays" required type="text" list="pays" class="form-control" id="w3-pays"  value="<?php if(isset($_POST['pays'])){ echo $_POST['pays'];}else{ echo trim($this->Crud_model->selectPaysById($user['pays'])); } ?>">
                                                 <datalist id="pays">
                                                    <?php foreach ($listepays as $elmt) {?>
                                                      <option value="<?=$elmt['name']?>"></option>
@@ -124,8 +124,8 @@
                                             
                                         </div>
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-c-city"><?= get_phrase("Ville")?></label>
-                                            <input type="text" class="form-control" name="ville" value="<?=$user['ville']?>" placeholder="<?= get_phrase("Ville")?>">
+                                            <label for="w3-c-city"><?= ucfirst(get_phrase("ville"))?></label>
+                                            <input type="text" required class="form-control" name="ville" value="<?php if(isset($_POST['ville'])){ echo $_POST['ville'];}else{ echo trim($user['ville']); } ?>" placeholder="<?= ucfirst(get_phrase("ville"))?>">
                                             
                                         </div>
                                     </div>
@@ -133,13 +133,13 @@
                                 <div class="form-group mb-none">
                                     <div class="row">
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-country" required=""><?= get_phrase("Region")?></label>
-                                            <input type="text" class="form-control" name="region" value="<?=$user['region']?>" placeholder="<?= get_phrase("Region")?>">
+                                            <label for="w3-country" required=""><?= ucfirst(get_phrase("region"))?></label>
+                                            <input type="text" required class="form-control" name="region" value="<?php if(isset($_POST['region'])){ echo $_POST['region'];}else{ echo trim($user['region']); } ?>" placeholder="<?= ucfirst(get_phrase("region"))?>">
                                             
                                         </div>
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-c-city"><?=get_phrase("Code Postal")?></label>
-                                            <input type="text" class="form-control" name="code_postal" value="<?=trim($user['code_postal'])?>" placeholder="<?= get_phrase("Code Postal")?>">
+                                            <label for="w3-c-city"><?=ucfirst(get_phrase("code Postal"))?></label>
+                                            <input type="text" class="form-control" name="code_postal" value="<?php if(isset($_POST['code_postal'])){ echo $_POST['code_postal'];}else{ echo trim($user['code_postal']); } ?>" placeholder="<?= ucwords(get_phrase("code postal"))?>">
                                             
                                         </div>
                                     </div>
@@ -149,42 +149,44 @@
                                 <div class="form-group mb-none">
                                     <div class="row">
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-phone"><?= get_phrase("Telephone avec l'indicatif de votre pays"); ?></label>
-                                            <input type="text" class="form-control" name="telephone" value="<?=$user['phone']?>" placeholder="<?= get_phrase("Numéro de téléphone (exple: +22500000000)")?>">
+                                            <label for="w3-phone"><?= ucfirst(get_phrase("téléphone avec l'indicatif de votre pays")); ?></label>
+                                            <input type="text" required class="form-control" name="telephone" value="<?php if(isset($_POST['telephone'])){ echo $_POST['telephone'];}else{ echo trim($user['phone']); } ?>" placeholder="<?= ucfirst(get_phrase("numéro de téléphone (exple: +22500000000)"))?>">
                                         </div>
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-phone"><?= get_phrase("Facebook"); ?></label>
-                                            <input type="text" class="form-control" name="facebook" value="<?=$social_reseau->{'facebook'}?>" placeholder="Facebook">
+                                            <label for="w3-phone"><?= ucfirst(get_phrase("facebook")); ?></label>
+                                            <input type="text" class="form-control" name="facebook" value="<?php if(isset($_POST['facebook'])){ echo $_POST['facebook'];}else{ echo trim($social_reseau->{'facebook'}); } ?>" placeholder="<?= ucfirst(get_phrase("facebook")); ?>">
+
+                                            
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group mb-none">
                                     <div class="row">
                                     <div class="col-sm-6 mb-lg">
-                                            <label for="w3-phone"><?= get_phrase("Twitter"); ?></label>
-                                            <input type="text" class="form-control" name="twitter" value="<?=$social_reseau->{'twitter'}?>" placeholder="Twitter">
+                                            <label for="w3-phone"><?= ucfirst(get_phrase("twitter")); ?></label>
+                                            <input type="text" class="form-control" name="twitter" value="<?php if(isset($_POST['twitter'])){ echo $_POST['twitter'];}else{ echo trim($social_reseau->{'twitter'}); } ?>" placeholder="<?= ucfirst(get_phrase("twitter")); ?>">
                                         </div>
                                         <div class="col-sm-6 mb-lg">
-                                            <label for="w3-phone"><?= get_phrase("Skype"); ?></label>
-                                            <input type="text" class="form-control" name="skype" value="<?=$social_reseau->{'skype'}?>" placeholder="Skype">
+                                            <label for="w3-phone"><?= ucfirst(get_phrase("skype")); ?></label>
+                                            <input type="text" class="form-control" name="skype" value="<?php if(isset($_POST['skype'])){ echo $_POST['skype'];}else{ echo trim($social_reseau->{'skype'}); } ?>" placeholder="<?= ucfirst(get_phrase("skype")); ?>">
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                     <div class="row" style="margin-bottom: 10px; ">
                         <div class="col-sm-6"> 
-                            <label for="w3-captcha"><?php echo get_phrase("Saisie dans captcha"); ?></label>
+                            <label for="w3-captcha"><?php echo  ucfirst(get_phrase("saisie dans captcha")); ?></label>
                             <div id="captcha">
                             </div>
                         </div>
                         <div class="col-sm-6 ">
-                            <label for="w3-captcha"><?php echo get_phrase("Securité"); ?></label>
-                                <input type="text" class="form-control" placeholder="Captcha" id="cpatchaTextBox"/>
+                            <label for="w3-captcha"><?php echo  ucfirst(get_phrase("securité")); ?></label>
+                                <input type="text" required class="form-control" placeholder="Captcha" id="cpatchaTextBox"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 text-right">
-                            <input type="submit" name="modifier-profil" value="<?= get_phrase("Je modifie"); ?>" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">
+                            <input type="submit" name="modifier-profil" value="<?=  ucfirst(get_phrase("je modifie")); ?>" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">
                         </div>
                     </div>
               </form>

@@ -51,54 +51,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 
-
-
-
-/*
- * Backoffice Controllers Routes
-*/
-
-/*$route['inscription'] = 'backoffice/membre/inscription';
-$route['inscription-offline'] = 'backoffice/membreoffline/inscription';
-$route['inscription-agence'] = 'backoffice/membreoffline/inscription_agence';
-$route['inscription/paiement-messenka'] = 'backoffice/membre/paiement_messenka';
-$route['inscription-offline/paiement'] = 'backoffice/membreoffline/paiement';
-$route['inscription-agence/paiement-agence'] = 'backoffice/membreoffline/paiement_agence';
-$route['inscription-effective'] = 'backoffice/membre/inscription_effective';
-$route['inscription-effective/:any'] = 'backoffice/membre/inscription_effective';
-$route['inscription-effective-offline'] = 'backoffice/membreoffline/inscription_effective';
-$route['inscription-effective-agence'] = 'backoffice/membreoffline/inscription_effective';*/
-$route['inscription/:any'] = 'pages/inscription';
-$route['confirmation'] = 'backoffice/membre/confirmation_inscription';
-$route['confirmation-agence'] = 'backoffice/membreoffline/confirmation_inscription_agence';
-$route['confirmation-offline'] = 'backoffice/membreoffline/confirmation_inscription';
-$route['paiement-attente'] = 'backoffice/membre/paiement_attente';
-$route['paiement/ipn'] = 'backoffice/membre/ipn';
-$route['backoffice/commission'] = 'backoffice/dashboard/mes_commissions';
-$route['backoffice/mon-reseau'] = 'backoffice/dashboard/mon_reseau';
-$route['backoffice/mon-parrain'] = 'backoffice/dashboard/mon_parrain';
-/*$route['backoffice/profil'] = 'backoffice/membre/profil';*/
-$route['backoffice/modifier-profil'] = 'backoffice/membre/modifier_profil';
-$route['backoffice/modifier-mot-de-passe'] = 'backoffice/membre/modifier_mdp';
-
-
 /*
  * Frontoffice Controllers Routes
  */
 
-$route['backoffice/buy-investment-package'] = 'backoffice/membre/buy_investment_package';
-$route['backoffice/my-investment-package'] = 'backoffice/membre/my_investment_package';
-$route['backoffice/internal-transactions'] = 'backoffice/membre/internal_transactions';
-$route['backoffice/financial-transactions'] = 'backoffice/membre/financial_transactions';
-$route['backoffice/new-partners-registration'] = 'backoffice/membre/new_partners_registration';
-$route['backoffice/partners-list'] = 'backoffice/membre/partners_list';
-$route['backoffice/your-level'] = 'backoffice/membre/your_level';
-$route['backoffice/my-documents'] = 'backoffice/membre/my_documents';
-$route['backoffice/profile-data'] = 'backoffice/membre/profile_data';
-$route['backoffice/security'] = 'backoffice/membre/security';
-$route['backoffice/my-documents'] = 'backoffice/membre/my_documents';
-$route['backoffice/promotional-materials'] = 'backoffice/membre/promotional_materials';
-$route['backoffice/signup-new-partner'] = 'backoffice/membre/signup_new_partner';
 
 
 
@@ -154,49 +110,16 @@ $route['webinars/(:num)'] = 'pages/webinars';
 
 
 
+///ROUTES MLM ADMIN
+$route['(fr|en)/admin/login'] = 'admin/auth/connexion/$1';
+$route['admin/login'] = 'admin/auth/connexion/en';
 
+$route['(fr|en)/admin'] = 'admin/principal/index/$1';
+$route['admin'] = 'admin/principal/index/en';
 
+$route['(fr|en)/admin/logout'] = 'admin/auth/deconnexion/$1';
+$route['admin/logout'] = 'admin/auth/deconnexion/en';
 
-/*
- * Backoffice Controllers Routes
- */
-/*$route['backoffice/login'] = "backoffice/auth/login";
-$route['(\w{2})/backoffice/login'] = "backoffice/auth/login";
-$route['backoffice/register'] = "backoffice/auth/register";
-$route['(\w{2})/backoffice/register'] = "backoffice/auth/register";
-$route['backoffice/forgotten-password'] = "backoffice/auth/forgotten";
-$route['(\w{2})/backoffice/forgotten-password'] = "backoffice/auth/forgotten";
-$route['backoffice/me'] = "backoffice/backofficeProfile";
-$route['(\w{2})/backoffice/me'] = "backoffice/backofficeProfile";
-$route['backoffice/logout'] = "backoffice/backofficeProfile/logout";
-$route['(\w{2})/backoffice/logout'] = "backoffice/backofficeProfile/logout";
-$route['backoffice/products'] = "backoffice/Products";
-$route['(\w{2})/backoffice/products'] = "backoffice/Products";
-$route['backoffice/products/(:num)'] = "backoffice/Products/index/$1";
-$route['(\w{2})/backoffice/products/(:num)'] = "backoffice/Products/index/$2";
-$route['backoffice/add/product'] = "backoffice/AddProduct";
-$route['(\w{2})/backoffice/add/product'] = "backoffice/AddProduct";
-$route['backoffice/edit/product/(:num)'] = "backoffice/AddProduct/index/$1";
-$route['(\w{2})/backoffice/edit/product/(:num)'] = "backoffice/AddProduct/index/$1";
-$route['backoffice/orders'] = "backoffice/Orders";
-$route['(\w{2})/backoffice/orders'] = "backoffice/Orders";
-$route['backoffice/uploadOthersImages'] = "backoffice/AddProduct/do_upload_others_images";
-$route['backoffice/loadOthersImages'] = "backoffice/AddProduct/loadOthersImages";
-$route['backoffice/removeSecondaryImage'] = "backoffice/AddProduct/removeSecondaryImage";
-$route['backoffice/delete/product/(:num)'] = "backoffice/products/deleteProduct/$1";
-$route['(\w{2})/backoffice/delete/product/(:num)'] = "backoffice/products/deleteProduct/$1";
-$route['backoffice/view/(:any)'] = "backoffice/index/0/$1";
-$route['(\w{2})/backoffice/view/(:any)'] = "backoffice/index/0/$2";
-$route['backoffice/view/(:any)/(:num)'] = "backoffice/index/$2/$1";
-$route['(\w{2})/backoffice/view/(:any)/(:num)'] = "backoffice/index/$3/$2";
-$route['(:any)/(:any)_(:num)'] = "backoffice/viewProduct/$1/$3";
-$route['(\w{2})/(:any)/(:any)_(:num)'] = "backoffice/viewProduct/$2/$4";
-$route['backoffice/changeOrderStatus'] = "backoffice/orders/changeOrdersOrderStatus";*/
-
-
-$route['administrator~shappinvest/connexion'] = 'administrator~shappinvest/Auth/connexion';
-$route['administrator~shappinvest'] = 'administrator~shappinvest/Principal/index';
-$route['administrator~shappinvest/deconnexion'] = 'administrator~shappinvest/Auth/deconnexion';
 
 ///ROUTES MLM
 $route['default_controller'] = 'pages/home';
@@ -211,7 +134,6 @@ $route['registration'] = 'pages/inscription/en';
 
 $route['(fr|en)/connexion'] = 'pages/connexion/$1';
 $route['connexion'] = 'pages/connexion/en';
-
 
 
 ///BACKOFFICE ROUTE
@@ -240,7 +162,6 @@ $route["backoffice/my-operation"] = 'backoffice/dashboard/operation_financiere/e
 $route["(fr|en)/backoffice/dataOperations"] = 'backoffice/dashboard/dataOperations/$1';
 
 
-
 $route["(fr|en)/backoffice/internal-transfer"] = 'backoffice/dashboard/transferts_interne/$1';
 $route["backoffice/internal-transfer"] = 'backoffice/dashboard/transferts_interne/en';
 
@@ -250,8 +171,8 @@ $route["backoffice/subscription"] = 'backoffice/dashboard/subscription';
 $route["(fr|en)/backoffice/messagerie/(:any)"] = 'backoffice/dashboard/messagerie/$1/$2';
 $route["backoffice/messagerie/(:any)"] = 'backoffice/dashboard/messagerie/$1';
 
-$route["(fr|en)/backoffice/securite"] = 'backoffice/dashboard/securite/$1';
-$route["backoffice/securite"] = 'backoffice/dashboard/securite';
+$route["(fr|en)/backoffice/security"] = 'backoffice/dashboard/securite/$1';
+$route["backoffice/security"] = 'backoffice/dashboard/securite/en';
 
 $route["(fr|en)/backoffice/materiel_marketing"] = 'backoffice/dashboard/materiel_marketing/$1';
 $route["backoffice/materiel_marketing"] = 'backoffice/dashboard/materiel_marketing';
@@ -274,21 +195,11 @@ $route["backoffice/support_technique"] = 'backoffice/dashboard/support_technique
 $route["(fr|en)/backoffice/faq"] = 'backoffice/dashboard/faq/$1';
 $route["backoffice/faq"] = 'backoffice/dashboard/faq/en';
 
-$route["(fr|en)/backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite/$1';
-$route["backoffice/politique_confidentialite"] = 'backoffice/dashboard/politique_confidentialite';
+$route["(fr|en)/backoffice/privacy-policy"] = 'backoffice/dashboard/politique_confidentialite/$1';
+$route["backoffice/privacy-policy"] = 'backoffice/dashboard/politique_confidentialite/en';
 
-$route["(fr|en)/backoffice/mention_legale"] = 'backoffice/dashboard/mention_legale/$1';
-$route["backoffice/mention_legale"] = 'backoffice/dashboard/mention_legale';
-
-
-
-
-///ADMIN ROUTE
-
-
-
-
-
+$route["(fr|en)/backoffice/legal-notice"] = 'backoffice/dashboard/mention_legale/$1';
+$route["backoffice/legal-notice"] = 'backoffice/dashboard/mention_legale/en';
 
 
 $route['404_override'] = 'errors/error404';

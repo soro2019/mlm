@@ -28,7 +28,8 @@ $lang['account_creation_invalid_default_group'] = 'Le nom du groupe par défaut 
 
 // Password
 $lang['password_change_successful']   = 'Le mot de passe a été changé avec succès';
-$lang['password_change_unsuccessful'] = 'Impossible de changer le mot de passe';
+$lang['password_change_unsuccessful'] = ucfirst(get_phrase('impossible de changer votre mot de passe'));
+$lang['password_change_unsuccessful_2']        = ucfirst(get_phrase('votre mot de passe na pas été changé'));
 $lang['forgot_password_successful']   = 'Mail de réinitialisation du mot de passe envoyé';
 $lang['forgot_password_unsuccessful'] = 'Impossible de réinitialiser le mot de passe';
 

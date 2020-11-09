@@ -4,6 +4,7 @@
     border-color: #cccccc !important;
     color: #2f363c;
   }
+
   </style>
 
    <!-- Content Header (Page header) -->     
@@ -57,9 +58,10 @@
 				</div>
 				<!-- /.box-header -->
 				<?php //var_dump($r);die; ?>
-				<div class="box-body no-padding">
-					<div class="table-responsive">
-					  <table class="table table-hover">
+				<div class="panel-body">
+                   <div class="table-wrap">
+                     <table class="table table-striped table-bordered">
+                     	<thead>
 						<tr>
 						  <th>N<sup>o</sup></th>
 						  <th><?php echo ucfirst(get_phrase('pseudo')); ?></th>
@@ -67,7 +69,8 @@
 						  <th><?php echo ucfirst(get_phrase("achat initial")); ?></th>
 						  <th><?php echo ucfirst(get_phrase("date d'entrer")); ?></th>
 						  <th><?php echo ucfirst(get_phrase("actions")); ?></th>
-						</tr>
+						</tr></thead>
+						<tbody>
 						<?php if(!empty($r)){ for ($i=0; $i < count($r) ; $i++) {
 							  $pseudo = $r[$i];
 					          if(stristr($pseudo, 'clone')==TRUE)
@@ -110,6 +113,7 @@
 					    		</td>
 					    	</tr>
 					    <?php } ?>
+					    </tbody>
 					  </table>
 					</div>
 				</div>
@@ -118,7 +122,7 @@
 			  <!-- /.box -->
 			</div>
 
-                        </div>
-                    </div>
-                </div>
             </div>
+        </div>
+    </div>
+</div>

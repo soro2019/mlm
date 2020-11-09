@@ -209,10 +209,10 @@ class UserModel extends CI_Model {
 
     public function membresreseauperso($pseudo)
     {
-            $this->db->select('pseudo_parrain');
-            $this->db->from($this->Table);
-            $this->db->where('pseudo_parrain',$pseudo);
-            $query = $this->db->get();
+        $this->db->select('pseudo_parrain');
+        $this->db->from($this->Table);
+        $this->db->where('pseudo_parrain', $pseudo);
+        $query = $this->db->get();
         if ($query) {
             $num = $query->num_rows();
              return $num;

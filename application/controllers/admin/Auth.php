@@ -9,6 +9,8 @@ class Auth extends MY_Controller
     parent::__construct();
     
     $this->data['page_title'] = 'shappinvest - Tableau de bord';
+    $this->load->model(['Crud_model', 'UserModel']);
+    $this->load->helper('form');
   }
 
   public function index()
@@ -16,43 +18,43 @@ class Auth extends MY_Controller
 
   }
 
-  public function connexion()
+
+  public function connexion($lang='')
   {
       if($this->ion_auth->logged_mlm_in())
       {
-        redirect('administrator~shappinvest/principal/');
+        redirect(trim($_SESSION['language']).'/admin/principal');
       }
-     
-      $this->data['page_title'] = 'Connexion | Administration de shappinvest';
+      defineLanguage($lang);
+      $this->data['page_title'] = get_phrase('connexion | administration de shappinvest');
       if($this->input->post())
       {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('identity', '', 'required');
         $this->form_validation->set_rules('password', '', 'required');
-        $this->form_validation->set_rules('souvenir','Se souvenir de moi','integer');
+        $this->form_validation->set_rules('souvenir', ucfirst(get_phrase('se souvenir de moi')),'integer');
         if($this->form_validation->run()===TRUE)
         {
           $souvenir = (bool) $this->input->post('souvenir');
           if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $souvenir))
           {
-              if($this->ion_auth->in_group('admin'))
+                if($this->ion_auth->in_group('admin'))
                 {
-                  redirect('administrator~shappinvest','refresh');
-                }
-              else {
+                  redirect(trim($_SESSION['language']).'/admin','refresh');
+                }else
+                {
                    if($this->ion_auth->logout()){
-                       $this->session->set_flashdata('message','Cet espace est réservé aux Administrateurs !');
+                       $this->session->set_flashdata('message',ucfirst(get_phrase('cet espace est réservé aux administrateurs !')));
                    }
-              }
+                }
           }
           else
           {
-            $this->session->set_flashdata('message',$this->ion_auth->errors());
-            redirect('administrator~shappinvest/connexion', 'refresh');
+            $this->session->set_flashdata('message', ucfirst(get_phrase($this->ion_auth->errors())));
+            redirect(trim($_SESSION['language']).'/admin/login', 'refresh');
           }
         }
       }
-      $this->load->helper('form');
       $this->render('admin/connexion_view',null);
   }
   
@@ -61,13 +63,12 @@ class Auth extends MY_Controller
       if($this->ion_auth->logged_mlm_in())
       {
         $this->ion_auth->logout();
-        redirect('administrator~shappinvest/connexion', 'refresh');
+        redirect(trim($_SESSION['language']).'/admin/login', 'refresh');
       }
       else
       {
-        redirect('administrator~shappinvest/principal/');  
+        redirect(trim($_SESSION['language']).'/admin/principal');  
       }
-      
   }
   
   

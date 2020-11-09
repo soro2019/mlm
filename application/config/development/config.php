@@ -381,7 +381,7 @@ $config['encryption_key'] = '33vyXI7JPCF9UkT8OZjbL1Tt1riRynb1';
 */
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 200;
 $config['sess_save_path'] = sys_get_temp_dir();
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><?php echo $titre; ?></title>
+  <title><?php echo ucwords($titre); ?></title>
   <link rel="icon" href="<?php echo site_url('assets/member/images/favicon.png');?>">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -51,11 +51,11 @@
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
-            <a href="<?php echo site_url('administrator~shappinvest');?>" class="logo">
+            <a href="<?php echo site_url('admin');?>" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><b><img src="<?php echo site_url('assets/member/images/favicon.png');?>" style="width: 3em;"> </b></span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>SHAPPINVEST</b>ADMIN</span>
+                <span class="logo-lg"><b>SOCIAL-COOP</b>ADMIN</span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -76,9 +76,9 @@
 
                             </ul>
                         </li>-->
-                        <li><a href="<?php echo site_url('administrator~shappinvest/gestion-membres');?>" class="dropdown-toggle" data-toggle="dropdown">Gestion des membres <span class="sr-only">(current)</span></a></li>
+                        <li><a href="<?php echo site_url('admin/principal/gestion_membres');?>" class="dropdown-toggle" data-toggle="dropdown">Gestion des membres <span class="sr-only">(current)</span></a></li>
                         
-                        <li><a href="<?php echo site_url('administrator~shappinvest/parametres_compte/profil');?>">Paramètres <span class="sr-only">(current)</span></a></li>
+                        <li><a href="<?php echo site_url('admin/parametres_compte/profil');?>">Paramètres <span class="sr-only">(current)</span></a></li>
 
                         
                         <li><a href="https://shappinvest.com" target="_blank">Allez sur la marketplace <span class="sr-only">(current)</span></a></li>
@@ -148,10 +148,10 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="<?php echo site_url('administrator~shappinvest/parametres_compte/profil');?>" class="btn btn-default btn-flat">Mon profil</a>
+                                        <a href="<?php echo site_url('admin/parametres_compte/profil');?>" class="btn btn-default btn-flat">Mon profil</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="<?php echo site_url('administrator~shappinvest/deconnexion');?>" class="btn btn-default btn-flat">Déconnexion</a>
+                                        <a href="<?php echo site_url(trim($_SESSION['language']).'/admin/logout');?>" class="btn btn-default btn-flat">Déconnexion</a>
                                     </div>
                                 </li>
                             </ul>
@@ -183,8 +183,8 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MENU PRINCIPAL</li>
-                    <li <?php if($page_title=='Bashboard | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/principal/');?>">
+                    <li <?php if($page_title=='Dashboard | Administration' ) echo 'class="active"' ;?>>
+                        <a href="<?php echo site_url('admin/principal');?>">
                             <i class="fa fa-dashboard"></i> <span>Tableau de bord</span>
 
                         </a>
@@ -192,7 +192,7 @@
                     </li>
 
                     <li <?php if($page_title=='Gestion membres | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/principal/gestion_membres');?>">
+                        <a href="<?php echo site_url('admin/principal/gestion_membres');?>">
                             <i class="fa fa-users"></i> <span>Gestion des membres</span>
 
                         </a>
@@ -201,7 +201,7 @@
 
 
                     <li <?php if($page_title=='Gestion membres | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/principal/gestion_investissement');?>">
+                        <a href="<?php echo site_url('admin/principal/gestion_investissement');?>">
                             <i class="fa fa-users"></i> <span>Gestion des investissements</span>
 
                         </a>
@@ -217,30 +217,30 @@
                         </span>
                       </a>
                       <ul class="treeview-menu">
-                        <li><a href="<?php echo site_url('administrator~shappinvest/gestion_agences/etat_creances');?>"><i class="fa fa-list"></i> Etat des créances</a></li>
-                        <li><a href="<?php echo site_url('administrator~shappinvest/gestion_agences/compte_agences');?>"><i class="fa fa-list"></i> Compte agences</a></li>
-                        <li><a href="<?php echo site_url('administrator~shappinvest/gestion_agences/gestion_versements');?>"><i class="fa fa-list"></i> Versements</a></li>
-                        <li><a href="<?php echo site_url('administrator~shappinvest/gestion_agences/ajouter_agence');?>"><i class="fa fa-list"></i> Ajouter une agence</a></li>
-                        <li><a href="<?php echo site_url('administrator~shappinvest/gestion_agences/ajouter_proprietaire_agence');?>"><i class="fa fa-list"></i> Propriétaire agence</a></li>
-                        <li><a href="<?php echo site_url('administrator~shappinvest/gestion_agences/crediter_agence');?>"><i class="fa fa-list"></i> Créditer agence</a></li>
+                        <li><a href="<?php echo site_url('admin/gestion_agences/etat_creances');?>"><i class="fa fa-list"></i> Etat des créances</a></li>
+                        <li><a href="<?php echo site_url('admin/gestion_agences/compte_agences');?>"><i class="fa fa-list"></i> Compte agences</a></li>
+                        <li><a href="<?php echo site_url('admin/gestion_agences/gestion_versements');?>"><i class="fa fa-list"></i> Versements</a></li>
+                        <li><a href="<?php echo site_url('admin/gestion_agences/ajouter_agence');?>"><i class="fa fa-list"></i> Ajouter une agence</a></li>
+                        <li><a href="<?php echo site_url('admin/gestion_agences/ajouter_proprietaire_agence');?>"><i class="fa fa-list"></i> Propriétaire agence</a></li>
+                        <li><a href="<?php echo site_url('admin/gestion_agences/crediter_agence');?>"><i class="fa fa-list"></i> Créditer agence</a></li>
                       </ul>
                     </li>
 
                     <li <?php if($page_title=='Gestion membres | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/principal/gestion_newletter');?>">
+                        <a href="<?php echo site_url('admin/principal/gestion_newletter');?>">
                             <i class="ion ion-email"></i> <span>News Letters</span>
 
                         </a>
                     </li>
                     <li <?php if($page_title=='Gestion membres | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/principal/gestion_contacts');?>">
+                        <a href="<?php echo site_url('admin/principal/gestion_contacts');?>">
                             <i class="fa fa-users"></i> <span>Contacts</span>
 
                         </a>
                     </li>
 
                     <li <?php if($page_title=='Gestion membres | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/principal/gestion_blogs');?>">
+                        <a href="<?php echo site_url('admin/principal/gestion_blogs');?>">
                             <i class="fa fa-users"></i> <span>Gestion des blogs</span>
 
                         </a>
@@ -249,7 +249,7 @@
 
                     <li class="header">PARAMETRES</li>
                     <li <?php if($page_title=='Profil | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/parametres_compte/profil');?>">
+                        <a href="<?php echo site_url('admin/parametres_compte/profil');?>">
                             <i class="fa fa-user"></i> <span>Profil</span>
 
                         </a>
@@ -257,7 +257,7 @@
                     </li>
 
                     <li <?php if($page_title=='Modifier Mdp | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('administrator~shappinvest/parametres_compte/modifier_mdp');?>">
+                        <a href="<?php echo site_url('admin/parametres_compte/modifier_mdp');?>">
                             <i class="fa fa-wrench"></i> <span>Modifier son mot de passe</span>
                         </a>
 
@@ -267,7 +267,7 @@
                             <br>
                             <li class="header">paramètre thème</li>
                             <li>
-                                <a href="<?php echo site_url('administrator~shappinvest/change_the_theme');?>" target="_blank">
+                                <a href="<?php echo site_url('admin/change_the_theme');?>" target="_blank">
                                    <i class="fa fa-share-alt"></i> 
                                    <span>lien Reseau sociaux</span>
                                 </a>
@@ -285,7 +285,7 @@
                     </li>
 
                     <li>
-                        <a href="<?php echo site_url('administrator~shappinvest/auth/deconnexion');?>">
+                        <a href="<?php echo site_url('admin/auth/deconnexion');?>">
                             <i class="fa fa-sign-out"></i> <span>Déconnexion</span>
                         </a>
                     </li>
@@ -304,7 +304,7 @@
                     <?= $titre; ?>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="<?php echo site_url('administrator~shappinvest/principal/');?>"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                    <li><a href="<?php echo site_url('admin/principal/');?>"><i class="fa fa-dashboard"></i> Accueil</a></li>
                     <li class="active">
                         <?= $lien; ?>
                     </li>

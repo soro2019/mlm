@@ -9,12 +9,7 @@ class Gestion_agences extends Admin_Controller
   {
     parent::__construct();
     $this->load->model('UserModel');
-    $this->load->model('MesFilleulsModel');
-    $this->load->model('MesBonsModel');
-    $this->load->model('AgenceModel');
     $this->load->model('admin/MembresModel','MembresModel');
-    $this->load->library('ion_auth');  
-    $this->load->library('grocery_CRUD');
       
     $this->data['pseudo'] = $this->session->userdata('identity');
     $noms_membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));

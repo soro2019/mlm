@@ -2,18 +2,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-class Membre extends MY_Controller
+class Membre extends Backoffice_Controller
 {
   function __construct()
   {
     parent::__construct();
-        
-      
     $this->load->library('ion_auth');
     $this->load->model(['UserModel', 'Crud_model']);
-      
-    $this->data['pseudo'] = $this->session->userdata('identity');
-    $membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    $membre = $this->data['membre'];
     $this->data['nom_membre'] = $membre['first_name'];
     $this->data['prenom_membre'] = $membre['last_name'];
     $this->data['dateInscription'] = $membre['created_on'];
@@ -22,13 +18,6 @@ class Membre extends MY_Controller
     $this->data['achat_ini'] = $membre['achat_ini'];
     $this->data['niveau'] = $membre['niveau'];
     $this->data['membre'] = $membre;
-  
-      $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
-      /*$this->data['mesbons'] = $this->MesBonsModel->mesbons($this->session->userdata('identity'));
-      $this->data['monNiveau'] = $this->MesFilleulsModel->monNiveau($this->session->userdata('identity'));
-      $this->data['inscritoday'] = $this->MesFilleulsModel->inscritoday($this->session->userdata('identity'));
-
-      $this->data['articles'] = $this->FronteModel->selectArticles();*/
   }
 
   public function index()
@@ -57,12 +46,73 @@ class Membre extends MY_Controller
       defineLanguage($lang);
       $this->data['listepays'] = $this->Crud_model->listePays();
       $this->data['titre'] = get_phrase('my profile');
-      $this->data['page_description'] = get_phrase('information in member');
+      $this->data['page_description'] = get_phrase('member information');
       $this->data['page_author'] = 'profil';
-      $user = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-      $this->data['user'] = $user;
+      $user = $this->data['user'] = $this->data['membre'];
+      $compte_ex = $this->data['compte_ex'];
+
+      if($this->input->post())
+      {
+        if($this->input->post('settings-payement') != null)
+        {
+          if($compte_ex)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('vous avez déjà configurer ses paramètres de paiement, pour les modifiés merci de cliquer sur le menu : Données personnelles => sécurité')));
+          }else
+          {
+            $data = ['par_bitcoin' =>$this->input->post('bitcoin'), 'par_payeer' =>$this->input->post('payeer'), 'par_perfect_money' =>$this->input->post('perfect_money'), 'pseudo_proprio' =>trim($this->session->userdata('identity')), 'date_create' =>time()];
+            $this->Crud_model->insertion_('comptes_externes', $data);
+            $this->session->set_flashdata('message', ucfirst(get_phrase('paramètres de paiement configuré avec succès')));
+              redirect(trim($_SESSION['language']).'/backoffice/my-profile','refresh');
+          }
+        }
+        if($this->input->post('settings') != null)
+        {
+          $date_n = formtageDate22($this->input->post('date_naissance'));
+          if(empty($this->input->post('first_name')) || empty($this->input->post('last_name')) || empty($this->input->post('genre')) || empty($this->input->post('Lieu_naissance')) || empty($this->input->post('date_naissance')) || empty($this->input->post('pays')) || empty($this->input->post('phone')) || empty($this->input->post('ville')) || empty($this->input->post('region')) || empty($this->input->post('email')))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('merci de remplir correctement le formulaire avec tous les informations demandées')));
+
+          }elseif($this->UserModel->EmailExiste2($this->input->post('email'), $user['id']))
+          {
+             $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet adresse email est déjà utilisée.')));
+          }elseif($this->UserModel->PhoneExiste2($this->input->post('phone'), $user['id']))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet numéro de téléphone est déjà utilisée.')));
+
+          }elseif($this->UserModel->NomExiste($this->input->post('first_name'), $user['id']) && $this->UserModel->PrenomsExiste($this->input->post('last_name'), $user['id']) && $this->UserModel->DateNaissanceExiste($date_n, $user['id']) && $this->UserModel->LieuNaissanceExiste($this->input->post('Lieu_naissance'), $user['id']))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('les informations saisie sont déjà utilisée par un autre utilisateur')));
+          }else
+          {
+
+             $pays = $this->Crud_model->listePays($this->input->post('pays'));
+             $new_data = array(
+                    'email' => test_inputValide($this->input->post('email')),
+                    'first_name' => test_inputValide($this->input->post('first_name')),
+                    'last_name' => test_inputValide($this->input->post('last_name')),
+                    'genre' => test_inputValide($this->input->post('genre')),
+                    'Lieu_naissance' => test_inputValide($this->input->post('Lieu_naissance')),
+                    'date_naissance' => test_inputValide($date_n),
+                    'pays' => test_inputValide($pays['id']),
+                    'phone' => test_inputValide($this->input->post('phone')),
+                    'ville' => test_inputValide($this->input->post('ville')),
+                    'region' => test_inputValide($this->input->post('region')),
+                    'code_postal' => test_inputValide($this->input->post('code_postal')),
+              );
+              if($this->UserModel->MajProfil($new_data, $user['id'])){
+                  $this->session->set_flashdata('message', ucfirst(get_phrase('profil mis à jour')));
+                  redirect(trim($_SESSION['language']).'/backoffice/my-profile','refresh');
+              }else
+              {
+                $this->session->set_flashdata('message_erreur', $this->ion_auth->messages());
+              } 
+          }
+        }
+
+      }
+
       $this->render('backoffice/profil_view','backoffice_master');
-      
   }
   
     
@@ -73,15 +123,14 @@ class Membre extends MY_Controller
       {
         redirect('connexion');
       }
-      $this->data['page_title'] = get_phrase('Modifier mon profil');
+      $this->data['page_title'] = ucwords(get_phrase('modifier mon profil'));
       $this->data['titre'] =ucwords(get_phrase('mon profil'));
-      $this->data['page_description'] = get_phrase('Modifier mon profil');
+      $this->data['page_description'] = ucwords(get_phrase('modifier mon profil'));
       $this->data['page_author'] = 'modifier_profil';
       $user = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
       $this->data['user'] = $user;
       if ($user['social_reseau']==""){$user['social_reseau']='{"facebook": "" ,"skype": "" ,"twitter": ""}'; }
       $socials = json_decode($user['social_reseau']);
-      $this->data['user'] = $user;
       $this->data['social_reseau'] = $socials;
       $this->data['listepays'] = $this->Crud_model->listePays();
 
@@ -92,15 +141,19 @@ class Membre extends MY_Controller
         $socials.='"twitter": "'.$this->input->post('twitter').'"}';
         $date_n = formtageDate22($this->input->post('date'));
 
-        if($this->UserModel->EmailExiste2($this->input->post('email'), $user['id']))
+        if(empty($this->input->post('nom')) || empty($this->input->post('prenoms')) || empty($this->input->post('genre')) || empty($this->input->post('lieu_naissance')) || empty($this->input->post('date')) || empty($this->input->post('pays')) || empty($this->input->post('telephone')) || empty($this->input->post('ville')) || empty($this->input->post('region')) || empty($this->input->post('email')) )
         {
-           $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet adresse email est déjà utilisée.'));
+          $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('merci de remplir correctement le formulaire avec tous les informations demandées')));
+
+        }elseif($this->UserModel->EmailExiste2($this->input->post('email'), $user['id']))
+        {
+           $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet adresse email est déjà utilisée.')));
         }elseif($this->UserModel->PhoneExiste2($this->input->post('telephone'), $user['id']))
         {
-          $this->session->set_flashdata('message_erreur', get_phrase('Désolé! Cet numéro de téléphone est déjà utilisée.'));
+          $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('désolé! Cet numéro de téléphone est déjà utilisée.')));
         }elseif($this->UserModel->NomExiste($this->input->post('nom'), $user['id']) && $this->UserModel->PrenomsExiste($this->input->post('prenoms'), $user['id']) && $this->UserModel->DateNaissanceExiste($date_n, $user['id']) && $this->UserModel->LieuNaissanceExiste($this->input->post('lieu_naissance'), $user['id']))
         {
-          $this->session->set_flashdata('message_erreur', get_phrase('Les informations saisie sont déjà utilisée par un autre utilisateur'));
+          $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('les informations saisie sont déjà utilisée par un autre utilisateur')));
         }else
         {
 
@@ -120,7 +173,7 @@ class Membre extends MY_Controller
                     'code_postal' => test_inputValide($this->input->post('code_postal')),
               );
               if($this->UserModel->MajProfil($new_data, $user['id'])){
-                  $this->session->set_flashdata('message', 'Profil mis à jour');
+                  $this->session->set_flashdata('message', ucfirst(get_phrase('profil mis à jour')));
                   redirect(trim($_SESSION['language']).'/backoffice/my-profile','refresh');
               }else
               {
@@ -133,7 +186,6 @@ class Membre extends MY_Controller
 
       $this->render('backoffice/modif_informations','backoffice_master');
   }
-    
     
     
   public function modifier_mdp()
@@ -195,7 +247,6 @@ class Membre extends MY_Controller
          $this->load->helper('form');
          $this->render('backoffice/changer_mdp_view','backoffice_master');
       }
-      
   } 
 
 // created the page for bakoffice

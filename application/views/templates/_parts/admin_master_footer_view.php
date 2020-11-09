@@ -86,136 +86,54 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/fc-3.2.5/r-2.2.2/sc-1.5.0/datatables.min.js"></script>
-    
-    
-
-
 <?php if($page_title=='Gestion membres | Administration'){ ?> 
-<script>
-		// render order list data table
-	// default render page
-	jQuery(document).ready(function() {
-		var data = {pseudo:"", nom:"", prenoms:"", bon:"", niveau:"", startDate: "", endDate: ""};
-		generateUserTable(data);
-	});
+<script type="text/javascript">
+    var userTable;
 
-	// render date datewise
-	jQuery(document).on('click','#filter-order-filter', function(){
-		var pseudo = jQuery('input#filter-pseudo').val();    
-		var nom = jQuery('input#filter-nom').val();
-		var prenoms = jQuery('input#filter-prenoms').val();
-		var bon = jQuery('input#filter-bon').val();
-		var niveau = jQuery('input#filter-niveau').val();
-		var startDate = jQuery('input#order-start-date').val();    
-		var endDate = jQuery('input#order-end-date').val();
-		var data = {pseudo:pseudo, nom:nom, prenoms:prenoms, tel:tel, bon:bon, niveau:niveau, startDate:startDate, endDate:endDate};
-		generateUserTable(data);
-	});
-	// generate Order Table
-	function generateUserTable(element){	
-		jQuery.ajax({
-			url: '<?= site_url('administrator~shappinvest/principal/gestion_membres_data');?>',
-			data: {'pseudo' : element.pseudo , 'nom' : element.nom, 'prenoms' : element.prenoms, 'tel' : element.tel , 'bon' : element.bon, 'niveau' : element.niveau, 'start_date' : element.startDate , 'end_date' : element.endDate},
-			type: 'post', 
-			dataType: 'json',
-			beforeSend: function () {
-				jQuery('#render-list-of-order').html('<div class="text-center mrgA padA"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i></div>');
-			},			 
-			success: function (html) {
-                
-				var dataTable='<table id="order-datatable" class="table cell-border hover order-column table-striped" cellspacing="0" width="100%"></table>';
-				jQuery('#render-list-of-order').html(dataTable);		
-				var table = $('#order-datatable').DataTable({
-					data: html.data,
-					"bPaginate": true,
-					"bLengthChange": true,
-                      'searching'   : false,
-                      'ordering'    : true,
-                      'info'        : true,
-                      'autoWidth'   : false,
-                      responsive: false,
-                      dom: 'lBfrtip',
-                    /*buttons: [
-                        'copy', 'excel', 'pdf'
-                    ],*/
-                    
-                    buttons: [ 
-                        { 
-                            extend: 'excel', 
-                            text: 'Exporter en EXCEL',
-                            //className: 'excelButton',
-                            filename: 'Etat des créances_'+today
-                            
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'Exporter en PDF',
-                            orientation: 'landscape', //portrait
-                            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
-                            //className: 'pdfButton',
-                            filename: 'Etat des créances_'+today,
-                            exportOptions: {
-                                columns: ':visible',
-                                search: 'applied',
-                                order: 'applied'
-                            }
-                        },
-                        { 
-                            extend: 'print', 
-                            text: 'Imprimer',
-                            orientation: 'landscape', //portrait
-                            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
-                            //className: 'printButton'
-                            filename: 'Etat des créances_'+today,
-                        }
-                    ],
-                    
-					columns: [
-						{ title: "Ordre", "width": "2%"},
-						{ title: "Pseudo", "width": "15%"},
-						{ title: "Nom", "width": "10%"},
-						{ title: "Prénoms", "width": "15%"},
-						{ title: "tel", "width": "10%"},
-						{ title: "Bon d'achat", "width": "10%"},					
-						{ title: "Niveau", "width": "10%"},
-						{ title: "Crée le", "width": "15%"}
-					],
-                    
-                    "language": {
-                        "sProcessing":     "Traitement en cours...",
-                        "sSearch":         "Rechercher&nbsp;:",
-                        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
-                        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-                        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                        "sInfoPostFix":    "",
-                        "sLoadingRecords": "Chargement en cours...",
-                        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
-                        "oPaginate": {
-                            "sFirst":      "Premier",
-                            "sPrevious":   "Pr&eacute;c&eacute;dent",
-                            "sNext":       "Suivant",
-                            "sLast":       "Dernier"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-                            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-                        },
-                        "select": {
-                                "rows": {
-                                    _: "%d lignes séléctionnées",
-                                    0: "Aucune ligne séléctionnée",
-                                    1: "1 ligne séléctionnée"
-                                } 
-                        }
-                    }
-				});
-			}
+    $(document).ready(function() {
+        $("#languageNav").addClass('active');
             
-		});
-	}
-	</script>
+        // initialize the datatable 
+        var base_url = "<?php echo base_url('admin/principal/');?>"; // You can use full url here but I prefer like this
+        userTable = $('#userTable').DataTable({
+            
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            /*'ordering': true,*/
+            'info': true,
+            'responsive': false,
+            /* Processing indicator */
+            "processing": true,
+            "pageLength" : 10,
+            "serverSide": true,
+            "order": [],
+            "ajax":{
+              dataType: "JSON",
+              url :  base_url+'gestion_membres_data',
+              type : 'POST',
+              
+              data: function(data){
+                   data.pseudo = $('#filter-pseudo').val();
+                   data.parrain = $('#filter-parrain').val();
+                   data.nom_prenoms = $('#filter-nom').val();
+                   data.niveau = $('#filter-niveau').val();
+                   data.created_on = $('#order-start-date').val();
+                   data.created_on = $('#order-end-date').val();
+                }
+            },
+
+        });
+
+       $('#filter-pseudo, #filter-parrain, #filter-nom, #filter-niveau, #order-start-date, #order-end-date').change(function(){
+          userTable.draw();
+       });
+       $('#filter-pseudo, #filter-parrain, #filter-nom, #filter-niveau, #order-start-date, #order-end-date').keyup(function(){
+          userTable.draw();
+       });
+
+    });
+ </script>
 <?php } ?> 
 
 <?php if($page_title=='Etat des créances | Administration'){ ?> 

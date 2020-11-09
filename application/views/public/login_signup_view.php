@@ -39,24 +39,24 @@
                         "name" => "");
                         echo form_open("", $attributes);
                         ?>
-                        <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; margin-bottom:15px;color:#02799c;"> <?=get_phrase('Sign in')?></h1>
+                        <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; margin-bottom:15px;color:#02799c;"> <?=ucfirst(get_phrase('sign in'))?></h1>
                         <div class="input-group">
-                            <input type="text" id="inputEmail" class="form-control" placeholder="<?=get_phrase('Votre pseudo')?>" required="" autofocus="" name="identity">
+                            <input type="text" id="inputEmail" class="form-control" placeholder="<?=ucfirst(get_phrase('votre pseudo'))?>" required="" autofocus="" name="identity">
                         </div>
                         <div class="input-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="<?=get_phrase('Votre mot de passe')?>" required="" name="password">
+                            <input type="password" id="inputPassword" class="form-control" placeholder="<?=ucfirst(get_phrase('votre mot de passe'))?>" required="" name="password">
                         </div>
-                        <button class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-btn-style-fill ttm-icon-btn-right ttm-btn-bgcolor-skincolor" title=""><?=get_phrase('Sign in')?></button>
-                        <a href="#" id="forgot_pswd" style="text-align: left; color:#0b0c26;"><?=get_phrase('Forgot password')?>?</a>
+                        <button class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-btn-style-fill ttm-icon-btn-right ttm-btn-bgcolor-skincolor" title=""><?=ucfirst(get_phrase('sign in'))?></button>
+                        <a href="#" id="forgot_pswd" style="text-align: left; color:#0b0c26;"><?=ucfirst(get_phrase('forgot password'))?>?</a>
                         <hr>
                         <!-- <p>Don't have an account!</p>  -->
                         <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-btn-style-fill ttm-icon-btn-right ttm-btn-bgcolor-skincolor" href="<?php echo site_url(trim($_SESSION['language']));?>/registration" title=""><?=get_phrase('Sign up New Account')?></a>
                         <?php echo form_close() ; ?>
                         <form action="" class="form-reset">
-                            <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; margin-bottom:15px;color:#02799c;"><?=get_phrase('Reset Password')?></h1>
+                            <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; margin-bottom:15px;color:#02799c;"><?=ucwords(get_phrase('reset password'))?></h1>
                             <input type="email" id="resetEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-                            <button class="btn btn-primary btn-block" type="submit" style="background-color:#02799c;border-color:#02799c"><?=get_phrase('Reset Password')?></button>
-                            <a href="#" id="cancel_reset"  style="text-align: left; color:#0b0c26;"><i class="fa fa-angle-left"></i> <?=get_phrase('Retour')?></a>
+                            <button class="btn btn-primary btn-block" type="submit" style="background-color:#02799c;border-color:#02799c"><?=ucwords(get_phrase('reset password'))?></button>
+                            <a href="#" id="cancel_reset"  style="text-align: left; color:#0b0c26;"><i class="fa fa-angle-left"></i> <?=ucfirst(get_phrase('retour'))?></a>
                         </form>
                         <br>
                     </div>

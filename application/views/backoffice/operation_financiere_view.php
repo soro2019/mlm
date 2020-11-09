@@ -21,7 +21,7 @@
 			  <div class="box">
 				<div class="box-header with-border">
 				  <h3 class="box-title"><?=ucwords(get_phrase('historique des transactions'));?></h3>
-				  <h6 class="box-subtitle"><?=ucfirst(get_phrase('export data excel and pdf'))?></h6>
+				  <!-- <h6 class="box-subtitle"><?=ucfirst(get_phrase('export data excel and pdf'))?></h6> -->
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
@@ -55,8 +55,9 @@
 						</div>
 					</div>
 					<br>
-					<div class="table-responsive">
-					  <table id="operation-table" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+					<div class="panel-body">
+                      <div class="table-wrap">
+                     <table class="table table-striped table-bordered">
 						<thead>
 							<tr>
 								<th>N<sup>o</sup></th>

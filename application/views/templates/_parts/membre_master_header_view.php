@@ -58,6 +58,61 @@
         .theme-purple a:hover, .theme-purple a:active, .theme-purple a:focus {
            /* color: white !important;*/
         }
+  /* ADDING */
+
+@media (max-width: 767px) {
+  .table-wrap table,
+  .table-wrap thead,
+  .table-wrap tbody,
+  .table-wrap th,
+  .table-wrap td,
+  .table-wrap tr {
+    display: block;
+  }
+  .table-wrap thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .table-wrap td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%!important;
+    white-space: normal;
+    text-align: left;
+  }
+  .table-wrap td:before {
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    width: 45%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+  .table-wrap td:first-child {
+    padding-top: 17px;
+  }
+  .table-wrap td:last-child {
+    padding-bottom: 16px;
+  }
+  .table-wrap td:first-child:before {
+    top: 17px;
+  }
+  .table-wrap td:before {
+    content: attr(data-title);
+  }
+  .table tbody tr {
+    border-top: 1px solid #ddd;
+      padding-bottom: 20px;
+  }
+  .table tbody tr td {
+    border: none;
+  }
+}
 
    /*     .theme-purple a:hover, .theme-purple a:active, .theme-purple a:focus {
     color: orange !important;
@@ -247,7 +302,7 @@
 						</a>
 					</li>
 
-					<li class="treeview <?php if($page_author == 'modifier_profil' or $page_author == 'Security' or $page_author == 'profil') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'modifier_profil' or $page_author == 'securite' or $page_author == 'profil') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("données personnelles"))?></span>
@@ -262,13 +317,12 @@
 									<?= ucfirst(get_phrase("mon Profil"))?>
 								</a>
 							</li>
-							<li <?php if($page_author == 'Security') echo 'class="active"';?>>
-								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/securite');?>">
+							<li <?php if($page_author == 'securite') echo 'class="active"';?>>
+								<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/security');?>">
 									<i class="ti-more"></i>
 									<?= ucfirst(get_phrase("sécurité"))?>
 								</a>
 							</li>
-							
 						</ul>
 					</li> 
 
@@ -285,7 +339,7 @@
 							<span><?= ucfirst(get_phrase("ajouter un nouveau partenaire"))?></span>
 						</a>
 					</li> 
-					<li class="treeview <?php if($page_author == 'webinaire' || $page_author == 'conferences' || $page_author == 'actualites' || $page_author == 'faq') echo 'active';?>">
+					<li class="treeview <?php if($page_author == 'webinaire' || $page_author == 'conferences' || $page_author == 'actualites' || $page_author == 'faq' || $page_author == 'politique_confidentialite' || $page_author == 'mention_legale') echo 'active';?>">
 						<a href="#">
 							<i class="ti-dashboard"></i>
 							<span><?= ucfirst(get_phrase("extra"))?></span>
@@ -318,13 +372,14 @@
 										<?=strtoupper(get_phrase("faq"))?>
 									</a>
 								</li>
-								<li>
-									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/politique_confidentialite');?>" class="ti-more">
+								<li <?php if($page_author == 'politique_confidentialite') echo 'class="active"';?>>
+									
+									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/privacy-policy');?>" class="ti-more">
 										<?= ucfirst(get_phrase("politique de confidentialité"))?>
 									</a>
 								</li>
-								<li>
-									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/mention_legale');?>" class="ti-more">
+								<li <?php if($page_author == 'mention_legale') echo 'class="active"';?>>
+									<a href="<?php echo site_url(trim($_SESSION['language']).'/backoffice/legal-notice');?>" class="ti-more">
 										<?= ucfirst(get_phrase("mention légales"))?>
 									</a>
 								</li>
