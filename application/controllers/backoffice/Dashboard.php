@@ -11,10 +11,20 @@ class Dashboard extends Backoffice_Controller
 
     $this->data['pseudo'] = trim($this->session->userdata('identity'));
     $membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+
     $this->data['nom_membre'] = $membre['first_name'];
     $this->data['prenom_membre'] = $membre['last_name'];
-    $this->data['dateInscription'] = date("d-m-Y à H:i:s", $membre['created_on']);
+    $this->data['dateInscription'] = $membre['created_on'];
     $this->data['email_membre'] = $membre['email'];
+    $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
+    $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
+    $cMatrice = $this->data['compactmatrice'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 1);
+
+    $cBonus = $this->data['compactbonus'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 2);
+
+    $cOperation = $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
+    $this->data['niveau'] = $membre['niveau'];
+    $this->data['achat_ini'] = $membre['achat_ini'];
   }
 
   public function index($lang='')
@@ -24,7 +34,10 @@ class Dashboard extends Backoffice_Controller
       {
         redirect(trim($_SESSION['language']).'/connexion');
       }
+      $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
 
+      $matrice = $this->data['membre']['niveau'];
+      
       $this->data['titre'] = get_phrase('dashboard');
 
       $this->data['page_description'] = get_phrase('dashboard');
@@ -37,10 +50,10 @@ class Dashboard extends Backoffice_Controller
       $this->data['webinaires'] = $this->Crud_model->selectArticle(3, 3);
 
       $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
-     
-       $cMatrice = $this->data['compactmatrice'];
-       $cBonus = $this->data['compactbonus'];
-       $cOperation = $this->data['compactinvest'];
+
+      
+
+      $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$matrice);
 
       if($this->input->post())
       {
@@ -53,10 +66,6 @@ class Dashboard extends Backoffice_Controller
           }elseif((int)$cMatrice["montant"] <= $montant)
           {
             $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
-
-          }elseif(sha1($this->input->post('codepin')) != $cMatrice["codepin"])
-          {
-            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le code pin saisir est incorrecte")));
           }else
           {
             $reste = (int)$cMatrice["montant"] - $montant;
@@ -83,6 +92,7 @@ class Dashboard extends Backoffice_Controller
             }
           }
         }
+
         if($this->input->post('c-bonus')!=NULL)
         {
           $montant = (int) $this->input->post('montant');
@@ -92,9 +102,6 @@ class Dashboard extends Backoffice_Controller
           }elseif((int)$cBonus["montant"] <= $montant)
           {
             $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
-          }elseif(sha1($this->input->post('codepin')) != $cBonus["codepin"])
-          {
-            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le code pin saisir est incorrecte")));
           }else
           {
             $reste = (int)$cBonus["montant"] - $montant;
@@ -202,17 +209,16 @@ class Dashboard extends Backoffice_Controller
       $matrice = 'matrice'.$_POST['niveau'];
       $reseau = selectFilleulByMatrice($user['pseudo'], $matrice);
       $result = '<div class="modal-body">
-                  <div class="panel-body">
-                   <div class="table-wrap">
-                     <table class="table table-striped table-bordered">
-                     <thead>
+                  <div class="box-body no-padding">
+                   <div class="table-responsive">
+                    <table class="table table-hover">
                       <tr>
                         <th>N<sup>o</sup></th>
                         <th>'.ucfirst(get_phrase('pseudo')).'</th>
                         <th>'.ucfirst(get_phrase('nom')).' '.ucfirst(get_phrase('prénoms')).'</th>
                         <th>'.ucfirst(get_phrase("achat initial")).'</th>
                         <th>'.ucfirst(get_phrase("date d'entrer")).'</th>
-                      </tr></thead>';
+                      </tr>';
       if(!empty($reseau))
       {
         for ($i=0; $i < count($reseau) ; $i++){
@@ -292,6 +298,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('mon réseau');
 
@@ -309,6 +316,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('faire l\'achat initial');
 
@@ -377,6 +385,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     $this->data['titre'] = get_phrase('matrice');
     $this->data['nieme'] = (int) $nieme;
     $this->data['page_description'] = get_phrase('matrice');
@@ -393,21 +402,6 @@ class Dashboard extends Backoffice_Controller
     $this->render('backoffice/matrice_view');
   }
 
-  public function filterTable() {
-   if($this->input->is_ajax_request()) {
-     $dataget['mois_annee']= $this->input->get('date');
-    $dataget['typeoperation']= $this->input->get('typeop');
-    $dataget['pseudo_receveur']= $this->input->get('pseudrecv');
-
-     $data= $this->Crud_model->filter($dataget);
-     foreach ($data as $elt) {
-       $elt->dateopration = date('d/m/Y', $elt->dateopration);
-       $elt->typeoperation= $this->Crud_model->selectTypeOpById($elt->typeoperation)['lib'];
-     }
-     echo json_encode($data);
-   }
-  }
-
 
   public function operation_financiere($lang='')
   {
@@ -416,6 +410,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = ucwords(get_phrase('mes opérations finacières'));
 
@@ -428,6 +423,71 @@ class Dashboard extends Backoffice_Controller
     
     $this->render('backoffice/operation_financiere_view');
   }
+
+  public function dataOperations()
+  {
+
+    if(!$this->ion_auth->logged_mlm_in())
+    {
+      redirect(trim($_SESSION['language']).'/connexion');
+    }
+
+    $data = array();
+        
+    $op = $this->DatatableModel->getRows();
+
+    var_dump($op);die;
+    
+    $i = isset($_POST['start'])?$_POST['start']:0;
+
+    foreach($op as $op){
+
+        //$champs = $this->Crud_model->selectChampProduct();
+        
+        $i++; 
+        $identifiant = $op['identifiant_genered'];   
+        $nom_prenoms =$op['nom_prenoms'];   
+        $date_naissance = formtageDate22($op['date_naissance']);   
+        $contact = $op['contact'];   
+        $quartier = $op['quartier'];   
+        $ayant_droit = $op['ayant_droit'];   
+        $message_envoyer = $op['message_envoyer'];  
+        $date_envoie = $op['date_envoie'];
+        $date_ = "";
+        if($date_envoie != 0 && $message_envoyer != 0){
+          $date_ = formtageDate22($date_envoie);
+        }
+        $status = "Identifiant reçu";
+        $action = '<span class="dropdown"><a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true"> <i class="la la-ellipsis-h"></i>  </a> <div class="dropdown-menu dropdown-menu-right">';
+
+               if($op['message_envoyer']==0)
+                {
+                    $action .= '<a class="dropdown-item" href="'.site_url("/main/envoieid/").$op['identifiant_genered'].'"><i class="la la-leaf"></i> Envoyer son identifiant</a>';
+                    $status = "Pas encore reçu";
+                }
+
+               $action .= '<a class="dropdown-item" href="'.site_url("/main/pdf/").$op['id'].'" target="_blank"><i class="la la-print"></i> Imprimé fiche</a>
+
+                  <a class="dropdown-item" href="'.site_url("/main/voir/").$op['id'].'"><i class="la la-leaf"></i> Voir détail</a> 
+
+                  <a class="dropdown-item" href="'.site_url("/main/modifier/").$op['id'].'"><i class=" la la-edit"></i> Modifier</a>  </div>  </span>';
+
+        $data[] = array($i,$identifiant,$nom_prenoms,$date_naissance,$contact,$quartier,$ayant_droit,$status,$date_,$action);
+                              
+    }
+
+    //var_dump($data);die;
+    
+    $output = array(
+        "draw" => isset($_POST['draw'])?$_POST['draw']:10,
+        "recordsTotal" => $this->DatatableModel->countAll(),
+        "recordsFiltered" => $this->DatatableModel->countFiltered($_POST),
+        "data" => $data
+    );
+    
+    // Output to JSON format
+    echo json_encode($output);
+  }
   
   public function transferts_interne($lang='')
   {
@@ -436,6 +496,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('internal transfer');
 
@@ -500,21 +561,29 @@ class Dashboard extends Backoffice_Controller
     $this->render('backoffice/transferts_interne_view');
   }
   
-    
-  public function messagerie($lang='')
+  
+  
+  public function messagerie($lang='',$innerPage)
   {
+    if($innerPage =="")
+    {
+      $innerPage='message_home';
+    }
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = ucfirst(get_phrase('messagerie'));
+    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['message_inner_page_name'] = $innerPage;
 
-    $this->data['page_description'] = get_phrase('messagerie');
-    $this->data['page_author'] = 'messagerie';
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
     
-    $this->render('backoffice/messagerie_view');
+    $this->render('backoffice/messagerie_view');  
+      
   }
   
   public function securite($lang='')
@@ -524,133 +593,15 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['titre'] = get_phrase('sécurité');
-    $this->data['page_description'] = get_phrase('sécurité');
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
+    $this->data['titre'] = get_phrase('dashboard');
 
-    $this->data['page_author'] = 'securite';
-
-    if($this->input->post("change-password") != null)
-    {
-      if(empty($this->input->post("old_pass")))
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('veuillez saisi votre ancien mot de passe')));
-      }elseif(empty($this->input->post("new_pass")))
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('veuillez saisi votre nouveau mot de passe')));
-
-      }elseif(empty($this->input->post("confirm_pass")))
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('corfirmé votre nouveau mot de passe')));
-      }elseif($this->input->post("confirm_pass") != $this->input->post("new_pass"))
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('vos mots de passe ne correspondent')));
-      }else
-      {
-        $identity = $this->session->userdata('identity');
-        $old = $this->input->post("old_pass");
-        $new = $this->input->post("new_pass");
-        if($this->ion_auth->change_password($identity, $old, $new))
-        {
-          $this->session->set_flashdata('message', ucfirst(get_phrase('votre mot de passe a été changé avec succès')));
-          redirect(trim($_SESSION['language']).'/backoffice/logout','refresh');
-        }else
-        {
-          /*$this->session->set_flashdata('message_erreur', ucfirst(get_phrase('une erreu est survenue lors du changement')));*/
-          $this->session->set_flashdata('message_erreur',$this->ion_auth->errors());
-        }
-      }
-    }
-
-    if($this->input->post("modifier-paiement") != null)
-    {
-      if(empty($this->input->post("bitcoin")) && empty($this->input->post("payeer")) && empty($this->input->post("perfect_money")))
-      {
-       $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('veuillez remplir au moins un champs du formulaire')));
-      }else
-      {
-        $data = ['par_bitcoin' => test_inputValide($this->input->post("bitcoin")), 'par_payeer' => test_inputValide($this->input->post("payeer")), 'par_perfect_money' => test_inputValide($this->input->post("perfect_money")), 'date_create' => time()];
-
-        $this->Crud_model->update_where('comptes_externes', $data, $this->session->userdata('identity'), 'pseudo_proprio');
-
-        $this->session->set_flashdata('message_success', ucfirst(get_phrase('configuration de paiement effectué avec succès')));
-          redirect(trim($_SESSION['language']).'/backoffice/security','refresh');
-      }
-    }
-
-    if($this->input->post("add-paiement") != null)
-    {
-        if(empty($this->input->post("bitcoin")) && empty($this->input->post("payeer")) && empty($this->input->post("perfect_money")))
-        {
-         $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('veuillez remplir au moins un champs du formulaire')));
-        }else
-        {
-          $data = ['par_bitcoin' => $this->input->post('bitcoin'), 'par_payeer' =>$this->input->post('payeer'), 'par_perfect_money' =>$this->input->post('perfect_money'), 'pseudo_proprio' =>trim($this->session->userdata('identity')), 'date_create' =>time()];
-          $this->Crud_model->insertion_('comptes_externes', $data);
-          $this->session->set_flashdata('message_success', ucfirst(get_phrase('paramètres de paiement configuré avec succès')));
-            redirect(trim($_SESSION['language']).'/backoffice/security','refresh');
-        }
-    }
-
-    if($this->input->post("modifier-code-pin") != null)
-    {
-      if(empty($this->input->post("compte")) || empty($this->input->post("old_pin")) || empty($this->input->post("new_pin")))
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('merci de bien remplir le formulaire')));
-      }elseif(!$this->Crud_model->verifCodePinCompte($this->input->post("compte"), $this->input->post("old_pin")))
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('votre ancien code pin est incorrecte')));
-      }elseif(strlen($this->input->post("new_pin")) != 4)
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('le code doit être composé de 4 chiffres obligatoirement')));
-      }else
-      {
-        $data = ['codepin' => sha1($this->input->post("new_pin"))];
-        $this->Crud_model->update_where('comptes', $data, $this->input->post("compte"), 'id');
-
-        $this->session->set_flashdata('message_success', ucfirst(get_phrase('code pin modifier avec succès')));
-          redirect(trim($_SESSION['language']).'/backoffice/security','refresh');
-      }
-    }
-
-    if($this->input->post("code-pin") != null)
-    {
-      $i = 0;
-      $mescomptes = $this->data['mescomptes'];
-      foreach($mescomptes as $mescompte)
-      {
-        if(empty($this->input->post("compte_".$mescompte['id'])))
-        {
-          $i = -1;
-        }elseif(strlen($this->input->post("compte_".$mescompte['id'])) != 4)
-        {
-          $i = -2;
-        }
-      }
-      if($i == -1)
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('aucun champs ne doit être vide svp !')));
-        
-      }elseif($i == -2)
-      {
-        $this->session->set_flashdata('message_erreur', ucfirst(get_phrase('le code doit être composé de 4 chiffres obligatoirement')));
-      }else
-      {
-        $j = 0;
-        foreach($mescomptes as $mescompte)
-        {
-          $j++;
-          $codepin = sha1($this->input->post("compte_".$mescompte['id']));
-          $this->Crud_model->update_where('comptes', ['codepin'=>$codepin], $mescompte['id'], 'id');
-          if($j == count($mescomptes))
-          {
-            $this->session->set_flashdata('message_success', ucfirst(get_phrase('vos codes pins on été bien pris en compte')));
-            redirect(trim($_SESSION['language']).'/backoffice','refresh');
-          }
-        }
-      }
-    }
-
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
+    
     $this->render('backoffice/securite_view');
+      
   }
 
   public function materiel_marketing($lang='')
@@ -660,12 +611,15 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('dashboard');
+
     $this->data['page_description'] = get_phrase('dashboard');
     $this->data['page_author'] = get_phrase('dashboard');
     
     $this->render('backoffice/materiel_marketing_view');
+      
   }
   
   public function nouveau_partenaire($lang='')
@@ -675,6 +629,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('ajouter un nouveau partenaire');
 
@@ -750,6 +705,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('webinaires en ligne');
 
@@ -767,6 +723,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('nos conférences');
 
@@ -784,6 +741,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('nos actualités');
 
@@ -801,6 +759,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('dashboard');
 
@@ -817,6 +776,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('faq');
 
@@ -833,11 +793,12 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = ucfirst(get_phrase('politique de confidentialité'));
+    $this->data['titre'] = get_phrase('dashboard');
 
-    $this->data['page_description'] = ucfirst(get_phrase('politique de confidentialité'));
-    $this->data['page_author'] = 'politique_confidentialite';
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
     
     $this->render('backoffice/politique_confidentialite');    
   }
@@ -849,14 +810,31 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
-    $this->data['titre'] = ucfirst(get_phrase('metion légale'));
+    $this->data['titre'] = get_phrase('dashboard');
 
-    $this->data['page_description'] = ucfirst(get_phrase('metion légale'));
-    $this->data['page_author'] = 'mention_legale';
+    $this->data['page_description'] = get_phrase('dashboard');
+    $this->data['page_author'] = get_phrase('dashboard');
     
     $this->render('backoffice/mention_legale');   
   }
+
+  //  public function mon_reseau()
+  // {
+  //     if(!$this->ion_auth->logged_mlm_in())
+  //     {
+  //       redirect(trim($_SESSION['language']).'/connexion');
+  //     }
+  //     $this->data['page_title'] = 'Mon réseau';
+  //     $this->data['titre'] = 'reseau';
+        
+  //     $users = $this->MesFilleulsModel->MesFilleuls($this->session->userdata('identity'));
+  //     $this->data['users'] = $users;
+
+  //     $this->render('backoffice/monreseau_view','backoffice_master');
+      
+  // }
   
   public function mon_arbre()
   {
