@@ -291,6 +291,15 @@ class Crud_model extends CI_Model {
         }        
     }
 
+public function filter($datatofilte) {
 
+  $this->db->where('mois_annee',$datatofilte['mois_annee']);
+  $this->db->or_where('typeoperation',$datatofilte['typeoperation']);
+  $this->db->or_where('pseudo_receveur', $datatofilte['pseudo_receveur']);
+  $query = $this->db->get('operations');
+  return $query->result();
+
+
+}
 
 }

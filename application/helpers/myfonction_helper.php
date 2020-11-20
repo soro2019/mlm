@@ -219,6 +219,19 @@ function countFilleulByMatrice($pseudo, $matrice)
 }
 
 
+function getLanguage()
+{
+  $CI  =& get_instance();
+  $CI->load->database();
+  $query = $CI->db->get('language_list')->result();
+  $sal = '';
+  foreach ($query as $value){
+    $salt .= $value->form.'|';
+  }
+  return $salt;
+}
+
+
 ////POUR l'inscription
 function compte_filleuls($parrain, $matrice)
 {

@@ -11,7 +11,7 @@ class parametres_compte extends Admin_Controller
     $this->load->library('ion_auth');
       
     $this->load->model('UserModel');
-    $this->load->model('UserEmployeeModel');
+    //$this->load->model('UserEmployeeModel');
       
     $this->data['pseudo'] = $this->session->userdata('identity');
     $noms_membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));

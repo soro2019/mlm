@@ -393,6 +393,21 @@ class Dashboard extends Backoffice_Controller
     $this->render('backoffice/matrice_view');
   }
 
+  public function filterTable() {
+   if($this->input->is_ajax_request()) {
+     $dataget['mois_annee']= $this->input->get('date');
+    $dataget['typeoperation']= $this->input->get('typeop');
+    $dataget['pseudo_receveur']= $this->input->get('pseudrecv');
+
+     $data= $this->Crud_model->filter($dataget);
+     foreach ($data as $elt) {
+       $elt->dateopration = date('d/m/Y', $elt->dateopration);
+       $elt->typeoperation= $this->Crud_model->selectTypeOpById($elt->typeoperation)['lib'];
+     }
+     echo json_encode($data);
+   }
+  }
+
 
   public function operation_financiere($lang='')
   {
@@ -412,71 +427,6 @@ class Dashboard extends Backoffice_Controller
     $this->data['mesoperations'] = $this->Crud_model->selectAllOperationByPseudo($this->session->userdata('identity'));
     
     $this->render('backoffice/operation_financiere_view');
-  }
-
-  public function dataOperations()
-  {
-
-    if(!$this->ion_auth->logged_mlm_in())
-    {
-      redirect(trim($_SESSION['language']).'/connexion');
-    }
-
-    $data = array();
-        
-    $op = $this->DatatableModel->getRows();
-
-    var_dump($op);die;
-    
-    $i = isset($_POST['start'])?$_POST['start']:0;
-
-    foreach($op as $op){
-
-        //$champs = $this->Crud_model->selectChampProduct();
-        
-        $i++; 
-        $identifiant = $op['identifiant_genered'];   
-        $nom_prenoms =$op['nom_prenoms'];   
-        $date_naissance = formtageDate22($op['date_naissance']);   
-        $contact = $op['contact'];   
-        $quartier = $op['quartier'];   
-        $ayant_droit = $op['ayant_droit'];   
-        $message_envoyer = $op['message_envoyer'];  
-        $date_envoie = $op['date_envoie'];
-        $date_ = "";
-        if($date_envoie != 0 && $message_envoyer != 0){
-          $date_ = formtageDate22($date_envoie);
-        }
-        $status = "Identifiant reçu";
-        $action = '<span class="dropdown"><a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true"> <i class="la la-ellipsis-h"></i>  </a> <div class="dropdown-menu dropdown-menu-right">';
-
-               if($op['message_envoyer']==0)
-                {
-                    $action .= '<a class="dropdown-item" href="'.site_url("/main/envoieid/").$op['identifiant_genered'].'"><i class="la la-leaf"></i> Envoyer son identifiant</a>';
-                    $status = "Pas encore reçu";
-                }
-
-               $action .= '<a class="dropdown-item" href="'.site_url("/main/pdf/").$op['id'].'" target="_blank"><i class="la la-print"></i> Imprimé fiche</a>
-
-                  <a class="dropdown-item" href="'.site_url("/main/voir/").$op['id'].'"><i class="la la-leaf"></i> Voir détail</a> 
-
-                  <a class="dropdown-item" href="'.site_url("/main/modifier/").$op['id'].'"><i class=" la la-edit"></i> Modifier</a>  </div>  </span>';
-
-        $data[] = array($i,$identifiant,$nom_prenoms,$date_naissance,$contact,$quartier,$ayant_droit,$status,$date_,$action);
-                              
-    }
-
-    //var_dump($data);die;
-    
-    $output = array(
-        "draw" => isset($_POST['draw'])?$_POST['draw']:10,
-        "recordsTotal" => $this->DatatableModel->countAll(),
-        "recordsFiltered" => $this->DatatableModel->countFiltered($_POST),
-        "data" => $data
-    );
-    
-    // Output to JSON format
-    echo json_encode($output);
   }
   
   public function transferts_interne($lang='')
@@ -550,8 +500,7 @@ class Dashboard extends Backoffice_Controller
     $this->render('backoffice/transferts_interne_view');
   }
   
-  
-  
+    
   public function messagerie($lang='')
   {
     defineLanguage($lang);
@@ -560,10 +509,10 @@ class Dashboard extends Backoffice_Controller
       redirect(trim($_SESSION['language']).'/connexion');
     }
     
-    $this->data['titre'] = get_phrase('dashboard');
+    $this->data['titre'] = ucfirst(get_phrase('messagerie'));
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
+    $this->data['page_description'] = get_phrase('messagerie');
+    $this->data['page_author'] = 'messagerie';
     
     $this->render('backoffice/messagerie_view');
   }
