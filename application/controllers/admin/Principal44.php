@@ -9,18 +9,18 @@ class Principal extends Admin_Controller
   {
     parent::__construct();
     $this->load->model('UserModel');
-    $this->load->model('admin/MembresModel','MembresModel');
     $this->load->library('ion_auth');  
     $this->load->model('FronteModel', 'fm');
+    $this->load->model('admin/MembresModel','MembresModel');
   }
 
   public function index($lang='')
   {
       if(!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
-      {
-        // redirect them to the home page because they must be an administrator to view this
-        return show_error('Vous devez être administrateur pour voir cette page.');
-      }
+  		{
+  			// redirect them to the home page because they must be an administrator to view this
+  			return show_error('Vous devez être administrateur pour voir cette page.');
+  		}
       defineLanguage($lang);
       $this->data['titre'] = ucfirst(get_phrase('administration'));
       $this->data['page_title'] = ucfirst(get_phrase('tableau de bord | administration'));
@@ -49,67 +49,54 @@ class Principal extends Admin_Controller
   //Tout le fonction contenu de la page de gestion des membres
   public function gestion_membres()
   {
-      
-      $this->data['titre'] = 'Gestion des membres du réseau MLM';
-      $this->data['page_title'] = 'Gestion membres | Administration';
-      $this->data['lien'] = 'Gestion des membres';
-      
-      $this->render('admin/gestion_membres_view');    
-
+    $this->data['titre'] = 'Gestion des membres du réseau MLM';
+    $this->data['page_title'] = 'Gestion membres | Administration';
+    $this->data['lien'] = 'Gestion des membres';
+    $this->render('admin/gestion_membres_view');    
   } 
   
-        
     
   public function gestion_membres_data()
   {
+    $data = array();
 
-        $pseudo = $this->input->post('pseudo');
-        $nom = $this->input->post('nom');
-        $prenoms = $this->input->post('prenoms');
-        $bon = $this->input->post('bon');
-        $niveau = $this->input->post('niveau');
-        $startDate = $this->input->post('start_date');
-        $endDate = $this->input->post('end_date'); 
-        
-        if(!empty($orderID)){
-            $this->MembresModel->setOrderID($orderID);
-        }        
-        if(!empty($pseudo)){
-            $this->MembresModel->setPseudo($pseudo);
-        }
-        if(!empty($nom)){
-            $this->MembresModel->setNom($nom);
-        }
-        if(!empty($prenoms)){
-            $this->MembresModel->setPrenoms($prenoms);
-        }
-        if(!empty($bon)){
-            $this->MembresModel->setMesBons($bon);
-        }
-        if(!empty($niveau)){
-            $this->MembresModel->setMonNiveau($niveau);
-        }                
-        if(!empty($startDate) && !empty($endDate)) {
-            $this->MembresModel->setStartDate(strtotime($startDate));
-            $this->MembresModel->setEndDate(strtotime($endDate));
-        }        
-        $getUserInfo = $this->MembresModel->getUsers();
-        $dataArray = array();
-        foreach ($getUserInfo as $element) {            
-            $dataArray[] = array(
-                $element['created_on'],
-                $element['pseudo'],
-                $element['nom'],
-                $element['prenoms'],
-                $element['telephone'],
-                $element['gains'],
-                $element['mon_niveau'],
-                date("d-m-Y à H:i:s", $element['created_on'])
-            );
-        }
+    $usersData = $this->MembresModel->getRows();
+    
+    $i = isset($_POST['start'])?$_POST['start']:0;
 
-        echo json_encode(array("data" => $dataArray));
+    foreach($usersData as $users){
+        $i++; 
+        $pseudo = $users['pseudo'];   
+        $nom_prenoms = $users['first_name'].' '.$users['last_name'];   
+        $parrain = $users['pseudo_parrain'];   
+        $contact = $users['phone'];   
+        $genre = $users['genre'];   
+        $ville = $users['ville'];   
+        $niveau = $users['niveau'];  
+        $created_on = date('d/m/Y', $users['created_on']);
 
+        $action = '<span class="dropdown"><a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true"> <i class="la la-ellipsis-h"></i>  </a> <div class="dropdown-menu dropdown-menu-right">';
+
+        $action .= '<a class="dropdown-item" href="'.site_url("/main/pdf/").$users['id'].'" target="_blank"><i class="la la-print"></i> Imprimé fiche</a>
+
+                  <a class="dropdown-item" href="'.site_url("/main/voir/").$users['id'].'"><i class="la la-leaf"></i> Voir détail</a> 
+
+                  <a class="dropdown-item" href="'.site_url("/main/modifier/").$users['id'].'"><i class=" la la-edit"></i> Modifier</a>  </div>  </span>';
+
+        $data[] = array($i,$pseudo,$nom_prenoms,$parrain,$contact,$genre,$ville,$niveau,$created_on,$action);
+    }
+
+    var_dump($data);die;
+    
+    $output = array(
+        "draw" => isset($_POST['draw'])?$_POST['draw']:10,
+        "recordsTotal" => $this->MembresModel->countAll(),
+        "recordsFiltered" => $this->MembresModel->countFiltered($_POST),
+        "data" => $data
+    );
+    
+    // Output to JSON format
+    echo json_encode($output);
   }   
      
     
