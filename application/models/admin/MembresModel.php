@@ -7,7 +7,7 @@ class MembresModel extends CI_Model{
         // Set table name
         $this->table = 'users';
         // Set orderable column fields
-        $this->column_order = array(null,'users.pseudo','users.first_name','users.pseudo_parrain','users.phone', 'users.genre' , 'users.ville', 'users.niveau', 'users.created_on');
+        $this->column_order = array(null,'users.pseudo','users.first_name','users.last_name','users.pseudo_parrain','users.phone', 'users.genre' , 'users.ville', 'users.niveau', 'users.created_on');
         // Set searchable column fields
         $this->column_search = array('users.pseudo', 'users.pseudo_parrain','users.niveau','users.created_on','users.first_name');
         // Set default order
@@ -56,6 +56,8 @@ class MembresModel extends CI_Model{
 
         $this->db->from($this->table);
 
+        $this->db->where('id!=', 1);
+
         // Custom search filter 
          
         /*if(isset($postData['pseudo']) && $postData['pseudo'] != ''){
@@ -67,24 +69,25 @@ class MembresModel extends CI_Model{
         }
 
         if(isset($postData['nom']) && $postData['nom'] != ''){
-            $this->db->like('users.first_name', $postData['nom']);
+            $this->db->like('users.first_name', $postData['nom_prenoms']);
             $this->db->or_like('users.last_name', $postData['nom']);
         }
 
         if(isset($postData['niveau']) && $postData['niveau'] != ''){
             $this->db->like('users.niveau', $postData['niveau']);
-        }
-
-        if((isset($postData['order_start_date']) && $postData['order_start_date'] != ''))
-        {
-            $this->db->where('users.created_on >=', $postData['order_start_date']);
         }*/
 
-        /*$i = 0;
+        /*if((isset($postData['order_start_date']) && $postData['order_start_date'] != '') && isset($postData['order_end_date']) && $postData['order_end_date'] != '')
+        {
+            $this->db->where('users.created_on2 >=', $postData['order_start_date']);
+            $this->db->where('users.created_on2 <=', $postData['order_end_date']);
+        }*/
+
+        $i = 0;
         // loop searchable columns 
         foreach($this->column_search as $item){
             // if datatable send POST for search
-            if(isset($postData['search']['value'])){
+            /*if(isset($postData['search']['value'])){
                 // first loop
                 if($i===0){
                     // open bracket
@@ -100,7 +103,7 @@ class MembresModel extends CI_Model{
                     $this->db->group_end();
                 }
             }
-            $i++;
+            $i++;*/
         }
          
         if(isset($postData['order'])){
@@ -108,6 +111,6 @@ class MembresModel extends CI_Model{
         }else if(isset($this->order)){
             $order = $this->order;
             $this->db->order_by(key($order), $order[key($order)]);
-        }*/
+        }
     }
 }

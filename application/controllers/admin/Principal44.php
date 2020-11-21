@@ -9,18 +9,18 @@ class Principal extends Admin_Controller
   {
     parent::__construct();
     $this->load->model('UserModel');
-    $this->load->model('admin/MembresModel','MembresModel');
     $this->load->library('ion_auth');  
     $this->load->model('FronteModel', 'fm');
+    $this->load->model('admin/MembresModel','MembresModel');
   }
 
   public function index($lang='')
   {
       if(!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
-      {
-        // redirect them to the home page because they must be an administrator to view this
-        return show_error('Vous devez être administrateur pour voir cette page.');
-      }
+  		{
+  			// redirect them to the home page because they must be an administrator to view this
+  			return show_error('Vous devez être administrateur pour voir cette page.');
+  		}
       defineLanguage($lang);
       $this->data['titre'] = ucfirst(get_phrase('administration'));
       $this->data['page_title'] = ucfirst(get_phrase('tableau de bord | administration'));
@@ -49,16 +49,12 @@ class Principal extends Admin_Controller
   //Tout le fonction contenu de la page de gestion des membres
   public function gestion_membres()
   {
-      
-      $this->data['titre'] = 'Gestion des membres du réseau MLM';
-      $this->data['page_title'] = 'Gestion membres | Administration';
-      $this->data['lien'] = 'Gestion des membres';
-      
-      $this->render('admin/gestion_membres_view');    
-
+    $this->data['titre'] = 'Gestion des membres du réseau MLM';
+    $this->data['page_title'] = 'Gestion membres | Administration';
+    $this->data['lien'] = 'Gestion des membres';
+    $this->render('admin/gestion_membres_view');    
   } 
   
-        
     
   public function gestion_membres_data()
   {
@@ -71,12 +67,10 @@ class Principal extends Admin_Controller
     foreach($usersData as $users){
         $i++; 
         $pseudo = $users['pseudo'];   
-        $nom = $users['first_name'];
-        $prenoms = $users['last_name'];
+        $nom_prenoms = $users['first_name'].' '.$users['last_name'];   
         $parrain = $users['pseudo_parrain'];   
         $contact = $users['phone'];   
-        $genre = $users['genre']; 
-        $email = $users['email'];  
+        $genre = $users['genre'];   
         $ville = $users['ville'];   
         $niveau = $users['niveau'];  
         $created_on = date('d/m/Y', $users['created_on']);
@@ -89,10 +83,10 @@ class Principal extends Admin_Controller
 
                   <a class="dropdown-item" href="'.site_url("/main/modifier/").$users['id'].'"><i class=" la la-edit"></i> Modifier</a>  </div>  </span>';
 
-        $data[] = array($i,$pseudo,$nom,$prenoms,$contact,$email,$niveau,$parrain,$created_on,$action);
+        $data[] = array($i,$pseudo,$nom_prenoms,$parrain,$contact,$genre,$ville,$niveau,$created_on,$action);
     }
 
-    //var_dump($data);die;
+    var_dump($data);die;
     
     $output = array(
         "draw" => isset($_POST['draw'])?$_POST['draw']:10,
