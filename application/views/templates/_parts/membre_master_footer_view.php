@@ -106,6 +106,8 @@
 	
 	<!-- VoiceX Admin for demo purposes -->
 	<script src="<?php echo site_url('assets/member/js/demo.js')?>"></script>
+  <script src="<?php echo site_url('assets/member/js/filter.js')?>"></script>
+
 	
 	<script type="text/javascript">
         var code;

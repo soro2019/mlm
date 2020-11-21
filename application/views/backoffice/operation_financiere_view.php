@@ -28,16 +28,16 @@
 					<div class="row">
 					  <div class="col-sm-3">
 					  	<label><?=ucfirst(get_phrase('specifiez le mois'))?></label>
-					  	<select class="form-control" name="mois" id='mois'>
+					  	<select class="form-control transactionstory_mounth" name="mois" id='mois'>
 					  		<option value=""><?=ucfirst(get_phrase('specifiez le mois'))?></option>
 					  		<?php foreach (lesMois() as $mois) { ?>
-					  		  <option value="<?=$mois?>"><?=ucfirst($mois).' '.date('Y')?></option>
+					  		  <option value="<?=$mois.' '.date('Y');?>"><?=$mois.' '.date('Y')?></option>
 					  		<?php } ?>
 					  	</select>
 					  </div>
 					  <div class="col-sm-6">
 					  	<label><?=ucfirst(get_phrase('type opération'))?></label>
-					  	<select class="form-control" name="type" id='type'>
+					  	<select class="form-control transactionstory_type" name="type" id='type'>
 					  		<option value=""><?=ucfirst(get_phrase('selectionner une opération'))?></option>
 					  		<?php foreach ($typeOp as $type) { ?>
 					  		  <option value="<?=$type['id']?>"><?=ucfirst($type['lib'])?></option>
@@ -46,18 +46,18 @@
 					  </div>
 					  <div class="col-sm-3">
 					  	<label><?=ucfirst(get_phrase('pseudo du receveur'))?></label>
-					  	 <input type="text" onkeyup="myFunction();" id="pseudo_r" name="pseudo_r" class="form-control">
+					  	 <input type="text" onkeyup="myFunction();" id="pseudo_r" name="pseudo_r" class="form-control transactionstory_pseudo_r">
 					  </div>
 					</div><br>
 					<div class="row">
 						<div class="col-sm-6">
-							<button type="submit" class="btn btn-primary"><?=ucfirst(get_phrase('filtrer'))?></button>
+							<button type="submit" class="btn btn-primary transactionstory_filter_btn"><?=ucfirst(get_phrase('filtrer'))?></button>
 						</div>
 					</div>
 					<br>
 					<div class="panel-body">
                       <div class="table-wrap">
-                     <table class="table table-striped table-bordered">
+                     <table class="table table-striped table-bordered filtereringT">
 						<thead>
 							<tr>
 								<th>N<sup>o</sup></th>

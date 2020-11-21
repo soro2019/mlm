@@ -55,8 +55,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Frontoffice Controllers Routes
  */
 
+/*require_once( APPPATH .'helpers/myfonction_helper.php');
+require BASEPATH.'core/Controller.php';
 
-
+var_dump(getLanguage());die;*/
 
 /*route page about_us ok*/
 $route['about-us'] = 'pages/about_us';
@@ -200,6 +202,10 @@ $route["backoffice/privacy-policy"] = 'backoffice/dashboard/politique_confidenti
 
 $route["(fr|en)/backoffice/legal-notice"] = 'backoffice/dashboard/mention_legale/$1';
 $route["backoffice/legal-notice"] = 'backoffice/dashboard/mention_legale/en';
+
+$route['backoffice/filter']= 'backoffice/dashboard/filterTable/en';
+$route['(fr|en)/backoffice/filter']= 'backoffice/dashboard/filterTable/$1';
+
 
 
 $route['404_override'] = 'errors/error404';
