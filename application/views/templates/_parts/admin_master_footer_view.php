@@ -90,7 +90,7 @@
     
 
 
-<?php if($page_title=='Gestion membres | Administration'){ ?> 
+<?php if($page_title=='SORO'){ ?> 
 <script>
 		// render order list data table
 	// default render page
@@ -218,253 +218,63 @@
 	</script>
 <?php } ?> 
 
-<?php if($page_title=='Etat des créances | Administration'){ ?> 
-<script>
-		// render order list data table
-	// default render page
-	jQuery(document).ready(function() {
-		var data = {startDate: "", endDate: ""};
-		generateUserTable(data);
-	});
+<script type="text/javascript">
+    var userTable;
 
-	// render date datewise
-	jQuery(document).on('click','#filter-order-filter', function(){
-		var startDate = jQuery('input#order-start-date').val();    
-		var endDate = jQuery('input#order-end-date').val();
-		var data = {startDate:startDate, endDate:endDate};
-		generateUserTable(data);
-	});
-	// generate Order Table
-	function generateUserTable(element){	
-		jQuery.ajax({
-			url: '<?= site_url('administrator~shappinvest/gestion_agences/etat_data');?>',
-			data: {'start_date' : element.startDate , 'end_date' : element.endDate},
-			type: 'post', 
-			dataType: 'json',
-			beforeSend: function () {
-				jQuery('#render-list-of-order').html('<div class="text-center mrgA padA"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i></div>');
-			},			 
-			success: function (html) {
-				var dataTable='<table id="order-datatable" class="table cell-border hover order-column table-striped" cellspacing="0" width="100%"></table>';
-				jQuery('#render-list-of-order').html(dataTable);		
-				var table = $('#order-datatable').DataTable({
-					data: html.data,
-					'paging'      : true,
-                      'lengthChange': true,
-                      'searching'   : false,
-                      'ordering'    : true,
-                      'info'        : true,
-                      'autoWidth'   : false,
-                      responsive: false,
-                      dom: 'lBfrtip',
-                    /*buttons: [
-                        'copy', 'excel', 'pdf'
-                    ],*/
-                    
-                    buttons: [ 
-                        { 
-                            extend: 'excel', 
-                            text: 'Exporter en EXCEL',
-                            filename: 'Etat des créances_'+today
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'Exporter en PDF',
-                            orientation: 'landscape', //portrait
-                            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
-                            filename: 'Etat des créances_'+today,
-                            exportOptions: {
-                                columns: ':visible',
-                                search: 'applied',
-                                order: 'applied'
-                            }
-                        },
-                        { 
-                            extend: 'print', 
-                            text: 'Imprimer',
-                            orientation: 'landscape', //portrait
-                            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
-                            filename: 'Etat des créances_'+today,
-                        }
-                    ],
-                    
-					columns: [
-						{ title: "Agence", "width": "5%"},
-						{ title: "Solde Initial", "width": "10%"},
-						{ title: "Qté Insc", "width": "5%"},
-						{ title: "Mtt Inscr", "width": "5%"},
-						{ title: "Qté Prod", "width": "5%"},					
-						{ title: "Mtt Prod", "width": "5%"},
-						{ title: "Versement", "width": "10%"},
-						{ title: "Solde de clôture", "width": "15%"}
-					],
-                    
-                    "language": {
-                        "sProcessing":     "Traitement en cours...",
-                        "sSearch":         "Rechercher&nbsp;:",
-                        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
-                        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-                        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                        "sInfoPostFix":    "",
-                        "sLoadingRecords": "Chargement en cours...",
-                        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
-                        "oPaginate": {
-                            "sFirst":      "Premier",
-                            "sPrevious":   "Pr&eacute;c&eacute;dent",
-                            "sNext":       "Suivant",
-                            "sLast":       "Dernier"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-                            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-                        },
-                        "select": {
-                                "rows": {
-                                    _: "%d lignes séléctionnées",
-                                    0: "Aucune ligne séléctionnée",
-                                    1: "1 ligne séléctionnée"
-                                } 
-                        }
-                    }
-				});
-			}
+    $(document).ready(function() {
+        $("#languageNav").addClass('active');
             
-		});
-	}
-	</script>
-<?php } ?>
-
-<?php if($page_title=='Compte des agences | Administration'){ ?> 
-<script>
-    
-		// render order list data table
-	// default render page
-	jQuery(document).ready(function() {
-		var data = {startDate: "",endDate: "",agence: ""};
-		generateUserTable(data);
-	});
-
-	// render date datewise
-	jQuery(document).on('click','#filter-order-filter', function(){
-		var startDate = jQuery('input#order-start-date').val();    
-		var endDate = jQuery('input#order-end-date').val();    
-		var agence = jQuery('select#agence').val();     
-		var data = {startDate:startDate,endDate:endDate,agence:agence};
-		generateUserTable(data);
-	});
-	// generate Order Table
-	function generateUserTable(element){	
-		jQuery.ajax({
-			url: '<?= site_url('administrator~shappinvest/gestion_agences/compte_agence_data');?>',
-			data: {'start_date' : element.startDate,'end_date' : element.endDate,'agence' : element.agence},
-			type: 'post', 
-			dataType: 'json',
-			beforeSend: function () {
-				jQuery('#render-list-of-order').html('<div class="text-center mrgA padA"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i></div>');
-			},			 
-			success: function (html) {
-				var dataTable='<table id="order-datatable" class="table cell-border hover order-column   table-striped"></table>';
-				jQuery('#render-list-of-order').html(dataTable);		
-				var table = $('#order-datatable').DataTable({
-					data: html.data,
-					/*"bPaginate": true,
-					"bLengthChange": true,
-					"bFilter": false,
-					"bInfo": true,
-					"bAutoWidth": true,*/
-                      'paging'      : true,
-                      'lengthChange': true,
-                      'searching'   : false,
-                      'ordering'    : true,
-                      'info'        : true,
-                      'autoWidth'   : false,
-                      responsive: false,
-                      dom: 'lBfrtip',
-                    /*buttons: [
-                        'copy', 'excel', 'pdf'
-                    ],*/
-                    
-                    buttons: [ 
-                        { 
-                            extend: 'excel', 
-                            text: 'Exporter en EXCEL',
-                            filename: 'Compte des agences_'+today
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'Exporter en PDF',
-                            orientation: 'landscape', //portrait
-                            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
-                            filename: 'Compte des agences_'+today,
-                            exportOptions: {
-                                columns: ':visible',
-                                search: 'applied',
-                                order: 'applied'
-                            }
-                        },
-                        { 
-                            extend: 'print', 
-                            text: 'Imprimer',
-                            orientation: 'landscape', //portrait
-                            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
-                            filename: 'Compte des agences_'+today,
-                        }
-                    ],
-                    
-					columns: [
-						{ title: "Ordre", "width": "3%"},
-						{ title: "Date", "width": "5%"},
-						{ title: "Agence", "width": "5%"},
-						{ title: "Pseudo Inscrit", "width": "10%"},
-						{ title: "Solde Initial", "width": "5%"},
-						{ title: "Qté Inscrit", "width": "5%"},
-						{ title: "Mtt Inscit", "width": "5%"},					
-						{ title: "Nom produit", "width": "5%"},
-						{ title: "Qté produit", "width": "5%"},
-						{ title: "Mtt produit", "width": "5%"},
-						{ title: "Versement", "width": "10%"},
-						{ title: "Référence", "width": "10%"},
-						{ title: "Solde de clôture", "width": "15%"}
-					],
-                    
-                    "language": {
-                        "sProcessing":     "Traitement en cours...",
-                        "sSearch":         "Rechercher&nbsp;:",
-                        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
-                        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-                        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                        "sInfoPostFix":    "",
-                        "sLoadingRecords": "Chargement en cours...",
-                        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
-                        "oPaginate": {
-                            "sFirst":      "Premier",
-                            "sPrevious":   "Pr&eacute;c&eacute;dent",
-                            "sNext":       "Suivant",
-                            "sLast":       "Dernier"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-                            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-                        },
-                        "select": {
-                                "rows": {
-                                    _: "%d lignes séléctionnées",
-                                    0: "Aucune ligne séléctionnée",
-                                    1: "1 ligne séléctionnée"
-                                } 
-                        }
-                    }
-				});
-			}
+        // initialize the datatable 
+        var base_url = "<?php echo base_url('admin/principal/');?>"; // You can use full url here but I prefer like this
+        userTable = $('#userTable').DataTable({
             
-		});
-	}
-	</script>
-<?php } ?>
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            /*'ordering': true,*/
+            'info': true,
+            'responsive': true,
+            /* Processing indicator */
+            "processing": true,
+            "pageLength" : 10,
+            "serverSide": true,
+            "order": [],
+            "ajax":{
+              dataType: "JSON",
+              url :  base_url+'gestion_membres_data',
+              type : 'POST',
+              beforeSend: function () {
+                jQuery('#render-list-of-order').html('<div class="text-center mrgA padA"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i></div>');
+             },
+              
+              data: function(data){
+                   /*data.code = $('#code').val();
+                   data.ref = $('#ref').val();
+                   data.name = $('#name').val();
+                   data.price = $('#price').val();
+                   data.category = $('#category').val();
+                   data.quantity = $('#quantity').val();
+                   data.brand = $('#brand').val();
+                   data.supplier = $('#supplier').val();
+                   data.warehouse = $('#warehouse').val();
+                   data.location = $('#location').val();*/
+                }
+            },
+            
+
+        });
+
+     /*  $('#category,#brand,#supplier,#warehouse').change(function(){
+          productTable.draw();
+       });
+       $('#code,#ref,#name,#price,#quantity,#location').keyup(function(){
+          productTable.draw();
+       });*/
+
+
+    });
+
+</script>
     
 
 <?php if(isset($before_head)) echo $before_body;?>

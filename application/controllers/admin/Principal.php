@@ -62,54 +62,47 @@ class Principal extends Admin_Controller
     
   public function gestion_membres_data()
   {
+    $data = array();
 
-        $pseudo = $this->input->post('pseudo');
-        $nom = $this->input->post('nom');
-        $prenoms = $this->input->post('prenoms');
-        $bon = $this->input->post('bon');
-        $niveau = $this->input->post('niveau');
-        $startDate = $this->input->post('start_date');
-        $endDate = $this->input->post('end_date'); 
-        
-        if(!empty($orderID)){
-            $this->MembresModel->setOrderID($orderID);
-        }        
-        if(!empty($pseudo)){
-            $this->MembresModel->setPseudo($pseudo);
-        }
-        if(!empty($nom)){
-            $this->MembresModel->setNom($nom);
-        }
-        if(!empty($prenoms)){
-            $this->MembresModel->setPrenoms($prenoms);
-        }
-        if(!empty($bon)){
-            $this->MembresModel->setMesBons($bon);
-        }
-        if(!empty($niveau)){
-            $this->MembresModel->setMonNiveau($niveau);
-        }                
-        if(!empty($startDate) && !empty($endDate)) {
-            $this->MembresModel->setStartDate(strtotime($startDate));
-            $this->MembresModel->setEndDate(strtotime($endDate));
-        }        
-        $getUserInfo = $this->MembresModel->getUsers();
-        $dataArray = array();
-        foreach ($getUserInfo as $element) {            
-            $dataArray[] = array(
-                $element['created_on'],
-                $element['pseudo'],
-                $element['nom'],
-                $element['prenoms'],
-                $element['telephone'],
-                $element['gains'],
-                $element['mon_niveau'],
-                date("d-m-Y à H:i:s", $element['created_on'])
-            );
-        }
+    $usersData = $this->MembresModel->getRows();
+    
+    $i = isset($_POST['start'])?$_POST['start']:0;
 
-        echo json_encode(array("data" => $dataArray));
+    foreach($usersData as $users){
+        $i++; 
+        $pseudo = $users['pseudo'];   
+        $nom = $users['first_name'];
+        $prenoms = $users['last_name'];
+        $parrain = $users['pseudo_parrain'];   
+        $contact = $users['phone'];   
+        $genre = $users['genre']; 
+        $email = $users['email'];  
+        $ville = $users['ville'];   
+        $niveau = $users['niveau'];  
+        $created_on = date('d/m/Y', $users['created_on']);
 
+        $action = '<span class="dropdown"><a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true"> <i class="la la-ellipsis-h"></i>  </a> <div class="dropdown-menu dropdown-menu-right">';
+
+        $action .= '<a class="dropdown-item" href="'.site_url("/main/pdf/").$users['id'].'" target="_blank"><i class="la la-print"></i> Imprimé fiche</a>
+
+                  <a class="dropdown-item" href="'.site_url("/main/voir/").$users['id'].'"><i class="la la-leaf"></i> Voir détail</a> 
+
+                  <a class="dropdown-item" href="'.site_url("/main/modifier/").$users['id'].'"><i class=" la la-edit"></i> Modifier</a>  </div>  </span>';
+
+        $data[] = array($i,$pseudo,$nom,$prenoms,$contact,$email,$niveau,$parrain,$created_on,$action);
+    }
+
+    //var_dump($data);die;
+    
+    $output = array(
+        "draw" => isset($_POST['draw'])?$_POST['draw']:10,
+        "recordsTotal" => $this->MembresModel->countAll(),
+        "recordsFiltered" => $this->MembresModel->countFiltered($_POST),
+        "data" => $data
+    );
+    
+    // Output to JSON format
+    echo json_encode($output);
   }   
      
     

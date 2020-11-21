@@ -56,9 +56,11 @@ class MembresModel extends CI_Model{
 
         $this->db->from($this->table);
 
+        $this->db->where('id!=', 1);
+
         // Custom search filter 
          
-        if(isset($postData['pseudo']) && $postData['pseudo'] != ''){
+        /*if(isset($postData['pseudo']) && $postData['pseudo'] != ''){
             $this->db->like('users.pseudo', $postData['pseudo']);
         }
 
@@ -73,7 +75,7 @@ class MembresModel extends CI_Model{
 
         if(isset($postData['niveau']) && $postData['niveau'] != ''){
             $this->db->like('users.niveau', $postData['niveau']);
-        }
+        }*/
 
         /*if((isset($postData['order_start_date']) && $postData['order_start_date'] != '') && isset($postData['order_end_date']) && $postData['order_end_date'] != '')
         {
@@ -85,7 +87,7 @@ class MembresModel extends CI_Model{
         // loop searchable columns 
         foreach($this->column_search as $item){
             // if datatable send POST for search
-            if(isset($postData['search']['value'])){
+            /*if(isset($postData['search']['value'])){
                 // first loop
                 if($i===0){
                     // open bracket
@@ -101,7 +103,7 @@ class MembresModel extends CI_Model{
                     $this->db->group_end();
                 }
             }
-            $i++;
+            $i++;*/
         }
          
         if(isset($postData['order'])){

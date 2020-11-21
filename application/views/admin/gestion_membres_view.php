@@ -46,7 +46,29 @@
         </div>
         <div class="box">
             <div class="box-body">
-                <div id="render-list-of-order" class="table-responsive">
+                <!-- <div id="render-list-of-order" class="table-responsive">
+                </div> -->
+                <div class="table-responsive">
+                  <table id="userTable" class="table cell-border hover order-column table-striped" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                      <th></th>
+                      <th>Pseudo</th>
+                      <th>Nom</th>
+                      <th>Prénoms</th>
+                      <th>Téléphone</th>
+                      <th>Email</th>
+                      <th>Niveau</th>
+                      <th>Parrain direct</th>
+                      <th>Date adhésion</th>
+                      <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                     
+                    </tbody>
+                  </table>
                 </div>
             </div>
         </div>
