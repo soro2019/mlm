@@ -30,16 +30,11 @@
                     <input type="date" name="order_start_date" value="" class="form-control getDatePicker" id="order-start-date" placeholder="Start date">
                 </div>
             </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <input type="date" name="order_end_date" value="" class="form-control getDatePicker" id="order-end-date" placeholder="End date">
-                </div>
-            </div>
         </div>
         <div class="box">
             <div class="box-body">
                 <div id="render-list-of-order" class="table-responsive">
-                 <table class="table table-striped- table-bordered table-hover table-checkable" id="userTable">
+                 <table class="table table-striped table-bordered table-hover table-checkable" id="userTable">
                         <thead>
                             <tr>
                              <th>N</th>

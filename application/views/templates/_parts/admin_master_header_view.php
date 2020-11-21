@@ -191,11 +191,21 @@
 
                     </li>
 
-                    <li <?php if($page_title=='Gestion membres | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('admin/principal/gestion_membres');?>">
-                            <i class="fa fa-users"></i> <span>Gestion des membres</span>
-
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-users"></i>    
+                            <span>
+                                Gestion des membres
+                            </span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
                         </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?php echo site_url('admin/principal/gestion_membres');?>"><i class="fa fa-list"></i> Liste de tous les membres</a></li>
+                            <li><a href="https://www.google.ci"><i class="fa fa-list"></i> Niveau 2</a></li>
+                            <li><a href="#"><i class="fa fa-list"></i> Niveau 3</a></li>
+                        </ul>
 
                     </li>
 

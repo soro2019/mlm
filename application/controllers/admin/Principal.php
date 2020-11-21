@@ -44,7 +44,7 @@ class Principal extends Admin_Controller
       $this->data['NombreDeMembresDeCeMois'] = $this->UserModel->MembreInscritDeCeMois();
       $this->data['StockActuel'] = $this->UserModel->MembreInscritDeCeMois();*/
       $this->render('admin/dashboard_view');
-  }
+  } 
     
   //Tout le fonction contenu de la page de gestion des membres
   public function gestion_membres()
@@ -52,6 +52,7 @@ class Principal extends Admin_Controller
     $this->data['titre'] = 'Gestion des membres du réseau MLM';
     $this->data['page_title'] = 'Gestion membres | Administration';
     $this->data['lien'] = 'Gestion des membres';
+
     $this->render('admin/gestion_membres_view');    
   } 
     
@@ -60,7 +61,8 @@ class Principal extends Admin_Controller
     $data = array();
 
     $usersData = $this->MembresModel->getRows();
-    
+
+      
     $i = isset($_POST['start'])?$_POST['start']:0;
 
     foreach($usersData as $users){
@@ -84,8 +86,6 @@ class Principal extends Admin_Controller
 
         $data[] = array($i,$pseudo,$nom_prenoms,$parrain,$contact,$genre,$ville,$niveau,$created_on,$action);
     }
-
-    //var_dump($data);die;
     
     $output = array(
         "draw" => isset($_POST['draw'])?$_POST['draw']:10,
