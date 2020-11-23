@@ -563,27 +563,40 @@ class Dashboard extends Backoffice_Controller
   
   
   
-  public function messagerie($lang='',$innerPage)
+  public function messagerie($lang='', $innerPage="message_home", $param2 = "")
   {
-    if($innerPage =="")
-    {
-      $innerPage='message_home';
-    }
     defineLanguage($lang);
     if(!$this->ion_auth->logged_mlm_in())
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-    
-    $this->data['titre'] = get_phrase('dashboard');
-    $this->data['message_inner_page_name'] = $innerPage;
 
-    $this->data['page_description'] = get_phrase('dashboard');
-    $this->data['page_author'] = get_phrase('dashboard');
-    
+    if($innerPage == 'send_new')
+    {
+      $message_thread_code = $this->Crud_model->send_new_private_message();
+      $this->session->set_flashdata('message_success', get_phrase('message_sent!'));
+      redirect(site_url('backoffice/messagerie/message_read/' . $message_thread_code), 'refresh');
+    }
+
+    if($innerPage == 'message_read'){
+            $this->data['current_message_thread_code'] = $param2; // $param2 = message_thread_code
+            $this->Crud_model->mark_thread_messages_read($param2);
+    }
+
+    if ($innerPage == 'send_reply'){
+            $this->Crud_model->send_reply_message($param2); //$param2 = message_thread_code
+            $this->session->set_flashdata('message_success', get_phrase('message_sent!'));
+            redirect(site_url('backoffice/messagerie/message_read/' . $param2), 'refresh');
+    }
+
+    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    $mesFieulles = $this->UserModel->selectMesFieulles($this->session->userdata('identity'));
+    $this->data['mescontacts']  = $mesFieulles;
+    $this->data['message_inner_page_name'] = $innerPage;
+    $this->data['titre'] = get_phrase('messagerie');
+    $this->data['page_description'] = get_phrase('messagerie');
+    $this->data['page_author'] = get_phrase('messagerie');
     $this->render('backoffice/messagerie_view');  
-      
   }
   
   public function securite($lang='')

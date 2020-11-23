@@ -223,7 +223,6 @@ class UserModel extends CI_Model {
 
     public function selectMesFieulles($pseudo, $limit="")
     {
-
         if($limit!="")
         {
           $this->db->limit($limit);

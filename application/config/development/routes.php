@@ -170,8 +170,17 @@ $route["backoffice/internal-transfer"] = 'backoffice/dashboard/transferts_intern
 $route["(fr|en)/backoffice/subscription"] = 'backoffice/dashboard/subscription/$1';
 $route["backoffice/subscription"] = 'backoffice/dashboard/subscription';
 
+
+$route["(fr|en)/backoffice/messagerie"] = 'backoffice/dashboard/messagerie/$1';
+$route["backoffice/messagerie"] = 'backoffice/dashboard/messagerie/en';
 $route["(fr|en)/backoffice/messagerie/(:any)"] = 'backoffice/dashboard/messagerie/$1/$2';
-$route["backoffice/messagerie/(:any)"] = 'backoffice/dashboard/messagerie/$1';
+$route["backoffice/messagerie/(:any)"] = 'backoffice/dashboard/messagerie/en/$1';
+
+$route["(fr|en)/backoffice/messagerie/(:any)/(:any)"] = 'backoffice/dashboard/messagerie/$1/$2/$3';
+$route["backoffice/messagerie/(:any)/(:any)"] = 'backoffice/dashboard/messagerie/en/$1/$2';
+
+
+
 
 $route["(fr|en)/backoffice/security"] = 'backoffice/dashboard/securite/$1';
 $route["backoffice/security"] = 'backoffice/dashboard/securite/en';
@@ -192,7 +201,7 @@ $route["(fr|en)/backoffice/news"] = 'backoffice/dashboard/actualites/$1';
 $route["backoffice/news"] = 'backoffice/dashboard/actualites/en';
 
 $route["(fr|en)/backoffice/support_technique"] = 'backoffice/dashboard/support_technique/$1';
-$route["backoffice/support_technique"] = 'backoffice/dashboard/support_technique';
+$route["backoffice/support_technique"] = 'backoffice/dashboard/support_technique/en';
 
 $route["(fr|en)/backoffice/faq"] = 'backoffice/dashboard/faq/$1';
 $route["backoffice/faq"] = 'backoffice/dashboard/faq/en';

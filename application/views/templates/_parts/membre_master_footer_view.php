@@ -58,9 +58,6 @@
   
 </div>
 <!-- ./wrapper -->
-  	
-	 
-	
 	<!-- jQuery 3 -->
 	<script src="<?php echo site_url('assets/member/vendor_components/jquery-3.3.1/jquery-3.3.1.js')?>"></script>
 	
@@ -87,10 +84,22 @@
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/highcharts-more.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-		
+
+  <!-- Select2 -->
+  <script src="<?php echo site_url('assets/member/vendor_components/select2/dist/js/select2.full.js')?>"></script>
+  
 	<!-- apexcharts -->
 	<script src="<?php echo site_url('assets/member/vendor_components/apexcharts-bundle/irregular-data-series.js')?>"></script>
 	<script src="<?php echo site_url('assets/member/vendor_components/apexcharts-bundle/dist/apexcharts.js')?>"></script>
+
+
+  <!-- <script src="<?php //echo site_url('assets/member/vendor_components/ckeditor/ckeditor.js')?>"></script> -->
+  
+  <!-- Bootstrap WYSIHTML5 -->
+  <script src="<?php echo site_url('assets/member/vendor_plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js')?>"></script>
+  
+  <!-- VoiceX Admin for editor -->
+  <script src="<?php echo site_url('assets/member/js/pages/editor.js')?>"></script>
 
   <!-- This is data table -->
 	

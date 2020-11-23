@@ -116,48 +116,5 @@ $route['administrator~gie2018/connexion'] = 'administrator~gie2018/auth/connexio
 $route['administrator~gie2018/deconnexion'] = 'administrator~gie2018/auth/deconnexion';
 
 
-
-
-
-/*
- * Backoffice Controllers Routes
- */
-/*$route['backoffice/login'] = "backoffice/auth/login";
-$route['(\w{2})/backoffice/login'] = "backoffice/auth/login";
-$route['backoffice/register'] = "backoffice/auth/register";
-$route['(\w{2})/backoffice/register'] = "backoffice/auth/register";
-$route['backoffice/forgotten-password'] = "backoffice/auth/forgotten";
-$route['(\w{2})/backoffice/forgotten-password'] = "backoffice/auth/forgotten";
-$route['backoffice/me'] = "backoffice/backofficeProfile";
-$route['(\w{2})/backoffice/me'] = "backoffice/backofficeProfile";
-$route['backoffice/logout'] = "backoffice/backofficeProfile/logout";
-$route['(\w{2})/backoffice/logout'] = "backoffice/backofficeProfile/logout";
-$route['backoffice/products'] = "backoffice/Products";
-$route['(\w{2})/backoffice/products'] = "backoffice/Products";
-$route['backoffice/products/(:num)'] = "backoffice/Products/index/$1";
-$route['(\w{2})/backoffice/products/(:num)'] = "backoffice/Products/index/$2";
-$route['backoffice/add/product'] = "backoffice/AddProduct";
-$route['(\w{2})/backoffice/add/product'] = "backoffice/AddProduct";
-$route['backoffice/edit/product/(:num)'] = "backoffice/AddProduct/index/$1";
-$route['(\w{2})/backoffice/edit/product/(:num)'] = "backoffice/AddProduct/index/$1";
-$route['backoffice/orders'] = "backoffice/Orders";
-$route['(\w{2})/backoffice/orders'] = "backoffice/Orders";
-$route['backoffice/uploadOthersImages'] = "backoffice/AddProduct/do_upload_others_images";
-$route['backoffice/loadOthersImages'] = "backoffice/AddProduct/loadOthersImages";
-$route['backoffice/removeSecondaryImage'] = "backoffice/AddProduct/removeSecondaryImage";
-$route['backoffice/delete/product/(:num)'] = "backoffice/products/deleteProduct/$1";
-$route['(\w{2})/backoffice/delete/product/(:num)'] = "backoffice/products/deleteProduct/$1";
-$route['backoffice/view/(:any)'] = "backoffice/index/0/$1";
-$route['(\w{2})/backoffice/view/(:any)'] = "backoffice/index/0/$2";
-$route['backoffice/view/(:any)/(:num)'] = "backoffice/index/$2/$1";
-$route['(\w{2})/backoffice/view/(:any)/(:num)'] = "backoffice/index/$3/$2";
-$route['(:any)/(:any)_(:num)'] = "backoffice/viewProduct/$1/$3";
-$route['(\w{2})/(:any)/(:any)_(:num)'] = "backoffice/viewProduct/$2/$4";
-$route['backoffice/changeOrderStatus'] = "backoffice/orders/changeOrdersOrderStatus";*/
-
-
-
-
-
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

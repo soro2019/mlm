@@ -1,15 +1,8 @@
-<div class="mail-header">
-    <!-- title -->
-    <h4 class="mail-title">
-        <?php echo get_phrase('messages'); ?> 
-    </h4>
+<div class="box-header with-border">
+  <h4 class="box-title"><?=ucfirst(get_phrase('messages'))?></h4>
 </div>
-
-<div style="width:100%; text-align:center;padding:100px;color:#aaa;">
-
-    <img src="<?php echo base_url('assets/images/inbox.png'); ?>" width="70">
+<div class="box-body" style="height: 400px;">
+    <img src="<?php echo base_url('assets/images/inbox.png'); ?>" style="margin-left: 280px; width: 100px;">
     <br><br>
-    <div>
-        <?php echo get_phrase('select a message to read');?>
-    </div>
+    <span style="margin-left: 250px;"><?php echo ucfirst(get_phrase('select a message to read'));?></span>
 </div>

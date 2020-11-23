@@ -302,4 +302,75 @@ public function filter($datatofilte) {
 
 }
 
+
+////////private message//////
+ public function send_new_private_message() {
+        $message    = $this->input->post('message');
+        $timestamp  = time();
+
+        $reciever   = $this->input->post('reciever');
+        $sender     = $this->session->userdata('identity');
+
+        //check if the thread between those 2 users exists, if not create new thread
+        $num1 = $this->db->get_where('message_thread', array('sender' => $sender, 'reciever' => $reciever))->num_rows();
+        $num2 = $this->db->get_where('message_thread', array('sender' => $reciever, 'reciever' => $sender))->num_rows();
+        if ($num1 == 0 && $num2 == 0) {
+            $message_thread_code = substr(md5(rand(100000000, 20000000000)), 0, 15);
+            $data_message_thread['message_thread_code'] = $message_thread_code;
+            $data_message_thread['sender']              = $sender;
+            $data_message_thread['reciever']            = $reciever;
+            $this->db->insert('message_thread', $data_message_thread);
+        }
+        if ($num1 > 0)
+            $message_thread_code = $this->db->get_where('message_thread', array('sender' => $sender, 'reciever' => $reciever))->row()->message_thread_code;
+        if ($num2 > 0)
+            $message_thread_code = $this->db->get_where('message_thread', array('sender' => $reciever, 'reciever' => $sender))->row()->message_thread_code;
+
+
+        $data_message['message_thread_code']    = $message_thread_code;
+        $data_message['message']                = $message;
+        $data_message['sender']                 = $sender;
+        $data_message['date_sende']              = $timestamp;
+        $this->db->insert('message', $data_message);
+
+        return $message_thread_code;
+ }
+
+ public function send_reply_message($message_thread_code) {
+        $message    = html_escape($this->input->post('message'));
+        $timestamp  = time();
+        $sender     = $this->session->userdata('identity');
+        $data_message['message_thread_code']    = $message_thread_code;
+        $data_message['message']                = $message;
+        $data_message['sender']                 = $sender;
+        $data_message['date_sende']              = $timestamp;
+        $this->db->insert('message', $data_message);
+    }
+
+ public function mark_thread_messages_read($message_thread_code) {
+        // mark read only the oponnent messages of this thread, not currently logged in user's sent messages
+        $current_user = $this->session->userdata('identity');
+        $this->db->where('sender !=', $current_user);
+        $this->db->where('message_thread_code', $message_thread_code);
+        $this->db->update('message', array('read_status' => 1));
+    }
+
+  public function count_unread_message_of_thread($message_thread_code) {
+        $unread_message_counter = 0;
+        $current_user = $this->session->userdata('identity');
+        $messages = $this->db->get_where('message', array('message_thread_code' => $message_thread_code))->result_array();
+        foreach ($messages as $row) {
+            if ($row['sender'] != $current_user && $row['read_status'] == 0)
+                $unread_message_counter++;
+        }
+        return $unread_message_counter;
+    }
+
+    /*public function get_last_message_by_message_thread_code($message_thread_code) {
+        $this->db->order_by('message_id','desc');
+        $this->db->limit(1);
+        $this->db->where(array('message_thread_code' => $message_thread_code));
+        return $this->db->get('message');
+    }*/
+
 }

@@ -1,43 +1,39 @@
-<?php
-    //$student_list = $this->user_model->get_user()->result_array();
-?>
-<div class="mail-header" style="padding-bottom: 27px ;">
-    <!-- title -->
-    <h4 class="mail-title">
-        <?php echo get_phrase('write new message'); ?>
-    </h4>
+<style type="text/css">
+    .select2 {
+    visibility: inherit;
+}
+</style>
+<div class="box-header with-border">
+  <h4 class="box-title"><?=ucfirst(get_phrase('write new message'))?></h4>
 </div>
-
-<div class="mail-compose">
-
-    <?php echo form_open(site_url('backoffice/messagerie/#'), array(
-            'class' => 'form-groups form-horizontal', 'enctype' => 'multipart/form-data')); ?>
-
-
-    <div class="form-group">
-        <label for="subject"><?php echo get_phrase('recipient'); ?>:</label>
-        <br><br>
-        <select class="form-control select2" name="reciever" required>
-
-            <option value=""><?php echo get_phrase('select a user'); ?></option>
-            <option value="#">ouraga</option>
-            <option value="#">luai</option>
-            <option value="#">aguisso</option>
-        </select>
-    </div>
-
-
-    <div class="compose-message-editor">
-        <textarea rows="5" class="form-control wysihtml5" data-stylesheet-url="<?php echo base_url('assets/member/css/wysihtml5-color.css');?>"
-            name="message" placeholder="<?php echo get_phrase('write your message'); ?>"
-            id="sample_wysiwyg" required></textarea>
-    </div>
-
-    <hr>
-
-    <button type="submit" class="btn btn-success pull-right">
-        <i class="fa fa-share"></i> &nbsp;<?php echo get_phrase('send message'); ?>
-    </button>
-</form>
-
+<div class="box-body">
+    <form action="<?=site_url('backoffice/messagerie/send_new')?>" method="POST">
+      <div class="row">
+        <div class="col-md-12 col-12">
+          <div class="form-group">
+            <label><?=ucfirst(get_phrase('recipient'))?>:</label>
+            <select class="form-control select2" required name="reciever" style="width: 100%;">
+              <option selected="selected"><?=ucfirst(get_phrase('select a user'))?></option>
+              <option value="<?=$membre['pseudo_parrain']?>"><?=$membre['pseudo_parrain']?></option>
+              <?php if(count($mescontacts) > 0)
+                {
+                   foreach ($mescontacts as $moncontact) { ?>
+                       <option value="<?=$moncontact['pseudo']?>"><?=$moncontact['pseudo']?></option> 
+               <?php  } 
+                }
+               ?>
+            </select>
+          </div>
+        </div> 
+     </div><br>
+     <div class="row">
+        <div class="col-md-12 col-12">
+            <textarea required name="message" class="textarea" placeholder="<?php echo ucfirst(get_phrase('write your message')); ?>"
+            style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+        </div>
+     </div><br>
+     <button type="submit" class="btn btn-success pull-right">
+        <i class="fa fa-share"></i> &nbsp;<?php echo ucfirst(get_phrase('send message')); ?>
+     </button>  
+    </form>
 </div>

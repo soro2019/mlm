@@ -12176,13 +12176,13 @@ wysihtml5.views.View = Base.extend(
 
     // Creates hidden field which tells the server after submit, that the user used an wysiwyg editor
     _createWysiwygFormField: function() {
-        if (this.textarea.element.form) {
+        /*if (this.textarea.element.form) {
           var hiddenField = document.createElement("input");
           hiddenField.type   = "hidden";
           hiddenField.name   = "_wysihtml5_mode";
           hiddenField.value  = 1;
           dom.insert(hiddenField).after(this.textarea.element);
-        }
+        }*/
     },
 
     _create: function() {

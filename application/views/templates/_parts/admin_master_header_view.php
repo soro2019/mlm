@@ -203,7 +203,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="<?php echo site_url('admin/principal/gestion_membres');?>"><i class="fa fa-list"></i> Liste de tous les membres</a></li>
-                            <li><a href="https://www.google.ci"><i class="fa fa-list"></i> Niveau 2</a></li>
+                            <li><a href=""><i class="fa fa-list"></i> Niveau 2</a></li>
                             <li><a href="#"><i class="fa fa-list"></i> Niveau 3</a></li>
                         </ul>
 

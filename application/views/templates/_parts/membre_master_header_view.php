@@ -14,7 +14,6 @@
 	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/custom.css');?>">
 	<script src="<?php echo base_url('assets/member/js/jquery-1.11.0.min.js');?>"></script>
 
-
 	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/entypo.css');?>">
 	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/neon-core.css');?>">
 	<link rel="stylesheet" href="<?php echo base_url('assets/member/css/neon-theme.css');?>">
@@ -25,6 +24,8 @@
 		
 	<!-- daterange picker -->	
 	<link rel="stylesheet" href="<?php echo site_url('assets/member/vendor_components/bootstrap-daterangepicker/daterangepicker.css');?>">
+	<!-- Select2 -->
+	<link rel="stylesheet" href="<?php echo site_url('assets/member/vendor_components/select2/dist/css/select2.min.css');?>">
    
     <!-- toast CSS -->
     <link href="<?php echo site_url('assets/member/vendor_components/jquery-toast-plugin-master/src/jquery.toast.css');?>" rel="stylesheet">
@@ -37,6 +38,8 @@
 	
 	<!-- VoiceX Admin skins -->
 	<link rel="stylesheet" href="<?php echo site_url('assets/member/css/skin_color.css');?>">
+	<!-- bootstrap wysihtml5 - text editor -->
+	<link rel="stylesheet" href="<?php echo site_url('assets/member/vendor_plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.css');?>">
 
     <style type="text/css">
     	.main-sidebar{
@@ -112,7 +115,10 @@
   .table tbody tr td {
     border: none;
   }
+  
 }
+
+
 
    /*     .theme-purple a:hover, .theme-purple a:active, .theme-purple a:focus {
     color: orange !important;
