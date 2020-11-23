@@ -317,15 +317,14 @@
         
 
 
-        <div class="modal center-modal fade" id="transfert-cmatrice" tabindex="-1">
-          <div class="modal-dialog">
-            <form action="" method="POST" onsubmit = "validateCaptcha();">
+        <div class="modal fade" id="transfert-cmatrice">
+          <div class="modal-dialog" role="document">
+            <form action="" method="POST">
                <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte matrice vers le compte d\'opération'))?></h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span></button>
                   </div>
                     <div class="modal-body">
                            <div class="row">
@@ -345,7 +344,7 @@
                              </div>
                            </div><br><br>
                     </div>
-                  <div class="modal-footer modal-footer-uniform">
+                  <div class="modal-footer">
                     <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
                     <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
                   </div>
@@ -354,9 +353,9 @@
           </div>
         </div>
 
-        <div class="modal center-modal fade" id="transfert-cbonus" tabindex="-1">
+        <div class="modal fade" id="transfert-cbonus">
           <div class="modal-dialog">
-            <form action="" method="POST" onsubmit = "validateCaptcha();">
+            <form action="" method="POST">
                <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte bonus vers le compte d\'opération'))?></h5>
@@ -392,7 +391,7 @@
         </div>
 
 
-        <div class="modal center-modal fade" id="approvisionner-cop" tabindex="-1">
+        <div class="modal fade" id="approvisionner-cop">
           <div class="modal-dialog">
             <form action="" method="POST">
                <div class="modal-content">
