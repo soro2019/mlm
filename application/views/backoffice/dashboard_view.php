@@ -58,7 +58,7 @@
                                     $lien = "onclick='retrun true'";
                                     $title = ucfirst(get_phrase("cette opération vous permet de retirer un montant sur votre compte"));
                                 } ?>
-                                <a href="<?php echo site_url(trim($this->session->userdata('language')).'/retrait/'.$compactmatrice['id']);?>" <?=$lien?> title='<?=$title?>'>
+                                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#retrait-cmatrice" data-toggle="modal"title='<?=$title?>'>
                                   <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
                                 </a>
                                 <a  href="#" data-backdrop="static" data-toggle="modal" data-target="#transfert-cmatrice" data-toggle="modal">
@@ -342,11 +342,48 @@
                                 <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
                                 <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
                              </div>
-                           </div><br><br>
+                           </div><br>
                     </div>
                   <div class="modal-footer">
                     <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
                     <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
+                  </div>
+               </div>
+            </form>
+          </div>
+        </div>
+
+
+        <div class="modal fade" id="retrait-cmatrice">
+          <div class="modal-dialog" role="document">
+            <form action="" method="POST">
+               <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title"><?=ucfirst(get_phrase('demande de retrait sur le compte matrice'))?></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span></button>
+                  </div>
+                    <div class="modal-body">
+                           <div class="row">
+                             <div class="col-md-12">
+                                <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est soumise à validation (max : 24h) !!!'))?></b></label>  
+                             </div>
+                           </div>
+                           <div class="row">
+                             <div class="col-md-6">
+                                <label><b><?=ucfirst(get_phrase('montant a retiré'))?></b></label>
+                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a retiré'))?>" value="">
+                                <input type="hidden" name="c-matrice" value="1">
+                             </div>
+                             <div class="col-md-6">
+                                <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                                <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                             </div>
+                           </div><br>
+                    </div>
+                  <div class="modal-footer">
+                    <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+                    <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('envoyer la demande'))?></button>
                   </div>
                </div>
             </form>
