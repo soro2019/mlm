@@ -21,7 +21,7 @@
           <div class="card-body">
             <h3 class="card-title text-center"><?=ucwords(get_phrase("lien de parrainage"))?></h3>
              <div class="input-group">
-                <input id="to-copy" type="text" class="form-control" value="<?php echo site_url(trim($_SESSION['language']).'/registration/');?><?php echo $pseudo; ?>" readonly="readonly">
+                <input id="to-copy" type="text" class="form-control" value="<?php echo site_url(trim($_SESSION['language']).'/registration/');?><?=trim($membre['pseudo'])?>" readonly="readonly">
                 <span class="input-group-btn">
                     <button id="copy" class="btn btn-default" type="button">
                       <?php echo get_phrase('copier'); ?>  
@@ -188,7 +188,7 @@
   <!-- /.box -->
 </div>
 <br><br>
- <div class="modal center-modal fade" id="userinfoyyy" tabindex="-1">
+<div class="modal fade" id="userinfoyyy">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -242,7 +242,7 @@
                </div>
             </div><br>
           </div>
-          <div class="modal-footer modal-footer-uniform">
+          <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
           </div>
         </div>

@@ -4,7 +4,7 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <div class="modal center-modal fade" id="userinfo" tabindex="-1">
+  <div class="modal fade" id="userinfo">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -16,14 +16,14 @@
         <div id="infouser">
            
         </div>
-        <div class="modal-footer modal-footer-uniform">
+        <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
         </div>
       </div>
     </div>
   </div>
 
-   <div class="modal fade bs-example-modal-lg" style="left: 140px !important;" id="reseauinfo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+   <div class="modal fade bs-example-modal-lg" style="left: 140px !important;" id="reseauinfo" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">

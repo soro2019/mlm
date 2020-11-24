@@ -49,33 +49,33 @@
                 <div class="box-body">
                   <h4 class="box-title"><?php echo ucfirst(get_phrase('sécurité du systèmes')); ?></h4>
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                       <button style="height: 64px !important;" type="button" data-backdrop="static" class="btn btn-danger" data-toggle="modal" data-target="#change-password">
                         <?php echo ucfirst(get_phrase('changer votre mot de passe')); ?>
                       </button>
                     </div>
                     <?php if(!is_array($compte_ex)){?>
                     <div class="col-md-4">
-                      <button type="button" data-backdrop="static" class="btn btn-info" data-toggle="modal" data-target="#add-paiement">
+                      <button type="button" style="height: 64px !important;" data-backdrop="static" class="btn btn-info" data-toggle="modal" data-target="#add-paiement">
                         <?php echo ucfirst(get_phrase('ajouter les paramètres de paiement')); ?>
                       </button>
                     </div>
                    <?php }else{?>
                     <div class="col-md-4">
-                      <button type="button" data-backdrop="static" class="btn btn-primary" data-toggle="modal" data-target="#modifier-paiement">
+                      <button type="button" style="height: 64px !important;" data-backdrop="static" class="btn btn-primary" data-toggle="modal" data-target="#modifier-paiement">
                         <?php echo ucfirst(get_phrase('modifier les paramètres de paiement')); ?>
                       </button>
                     </div>
                   <?php } ?>
                   <?php if($this->Crud_model->verifParserelCompte($this->session->userdata('identity')) != 0){?>
                     <div class="col-md-4">
-                      <button type="button" data-backdrop="static" class="btn btn-success" data-toggle="modal" data-target="#code-pin">
+                      <button type="button" style="height: 64px !important;" data-backdrop="static" class="btn btn-success" data-toggle="modal" data-target="#code-pin">
                         <?php echo ucfirst(get_phrase('ajouter des codes pins à vos comptes')); ?>
                       </button>
                     </div>
                     <?php }else{?>
                     <div class="col-md-4">
-                      <button type="button" data-backdrop="static" class="btn btn-warning" data-toggle="modal" data-target="#modifier-code-pin">
+                      <button type="button" style="height: 64px !important;" data-backdrop="static" class="btn btn-warning" data-toggle="modal" data-target="#modifier-code-pin">
                         <?php echo ucfirst(get_phrase('modifier les codes pins de vos comptes')); ?>
                       </button>
                     </div>

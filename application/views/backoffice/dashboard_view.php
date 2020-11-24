@@ -300,7 +300,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <div class="input-group">
-                                            <input id="to-copy" type="text" class="form-control" value="<?php echo site_url(trim($_SESSION['language']).'/registration/');?><?php echo $pseudo; ?>" readonly="readonly">
+                                            <input id="to-copy" type="text" class="form-control" value="<?php echo site_url(trim($_SESSION['language']).'/registration/');?><?php echo $membre['pseudo']; ?>" readonly="readonly">
                                             <span class="input-group-btn">
                                                 <button id="copy" class="btn btn-default" type="button">
                                                   <?php echo get_phrase('copier'); ?>  

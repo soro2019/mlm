@@ -85,6 +85,10 @@ class Backoffice_Controller extends MY_Controller
       $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
       $this->data['niveau'] = $membre['niveau'];
       $this->data['achat_ini'] = $membre['achat_ini'];
+      $this->data['nom_membre'] = $membre['first_name'];
+      $this->data['prenom_membre'] = $membre['last_name'];
+      $this->data['dateInscription'] = $membre['created_on'];
+      $this->data['email_membre'] = $membre['email'];
 
       $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$membre['niveau']);
     }

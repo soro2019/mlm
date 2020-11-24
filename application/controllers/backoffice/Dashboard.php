@@ -3,28 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends Backoffice_Controller
 {
-
   function __construct()
   {
     parent::__construct();
-    $this->load->model(['UserModel', 'Crud_model', 'DatatableModel']);
-
-    $this->data['pseudo'] = trim($this->session->userdata('identity'));
-    $membre = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-
-    $this->data['nom_membre'] = $membre['first_name'];
-    $this->data['prenom_membre'] = $membre['last_name'];
-    $this->data['dateInscription'] = $membre['created_on'];
-    $this->data['email_membre'] = $membre['email'];
-    $this->data['membrereseauperso'] = $this->UserModel->membresreseauperso($this->session->userdata('identity'));
-    $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
-    $cMatrice = $this->data['compactmatrice'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 1);
-
-    $cBonus = $this->data['compactbonus'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 2);
-
-    $cOperation = $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
-    $this->data['niveau'] = $membre['niveau'];
-    $this->data['achat_ini'] = $membre['achat_ini'];
+    $this->load->model(['DatatableModel']);
   }
 
   public function index($lang='')
@@ -34,7 +16,6 @@ class Dashboard extends Backoffice_Controller
       {
         redirect(trim($_SESSION['language']).'/connexion');
       }
-      $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
 
       $matrice = $this->data['membre']['niveau'];
       
@@ -50,8 +31,6 @@ class Dashboard extends Backoffice_Controller
       $this->data['webinaires'] = $this->Crud_model->selectArticle(3, 3);
 
       $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
-
-      
 
       $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$matrice);
 
@@ -298,7 +277,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('mon réseau');
 
@@ -316,7 +294,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('faire l\'achat initial');
 
@@ -385,7 +362,7 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
+    
     $this->data['titre'] = get_phrase('matrice');
     $this->data['nieme'] = (int) $nieme;
     $this->data['page_description'] = get_phrase('matrice');
@@ -410,7 +387,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = ucwords(get_phrase('mes opérations finacières'));
 
@@ -496,7 +472,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('internal transfer');
 
@@ -561,7 +536,7 @@ class Dashboard extends Backoffice_Controller
     $this->render('backoffice/transferts_interne_view');
   }
   
-  
+
   
   public function messagerie($lang='', $innerPage="message_home", $param2 = "")
   {
@@ -589,7 +564,6 @@ class Dashboard extends Backoffice_Controller
             redirect(site_url('backoffice/messagerie/message_read/' . $param2), 'refresh');
     }
 
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     $mesFieulles = $this->UserModel->selectMesFieulles($this->session->userdata('identity'));
     $this->data['mescontacts']  = $mesFieulles;
     $this->data['message_inner_page_name'] = $innerPage;
@@ -606,8 +580,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-    
     $this->data['titre'] = get_phrase('dashboard');
 
     $this->data['page_description'] = get_phrase('dashboard');
@@ -624,7 +596,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('dashboard');
 
@@ -642,7 +613,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('ajouter un nouveau partenaire');
 
@@ -718,8 +688,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
-    
     $this->data['titre'] = get_phrase('webinaires en ligne');
 
     $this->data['page_description'] = get_phrase('webinaire');
@@ -736,7 +704,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('nos conférences');
 
@@ -754,7 +721,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('nos actualités');
 
@@ -772,7 +738,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('dashboard');
 
@@ -789,7 +754,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('faq');
 
@@ -806,7 +770,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('dashboard');
 
@@ -823,7 +786,6 @@ class Dashboard extends Backoffice_Controller
     {
       redirect(trim($_SESSION['language']).'/connexion');
     }
-    $this->data['membre'] = $this->UserModel->GetUserDataByPseudo($this->session->userdata('identity'));
     
     $this->data['titre'] = get_phrase('dashboard');
 
