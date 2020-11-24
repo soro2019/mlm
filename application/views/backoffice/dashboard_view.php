@@ -76,8 +76,8 @@
                             <h3 class="card-title text-center"><?php echo number_format(floatval(trim($compactbonus['montant'])), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
-                                <a href="#">
-                                    <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
+                                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#retrait-cbonus" data-toggle="modal"title='<?=$title?>'>
+                                  <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
                                 </a>
                                 <a  href="#" data-backdrop="static" data-toggle="modal" data-target="#transfert-cbonus" data-toggle="modal">
                                     <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("transferer"))?></button>
@@ -97,8 +97,8 @@
                                 <a href="#">
                                     <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("approvisionner"))?></button>
                                 </a>
-                                <a href="#">
-                                    <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
+                                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#retrait-coperation" data-toggle="modal"title='<?=$title?>'>
+                                  <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
                                 </a>
                                 <a href="#">
                                     <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("transferer"))?></button>
@@ -314,152 +314,220 @@
                     </div>
                 </div>
             </div>
-        
 
+    <div class="modal fade" id="transfert-cmatrice">
+      <div class="modal-dialog" role="document">
+        <form action="" method="POST">
+           <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte matrice vers le compte d\'opération'))?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              </div>
+                <div class="modal-body">
+                       <div class="row">
+                         <div class="col-md-12">
+                            <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est irreversible !!!'))?></b></label>  
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
+                            <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a transferé'))?>" value="">
+                            <input type="hidden" name="c-matrice" value="1">
+                         </div>
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                            <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                         </div>
+                       </div><br>
+                </div>
+              <div class="modal-footer">
+                <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
+              </div>
+           </div>
+        </form>
+      </div>
+    </div>
 
-        <div class="modal fade" id="transfert-cmatrice">
-          <div class="modal-dialog" role="document">
-            <form action="" method="POST">
-               <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte matrice vers le compte d\'opération'))?></h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span></button>
-                  </div>
-                    <div class="modal-body">
-                           <div class="row">
-                             <div class="col-md-12">
-                                <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est irreversible !!!'))?></b></label>  
-                             </div>
-                           </div>
-                           <div class="row">
-                             <div class="col-md-6">
-                                <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
-                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a transferé'))?>" value="">
-                                <input type="hidden" name="c-matrice" value="1">
-                             </div>
-                             <div class="col-md-6">
-                                <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
-                                <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
-                             </div>
-                           </div><br>
-                    </div>
-                  <div class="modal-footer">
-                    <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
-                    <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
-                  </div>
-               </div>
-            </form>
-          </div>
-        </div>
+    <div class="modal fade" id="retrait-cmatrice">
+      <div class="modal-dialog" role="document">
+        <form action="" method="POST">
+           <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><?=ucfirst(get_phrase('demande de retrait sur le compte matrice'))?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              </div>
+                <div class="modal-body">
+                       <div class="row">
+                         <div class="col-md-12">
+                            <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est soumise à validation (max : 24h) !!!'))?></b></label>  
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('montant a retiré'))?></b></label>
+                            <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a retiré'))?>" value="">
+                            <input type="hidden" name="c-matrice" value="1">
+                         </div>
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                            <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                         </div>
+                       </div><br>
+                </div>
+              <div class="modal-footer">
+                <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('envoyer la demande'))?></button>
+              </div>
+           </div>
+        </form>
+      </div>
+    </div>
 
+    <div class="modal fade" id="transfert-cbonus">
+      <div class="modal-dialog">
+        <form action="" method="POST">
+           <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte bonus vers le compte d\'opération'))?></h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                <div class="modal-body">
+                       <div class="row">
+                         <div class="col-md-12">
+                            <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est irreversible !!!'))?></b></label>  
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
+                            <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a transferé'))?>" value="">
+                            <input type="hidden" name="c-bonus" value="1">
+                         </div>
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                            <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                         </div>
+                       </div>
+                </div>
+              <div class="modal-footer modal-footer-uniform">
+                <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
+              </div>
+           </div>
+        </form>
+      </div>
+    </div>
 
-        <div class="modal fade" id="retrait-cmatrice">
-          <div class="modal-dialog" role="document">
-            <form action="" method="POST">
-               <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title"><?=ucfirst(get_phrase('demande de retrait sur le compte matrice'))?></h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span></button>
-                  </div>
-                    <div class="modal-body">
-                           <div class="row">
-                             <div class="col-md-12">
-                                <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est soumise à validation (max : 24h) !!!'))?></b></label>  
-                             </div>
-                           </div>
-                           <div class="row">
-                             <div class="col-md-6">
-                                <label><b><?=ucfirst(get_phrase('montant a retiré'))?></b></label>
-                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a retiré'))?>" value="">
-                                <input type="hidden" name="c-matrice" value="1">
-                             </div>
-                             <div class="col-md-6">
-                                <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
-                                <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
-                             </div>
-                           </div><br>
-                    </div>
-                  <div class="modal-footer">
-                    <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
-                    <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('envoyer la demande'))?></button>
-                  </div>
-               </div>
-            </form>
-          </div>
-        </div>
+    <div class="modal fade" id="retrait-cbonus">
+      <div class="modal-dialog" role="document">
+        <form action="" method="POST">
+           <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><?=ucfirst(get_phrase('demande de retrait sur le compte matrice'))?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              </div>
+                <div class="modal-body">
+                       <div class="row">
+                         <div class="col-md-12">
+                            <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est soumise à validation (max : 24h) !!!'))?></b></label>  
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('montant a retiré'))?></b></label>
+                            <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a retiré'))?>" value="">
+                            <input type="hidden" name="c-matrice" value="1">
+                         </div>
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                            <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                         </div>
+                       </div><br>
+                </div>
+              <div class="modal-footer">
+                <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('envoyer la demande'))?></button>
+              </div>
+           </div>
+        </form>
+      </div>
+    </div>
 
-        <div class="modal fade" id="transfert-cbonus">
-          <div class="modal-dialog">
-            <form action="" method="POST">
-               <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte bonus vers le compte d\'opération'))?></h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                    <div class="modal-body">
-                           <div class="row">
-                             <div class="col-md-12">
-                                <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est irreversible !!!'))?></b></label>  
-                             </div>
-                           </div>
-                           <div class="row">
-                             <div class="col-md-6">
-                                <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
-                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a transferé'))?>" value="">
-                                <input type="hidden" name="c-bonus" value="1">
-                             </div>
-                             <div class="col-md-6">
-                                <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
-                                <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
-                             </div>
-                           </div>
-                    </div>
-                  <div class="modal-footer modal-footer-uniform">
-                    <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
-                    <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
-                  </div>
-               </div>
-            </form>
-          </div>
-        </div>
+    <div class="modal fade" id="approvisionner-cop">
+      <div class="modal-dialog">
+        <form action="" method="POST">
+           <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte bonus vers le compte d\'opération'))?></h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                <div class="modal-body">
+                       <div class="row">
+                         <div class="col-md-12">
+                            <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est irreversible !!!'))?></b></label>  
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
+                            <input type="number" min="1" step="0.1" required name="montant" class="form-control" value="">
+                            <input type="hidden" name="c-bonus" value="1">
+                         </div>
+                       </div>
+                </div>
+              <div class="modal-footer modal-footer-uniform">
+                <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
+              </div>
+           </div>
+        </form>
+      </div>
+    </div>
 
-
-        <div class="modal fade" id="approvisionner-cop">
-          <div class="modal-dialog">
-            <form action="" method="POST">
-               <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte bonus vers le compte d\'opération'))?></h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                    <div class="modal-body">
-                           <div class="row">
-                             <div class="col-md-12">
-                                <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est irreversible !!!'))?></b></label>  
-                             </div>
-                           </div>
-                           <div class="row">
-                             <div class="col-md-6">
-                                <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
-                                <input type="number" min="1" step="0.1" required name="montant" class="form-control" value="">
-                                <input type="hidden" name="c-bonus" value="1">
-                             </div>
-                           </div>
-                    </div>
-                  <div class="modal-footer modal-footer-uniform">
-                    <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
-                    <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
-                  </div>
-               </div>
-            </form>
-          </div>
-        </div>                          
+    <div class="modal fade" id="retrait-coperation">
+      <div class="modal-dialog" role="document">
+        <form action="" method="POST">
+           <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><?=ucfirst(get_phrase('demande de retrait sur le compte matrice'))?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              </div>
+                <div class="modal-body">
+                       <div class="row">
+                         <div class="col-md-12">
+                            <label style="color: red;"><b><?=ucfirst(get_phrase('attention : cette action est soumise à validation (max : 24h) !!!'))?></b></label>  
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('montant a retiré'))?></b></label>
+                            <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a retiré'))?>" value="">
+                            <input type="hidden" name="c-matrice" value="1">
+                         </div>
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
+                            <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                         </div>
+                       </div><br>
+                </div>
+              <div class="modal-footer">
+                <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
+                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('envoyer la demande'))?></button>
+              </div>
+           </div>
+        </form>
+      </div>
+    </div>                     
      
      
         
