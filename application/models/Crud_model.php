@@ -125,6 +125,8 @@ class Crud_model extends CI_Model {
       return $query->row_array();           
     }
 
+  
+
 
     public function selectAllProduct()
     {
@@ -299,6 +301,27 @@ public function filter($datatofilte) {
   $query = $this->db->get('operations');
   return $query->result();
 
+
+}
+
+public function selectNiveauMax(){
+  $this->db->select_max('niveau');
+  $this->db->from('users');
+  $this->db->where('id!=', 1);
+  $this->db->where('id!=', 2);
+  $query = $this->db->get();
+  return $query->row_array()['niveau'];
+
+}
+
+public function countReInvest($pseudo,$matrice){
+  $this->db->select('count(clone_pseudo) as nb_reinv');
+  $this->db->from('clones_'.$matrice);
+  $this->db->where('reel_pseudo',$pseudo);
+  $this->db->group_by('reel_pseudo');
+  $query = $this->db->get();
+  if($query->num_rows() == 0) return 0;
+  return $query->row_array()['nb_reinv'];
 
 }
 

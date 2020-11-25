@@ -218,6 +218,7 @@
 	</script>
 <?php } ?> 
 
+<?php if($page_title=='Gestion membres | Administration' && $niveau==""){ ?> 
 <script type="text/javascript">
     var userTable;
 
@@ -275,6 +276,67 @@
     });
 
 </script>
+<?php } ?> 
+
+<?php if($page_title=='Gestion membres | Administration' && $niveau!=""){ ?>
+<script type="text/javascript">
+    var userTable;
+
+    $(document).ready(function() {
+        $("#languageNav").addClass('active');
+            
+        // initialize the datatable 
+        var base_url = "<?php echo base_url('admin/principal/');?>"; // You can use full url here but I prefer like this
+        userTable = $('#userTable').DataTable({
+            
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            /*'ordering': true,*/
+            'info': true,
+            'responsive': true,
+            /* Processing indicator */
+            "processing": true,
+            "pageLength" : 10,
+            "serverSide": true,
+            "order": [],
+            "ajax":{
+              dataType: "JSON",
+              url :  base_url+'gestion_membres_matrice_data/'+<?= $niveau ?>,
+              type : 'POST',
+              beforeSend: function () {
+                jQuery('#render-list-of-order').html('<div class="text-center mrgA padA"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i></div>');
+             },
+              
+              data: function(data){
+                   /*data.code = $('#code').val();
+                   data.ref = $('#ref').val();
+                   data.name = $('#name').val();
+                   data.price = $('#price').val();
+                   data.category = $('#category').val();
+                   data.quantity = $('#quantity').val();
+                   data.brand = $('#brand').val();
+                   data.supplier = $('#supplier').val();
+                   data.warehouse = $('#warehouse').val();
+                   data.location = $('#location').val();*/
+                }
+            },
+            
+
+        });
+
+     /*  $('#category,#brand,#supplier,#warehouse').change(function(){
+          productTable.draw();
+       });
+       $('#code,#ref,#name,#price,#quantity,#location').keyup(function(){
+          productTable.draw();
+       });*/
+
+
+    });
+
+</script>
+<?php } ?>
     
 
 <?php if(isset($before_head)) echo $before_body;?>

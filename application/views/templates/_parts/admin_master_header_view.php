@@ -201,10 +201,12 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
+                        <?php $nivMax = $this->Crud_model->selectNiveauMax();?>
                         <ul class="treeview-menu">
                             <li><a href="<?php echo site_url('admin/principal/gestion_membres');?>"><i class="fa fa-list"></i> Liste de tous les membres</a></li>
-                            <li><a href=""><i class="fa fa-list"></i> Niveau 2</a></li>
-                            <li><a href="#"><i class="fa fa-list"></i> Niveau 3</a></li>
+                            <?php for($j = 1;$j<=$nivMax; $j++){ ?>
+                                <li><a href="<?= site_url('admin/principal/gestion_membres/'.$j) ?>"><i class="fa fa-list"></i> Matrice <?= $j?></a></li>
+                            <?php } ?>
                         </ul>
 
                     </li>

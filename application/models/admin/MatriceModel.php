@@ -1,26 +1,26 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class MembresModel extends CI_Model{
+class MatriceModel extends CI_Model{
     
     function __construct() {
         // Set table name
-        $this->table = 'users';
+        $this->table = 'matrice';
         // Set orderable column fields
         $this->column_order = array(null,'users.pseudo','users.first_name','users.last_name','users.pseudo_parrain','users.phone', 'users.genre' , 'users.ville', 'users.niveau', 'users.created_on');
         // Set searchable column fields
         $this->column_search = array('users.pseudo', 'users.pseudo_parrain','users.niveau','users.created_on','users.first_name');
         // Set default order
-        $this->order = array('users.created_on' => 'DESC', 'users.pseudo' => 'ASC');
+        $this->order = array('matrice.date_migration' => 'DESC');
     }
     
     /*
      * Fetch members data from the database
      * @param $_POST filter data based on the posted parameters
      */
-    public function getRows(){
+    public function getRows($niveau){
         $postData = $this->input->post();
-        $this->_get_datatables_query($postData);
+        $this->_get_datatables_query($niveau,$postData);
         if(isset($postData['length']) && $postData['length'] != -1){
             $this->db->limit($postData['length'], $postData['start']);
         }
@@ -50,14 +50,20 @@ class MembresModel extends CI_Model{
      * Perform the SQL queries needed for an server-side processing requested
      * @param $_POST filter data based on the posted parameters
      */
-    private function _get_datatables_query($postData){
+    private function _get_datatables_query($niveau,$postData){
 
-        $this->db->select('*');
+        $this->db->select('u.pseudo,
+                            u.first_name,
+                            u.last_name,
+                            u.phone,
+                            u.email,
+                            matrice.date_migration,
+                            matrice.pseudo_filleulGauche,
+                            matrice.pseudo_filleulDroit,
+                            u.pseudo_parrain');
 
-        $this->db->from($this->table);
-
-        $this->db->where('id!=', 1);
-        $this->db->where('id!=', 2);
+        $this->db->from(''.$this->table.$niveau.' AS matrice');
+        $this->db->join('users u',"u.pseudo = matrice.pseudo_user AND matrice.pseudo_user <> 'usermlm'");
 
         // Custom search filter 
          
@@ -107,11 +113,11 @@ class MembresModel extends CI_Model{
             $i++;*/
         }
          
-        if(isset($postData['order'])){
+        /*if(isset($postData['order'])){
             $this->db->order_by($this->column_order[$postData['order']['0']['column']], $postData['order']['0']['dir']);
         }else if(isset($this->order)){
             $order = $this->order;
             $this->db->order_by(key($order), $order[key($order)]);
-        }
+        }*/
     }
 }

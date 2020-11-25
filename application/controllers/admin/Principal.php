@@ -9,6 +9,7 @@ class Principal extends Admin_Controller
   {
     parent::__construct();
     $this->load->model('UserModel');
+    $this->load->model('admin/MatriceModel','MatriceModel');
     $this->load->model('admin/MembresModel','MembresModel');
     $this->load->library('ion_auth');  
     $this->load->model('FronteModel', 'fm');
@@ -47,15 +48,64 @@ class Principal extends Admin_Controller
   }
     
   //Tout le fonction contenu de la page de gestion des membres
-  public function gestion_membres()
+  public function gestion_membres($niveau="")
   {
       
       $this->data['titre'] = 'Gestion des membres du réseau MLM';
       $this->data['page_title'] = 'Gestion membres | Administration';
       $this->data['lien'] = 'Gestion des membres';
-      
-      $this->render('admin/gestion_membres_view');    
+      $this->data['niveau'] = $niveau;
+      if($niveau=="")
+      {
+        $this->render('admin/gestion_membres_view');
+      }
+      else{
+        $this->data['titre'] .=' | Matrice '.$niveau;
+        $this->render('admin/gestion_membres_by_niveau_view');
+      }    
 
+  }
+
+  public function gestion_membres_matrice_data($niveau)
+  {
+    $data = array();
+
+    $usersData = $this->MatriceModel->getRows($niveau);
+    
+    $i = isset($_POST['start'])?$_POST['start']:0;
+
+    foreach($usersData as $users){
+        $i++; 
+        $pseudo = $users['pseudo'];   
+        $nom = $users['first_name'];
+        $prenoms = $users['last_name'];
+        $contact = $users['phone'];    
+        $email = $users['email'];
+        $migration = $users['date_migration'];
+        $filleulGauche = $users['pseudo_filleulGauche'];
+        $filleulDroit = $users['pseudo_filleulDroit'];
+        $parrainMatrice = $this->Crud_model->select_parrain($pseudo,'matrice'.$niveau);
+        $parrainMatrice = $parrainMatrice['clone'] == 1 ? $parrainMatrice['pseudo_user'] : $this->Crud_model->recup_reelPseudo($parrainMatrice['pseudo_user'], 'matrice'.$niveau);
+        $reinvestissement = $this->Crud_model->countReInvest($pseudo,'matrice'.$niveau);
+        $parrain = $users['pseudo_parrain'];   
+        $action = '<span class="dropdown"><a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true"> <i class="la la-ellipsis-h"></i>  </a> <div class="dropdown-menu dropdown-menu-right">';
+
+
+        $data[] = array($i,$pseudo,$nom,$prenoms,$contact,$email,$migration,$filleulGauche,$filleulDroit,$parrainMatrice,$reinvestissement,$parrain,$action);
+
+    }
+
+
+    
+    $output = array(
+        "draw" => isset($_POST['draw'])?$_POST['draw']:10,
+        "recordsTotal" => 0,
+        "recordsFiltered" => 0,
+        "data" => $data
+    );
+    
+    // Output to JSON format
+    echo json_encode($output);
   } 
   
         
