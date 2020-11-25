@@ -63,7 +63,7 @@ class MatriceModel extends CI_Model{
                             u.pseudo_parrain');
 
         $this->db->from(''.$this->table.$niveau.' AS matrice');
-        $this->db->join('users u',"u.pseudo = matrice.pseudo_user AND matrice.pseudo_user <> 'usermlm'");
+        $this->db->join('users u',"u.pseudo = matrice.pseudo_user");
 
         // Custom search filter 
          

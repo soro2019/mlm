@@ -57,7 +57,6 @@ class MembresModel extends CI_Model{
         $this->db->from($this->table);
 
         $this->db->where('id!=', 1);
-        $this->db->where('id!=', 2);
 
         // Custom search filter 
          
