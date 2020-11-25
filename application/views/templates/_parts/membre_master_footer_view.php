@@ -3,8 +3,7 @@
 	  </div>
   </div>
   <!-- /.content-wrapper -->
-
-  <div class="modal fade" id="userinfo">
+  <div class="modal modal-fill fade" data-backdrop="false" id="userinfo" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">

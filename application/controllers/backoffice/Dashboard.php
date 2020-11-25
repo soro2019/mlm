@@ -36,12 +36,18 @@ class Dashboard extends Backoffice_Controller
 
       if($this->input->post())
       {
+        $cMatrice = $this->data['compactmatrice'];
+        $cBonus = $this->data['compactbonus'];
+        $cOperation = $this->data['compactinvest'];
         if($this->input->post('c-matrice')!=NULL)
         {
           $montant = (int) $this->input->post('montant');
           if(empty($montant) || $montant == 0)
           {
             $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }elseif(empty($this->input->post('codepin')) || $cMatrice['codepin'] != sha1($this->input->post('codepin')))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("code pin invalide")));
           }elseif((int)$cMatrice["montant"] <= $montant)
           {
             $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
@@ -71,6 +77,46 @@ class Dashboard extends Backoffice_Controller
             }
           }
         }
+        
+        if($this->input->post('rc-matrice')!=NULL)
+        {
+          $montant = (int) $this->input->post('montant');
+          if(empty($montant) || $montant == 0)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }elseif(empty($this->input->post('codepin')) || $cMatrice['codepin'] != sha1($this->input->post('codepin')))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("code pin invalide")));
+          }elseif((int)$cMatrice["montant"] <= $montant)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
+          }else
+          {
+            $reste = (int)$cMatrice["montant"] - $montant;
+            if($this->Crud_model->update_where('comptes', ['montant' => $reste], $cMatrice["id"], 'id'))
+            {
+              /*$newSolde = (int)$cOperation["montant"] + $montant;
+              $this->Crud_model->update_where('comptes', ['montant' => $newSolde], $cOperation["id"], 'id');*/
+              $modepaie = 'Demande de retrait sur le Compte Matrice';
+              $data['comptdestinataire'] = $cMatrice["id"];
+              $motif = ucfirst(get_phrase("Demande de retrait"));
+              $data['typeoperation'] = 1;
+              $data['pseudodestinataire'] = $this->session->userdata('identity');
+              $data['dateopration'] = time();
+              $data['date_demande'] = date("d/m/Y");
+              $data['motif_oprt'] = $motif;
+              $data['modpaiement'] = $modepaie;
+              $data['montant'] = $montant;
+              $leMois = lesMois(date('m'));
+              $data['mois_annee'] = $leMois.' '.date('Y');
+              $data['pseudo_receveur'] = $this->session->userdata('identity');
+              $data['status'] = $data['comptereceveur'] = 0;
+              $this->Crud_model->insertion_('operations', $data);
+              $this->session->set_flashdata('message_success', ucfirst(get_phrase("demande de retrait effectué avec succès")));
+              redirect(trim($_SESSION['language']).'/backoffice');
+            }
+          }
+        }
 
         if($this->input->post('c-bonus')!=NULL)
         {
@@ -78,6 +124,9 @@ class Dashboard extends Backoffice_Controller
           if(empty($montant) || $montant == 0)
           {
             $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }elseif(empty($this->input->post('codepin')) || $cBonus['codepin'] != sha1($this->input->post('codepin')))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("code pin invalide")));
           }elseif((int)$cBonus["montant"] <= $montant)
           {
             $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
@@ -104,6 +153,46 @@ class Dashboard extends Backoffice_Controller
               $data['comptereceveur'] = $cOperation["id"];
               $this->Crud_model->insertion_('operations', $data);
               $this->session->set_flashdata('message_success', ucfirst(get_phrase("transfert effectué avec succès")));
+              redirect(trim($_SESSION['language']).'/backoffice');
+            }
+          }
+        }
+
+        if($this->input->post('rc-bonus')!=NULL)
+        {
+          $montant = (int) $this->input->post('montant');
+          if(empty($montant) || $montant == 0)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }elseif(empty($this->input->post('codepin')) || $cBonus['codepin'] != sha1($this->input->post('codepin')))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("code pin invalide")));
+          }elseif((int)$cBonus["montant"] <= $montant)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
+          }else
+          {
+            $reste = (int)$cBonus["montant"] - $montant;
+            if($this->Crud_model->update_where('comptes', ['montant' => $reste], $cBonus["id"], 'id'))
+            {
+              /*$newSolde = (int)$cOperation["montant"] + $montant;
+              $this->Crud_model->update_where('comptes', ['montant' => $newSolde], $cOperation["id"], 'id');*/
+              $modepaie = 'Demande de retrait sur le Compte Bonus';
+              $data['comptdestinataire'] = $cBonus["id"];
+              $motif = ucfirst(get_phrase("Demande de retrait"));
+              $data['typeoperation'] = 1;
+              $data['pseudodestinataire'] = $this->session->userdata('identity');
+              $data['dateopration'] = time();
+              $data['date_demande'] = date("d/m/Y");
+              $data['motif_oprt'] = $motif;
+              $data['modpaiement'] = $modepaie;
+              $data['montant'] = $montant;
+              $leMois = lesMois(date('m'));
+              $data['mois_annee'] = $leMois.' '.date('Y');
+              $data['pseudo_receveur'] = $this->session->userdata('identity');
+              $data['status'] = $data['comptereceveur'] = 0;
+              $this->Crud_model->insertion_('operations', $data);
+              $this->session->set_flashdata('message_success', ucfirst(get_phrase("demande de retrait effectué avec succès")));
               redirect(trim($_SESSION['language']).'/backoffice');
             }
           }
