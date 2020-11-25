@@ -33,6 +33,7 @@ class MembresModel extends CI_Model{
      */
     public function countAll(){
         $this->db->from($this->table);
+        $this->db->where('id !=',1);
         return $this->db->count_all_results();
     }
     

@@ -55,6 +55,7 @@ class Principal extends Admin_Controller
       $this->data['page_title'] = 'Gestion membres | Administration';
       $this->data['lien'] = 'Gestion des membres';
       $this->data['niveau'] = $niveau;
+      
       if($niveau=="")
       {
         $this->render('admin/gestion_membres_view');

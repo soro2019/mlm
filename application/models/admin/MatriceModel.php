@@ -33,7 +33,7 @@ class MatriceModel extends CI_Model{
      */
     public function countAll($niveau){
         $this->db->from("".$this->table.$niveau);
-        $this->db->where('clone !=',1);
+        $this->db->where('clone',null);
         return $this->db->count_all_results();
     }
     
