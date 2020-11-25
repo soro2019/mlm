@@ -31,8 +31,9 @@ class MatriceModel extends CI_Model{
     /*
      * Count all records
      */
-    public function countAll(){
-        $this->db->from($this->table);
+    public function countAll($niveau){
+        $this->db->from("".$this->table.$niveau);
+        $this->db->where('clone !=',1);
         return $this->db->count_all_results();
     }
     
@@ -40,8 +41,8 @@ class MatriceModel extends CI_Model{
      * Count records based on the filter params
      * @param $_POST filter data based on the posted parameters
      */
-    public function countFiltered($postData){
-        $this->_get_datatables_query($postData);
+    public function countFiltered($niveau,$postData){
+        $this->_get_datatables_query($niveau, $postData);
         $query = $this->db->get();
         return $query->num_rows();
     }

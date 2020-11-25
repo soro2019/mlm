@@ -99,8 +99,8 @@ class Principal extends Admin_Controller
     
     $output = array(
         "draw" => isset($_POST['draw'])?$_POST['draw']:10,
-        "recordsTotal" => 0,
-        "recordsFiltered" => 0,
+        "recordsTotal" => $this->MatriceModel->countAll($niveau),
+        "recordsFiltered" => $this->MatriceModel->countFiltered($niveau,$_POST),
         "data" => $data
     );
     
