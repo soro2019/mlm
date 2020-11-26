@@ -498,7 +498,7 @@
         <form action="" method="POST">
            <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title"><?=ucfirst(get_phrase('demande de retrait sur le compte matrice'))?></h5>
+                <h5 class="modal-title"><?=ucfirst(get_phrase('demande de retrait sur le compte d\'opération'))?></h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
               </div>
@@ -512,11 +512,11 @@
                          <div class="col-md-6">
                             <label><b><?=ucfirst(get_phrase('montant a retiré'))?></b></label>
                             <input type="number" min="1" step="0.1" required name="montant" class="form-control" placeholder="<?=ucfirst(get_phrase('montant a retiré'))?>" value="">
-                            <input type="hidden" name="c-matrice" value="1">
+                            <input type="hidden" name="rc-operation" value="1">
                          </div>
                          <div class="col-md-6">
                             <label><b><?=ucfirst(get_phrase('code pin du compte'))?></b></label>
-                            <input type="number" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
+                            <input type="password" required name="codepin" class="form-control" placeholder="<?=ucfirst(get_phrase('votre code pin'))?>" value="">
                          </div>
                        </div><br>
                 </div>

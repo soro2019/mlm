@@ -197,6 +197,46 @@ class Dashboard extends Backoffice_Controller
             }
           }
         }
+
+        if($this->input->post('rc-operation')!=NULL)
+        {
+          $montant = (int) $this->input->post('montant');
+          if(empty($montant) || $montant == 0)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }elseif(empty($this->input->post('codepin')) || $cOperation['codepin'] != sha1($this->input->post('codepin')))
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("code pin invalide")));
+          }elseif((int)$cOperation["montant"] <= $montant)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("votre compte est insuffisant pour effectuer cette opération")));
+          }else
+          {
+            $reste = (int)$cOperation["montant"] - $montant;
+            if($this->Crud_model->update_where('comptes', ['montant' => $reste], $cOperation["id"], 'id'))
+            {
+              /*$newSolde = (int)$cOperation["montant"] + $montant;
+              $this->Crud_model->update_where('comptes', ['montant' => $newSolde], $cOperation["id"], 'id');*/
+              $modepaie = 'Demande de retrait sur le Compte d\'opération';
+              $data['comptdestinataire'] = $cOperation["id"];
+              $motif = ucfirst(get_phrase("Demande de retrait"));
+              $data['typeoperation'] = 1;
+              $data['pseudodestinataire'] = $this->session->userdata('identity');
+              $data['dateopration'] = time();
+              $data['date_demande'] = date("d/m/Y");
+              $data['motif_oprt'] = $motif;
+              $data['modpaiement'] = $modepaie;
+              $data['montant'] = $montant;
+              $leMois = lesMois(date('m'));
+              $data['mois_annee'] = $leMois.' '.date('Y');
+              $data['pseudo_receveur'] = $this->session->userdata('identity');
+              $data['status'] = $data['comptereceveur'] = 0;
+              $this->Crud_model->insertion_('operations', $data);
+              $this->session->set_flashdata('message_success', ucfirst(get_phrase("demande de retrait effectué avec succès")));
+              redirect(trim($_SESSION['language']).'/backoffice');
+            }
+          }
+        }
       }
 
       $this->render('backoffice/dashboard_view');

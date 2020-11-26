@@ -63,7 +63,7 @@ class Auth extends MY_Controller
       if($this->ion_auth->logged_mlm_in())
       {
         $this->ion_auth->logout();
-        redirect(trim($_SESSION['language']).'/admin/login', 'refresh');
+        redirect('admin/login', 'refresh');
       }
       else
       {
