@@ -197,6 +197,27 @@ class Crud_model extends CI_Model {
         }else return false;
     }
 
+    //$this->db->list_fields('table')
+
+    public function getmodepaiement()
+    {
+        $this->db->select('*');
+        $this->db->from('payment_methods');
+        $this->db->where('status =', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+          return $query->result_array();
+        }else return false;
+    }
+
+    public function getPaymentMethodById($id){
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $this->db->from('payment_methods');
+        $query = $this->db->get();
+        return $query->row();
+    }
+
 
     public function verifCodePinCompte($compte, $codepin)
     {

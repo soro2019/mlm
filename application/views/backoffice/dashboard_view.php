@@ -94,10 +94,10 @@
                             <h3 class="card-title text-center"><?php echo number_format(floatval(trim($compactinvest['montant'])), 0, ' ', ' ');?> $</h3>
                             <br><hr><br>
                             <div class="mb-30 text-center">
-                                <a href="#">
+                                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#approvisionner" data-toggle="modal">
                                     <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("approvisionner"))?></button>
                                 </a>
-                                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#retrait-coperation" data-toggle="modal"title='<?=$title?>'>
+                                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#retrait-coperation" data-toggle="modal" title='<?=$title?>'>
                                   <button type="button" class="btn btn-primary mb-5"><?=ucfirst(get_phrase("retirer"))?></button>
                                 </a>
                                 <a href="#">
@@ -460,12 +460,12 @@
       </div>
     </div>
 
-    <div class="modal fade" id="approvisionner-cop">
+    <div class="modal fade" id="approvisionner">
       <div class="modal-dialog">
         <form action="" method="POST">
            <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title"><?=ucfirst(get_phrase('transfert du compte bonus vers le compte d\'opération'))?></h5>
+                <h5 class="modal-title"><?=ucfirst(get_phrase('approvisionnement de votre compte d\'opération'))?></h5>
                 <button type="button" class="close" data-dismiss="modal">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -478,15 +478,25 @@
                        </div>
                        <div class="row">
                          <div class="col-md-6">
-                            <label><b><?=ucfirst(get_phrase('montant a transferé'))?></b></label>
-                            <input type="number" min="1" step="0.1" required name="montant" class="form-control" value="">
-                            <input type="hidden" name="c-bonus" value="1">
+                            <label><b><?=ucfirst(get_phrase('montant'))?></b></label>
+                            <input type="number" min="1" required name="montant" class="form-control" value="" placeholder="<?=ucfirst(get_phrase('montant'))?>">
                          </div>
-                       </div>
+                         <div class="col-md-6">
+                            <label><b><?=ucfirst(get_phrase('selectionnez un compte'))?></b></label>
+                            <select name="compte" class="form-control">
+                                <option value=""><?=ucfirst(get_phrase('selectionnez un compte'))?></option>
+                                <?php if(count($modepaiements) > 0){ foreach ($modepaiements as $modepaiement)
+                                 {?>
+                                  <option value="<?=$modepaiement['id']?>"><?=$modepaiement['name']?></option>
+                                <?php } } ?>
+                            </select>
+                            <input type="hidden" name="appro" value="1">
+                         </div>
+                      </div>
                 </div>
               <div class="modal-footer modal-footer-uniform">
                 <button type="button" style="float: right;" class="btn btn-danger" data-dismiss="modal"><?=ucfirst(get_phrase('fermer'))?></button>
-                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('faire le transfert'))?></button>
+                <button type="submit" style="float: right; margin-right: 10px;" class="btn btn-primary"><?=ucfirst(get_phrase('approvisionner'))?></button>
               </div>
            </div>
         </form>

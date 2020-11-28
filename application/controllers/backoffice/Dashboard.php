@@ -17,22 +17,14 @@ class Dashboard extends Backoffice_Controller
         redirect(trim($_SESSION['language']).'/connexion');
       }
 
-      $matrice = $this->data['membre']['niveau'];
-      
       $this->data['titre'] = get_phrase('dashboard');
 
       $this->data['page_description'] = get_phrase('dashboard');
       $this->data['page_author'] = 'dashboard';
-      
-      $this->data['mesFieulles'] = $this->UserModel->selectMesFieulles($this->session->userdata('identity'), 3);
-
       $this->data['actualites'] = $this->Crud_model->selectArticle(1, 3);
       $this->data['conferneces'] = $this->Crud_model->selectArticle(2, 3);
       $this->data['webinaires'] = $this->Crud_model->selectArticle(3, 3);
-
-      $this->data['mescomptes'] = $this->Crud_model->mescomptes($this->session->userdata('identity'));
-
-      $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$matrice);
+      $this->data['modepaiements'] = $this->Crud_model->getmodepaiement();
 
       if($this->input->post())
       {
@@ -61,10 +53,10 @@ class Dashboard extends Backoffice_Controller
               $modepaie = 'Avec le Compte Matrice';
               $data['comptdestinataire'] = $cMatrice["id"];
               $motif = ucfirst(get_phrase("transfert interne"));
-              $data['typeoperation'] = 4;
+              $data['typeoperation'] = 5;
               $data['pseudodestinataire'] = $this->session->userdata('identity');
               $data['dateopration'] = time();
-              $data['motif_oprt'] = ucfirst(get_phrase("transfert interne du compte matrice vers le compte d'opération"));
+              $data['motif_oprt'] = ucfirst(get_phrase("approvisionnement interne du compte d'opération avec le compte matrice"));
               $data['modpaiement'] = $modepaie;
               $data['montant'] = $montant;
               $leMois = lesMois(date('m'));
@@ -141,10 +133,10 @@ class Dashboard extends Backoffice_Controller
               $modepaie = 'Avec le Compte Bonus';
               $data['comptdestinataire'] = $cBonus["id"];
               $motif = ucfirst(get_phrase("transfert interne"));
-              $data['typeoperation'] = 4;
+              $data['typeoperation'] = 5;
               $data['pseudodestinataire'] = $this->session->userdata('identity');
               $data['dateopration'] = time();
-              $data['motif_oprt'] = ucfirst(get_phrase("transfert interne du compte bonus vers le compte d'opération"));
+              $data['motif_oprt'] = ucfirst(get_phrase("approvisionnement interne du compte d'opération avec le compte bonus"));
               $data['modpaiement'] = $modepaie;
               $data['montant'] = $montant;
               $leMois = lesMois(date('m'));
@@ -234,6 +226,61 @@ class Dashboard extends Backoffice_Controller
               $this->Crud_model->insertion_('operations', $data);
               $this->session->set_flashdata('message_success', ucfirst(get_phrase("demande de retrait effectué avec succès")));
               redirect(trim($_SESSION['language']).'/backoffice');
+            }
+          }
+        }
+
+        if($this->input->post('appro')!=NULL)
+        {
+          $montant = (int) $this->input->post('montant');
+          if(empty($montant) || $montant == 0)
+          {
+            $this->session->set_flashdata('message_erreur', ucfirst(get_phrase("le montant saisi n'est pas valable")));
+          }else
+          {
+            $newsolde = (int)$cOperation["montant"] + $montant;
+            $method = $this->input->post('compte');
+            $code = substr(md5(rand(100000000, 20000000000)), 0, 15);
+            $method_data = $this->Crud_model->getPaymentMethodById($method);
+            $API = $method_data->name;
+            if($API == 'Payeer')
+            {
+              $this->load->library('Payeer');
+              $config = array(
+                          'm_shop'    => $method_data->merchantID,
+                          'm_orderid' => $code,
+                          'm_amount'  => $montant,
+                          'm_curr'    => 'USD',
+                          'm_desc'    => 'Supply operation',
+                          'm_key'     => $method_data->secret_key,
+                      );
+                $payeer = new Payeer($config);
+                $hash = $payeer->digital_signature();
+                $payAnswer = false;
+                if(isset($_GET['action']) && $_GET['action'] == 'payed'){
+                $payAnswer = $payeer->payment_handler();  // Check if the payment has passed
+                if($payAnswer == 'success')
+                  $this->Crud_model->update_where('comptes', ['montant' => $newsolde], $cOperation["id"], 'id');
+                  $modepaie = 'Payeer';
+                  $data['comptdestinataire'] = $cOperation["id"];
+                  $motif = ucfirst(get_phrase("Approvisionnement"));
+                  $data['typeoperation'] = 3;
+                  $data['pseudo_receveur'] = $data['pseudodestinataire'] = $this->session->userdata('identity');
+                  $data['dateopration'] = time();
+                  $data['date_demande'] = date("d/m/Y");
+                  $data['motif_oprt'] = $motif;
+                  $data['modpaiement'] = $modepaie;
+                  $data['montant'] = $montant;
+                  $leMois = lesMois(date('m'));
+                  $data['mois_annee'] = $leMois.' '.date('Y');
+                  $data['status'] = $data['comptereceveur'] = 0;
+                  $this->Crud_model->insertion_('operations', $data);
+                  $this->session->set_flashdata('message_success', ucfirst(get_phrase("payment was succesful!")));
+                  redirect(trim($_SESSION['language']).'/backoffice');
+                }
+                if($payAnswer != 'success'){
+                    $payeer->submitForm(); 
+                }
             }
           }
         }

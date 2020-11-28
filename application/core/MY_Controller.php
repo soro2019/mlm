@@ -83,6 +83,7 @@ class Backoffice_Controller extends MY_Controller
       $this->data['compactbonus'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 2);
 
       $this->data['compactinvest'] = $this->Crud_model->moncomptes($this->session->userdata('identity'), 3);
+
       $this->data['niveau'] = $membre['niveau'];
       $this->data['achat_ini'] = $membre['achat_ini'];
       $this->data['nom_membre'] = $membre['first_name'];
@@ -91,6 +92,7 @@ class Backoffice_Controller extends MY_Controller
       $this->data['email_membre'] = $membre['email'];
 
       $this->data['nbfilleulByMatrice'] = countFilleulByMatrice($this->session->userdata('identity'), 'matrice'.$membre['niveau']);
+      $this->data['mesFieulles'] = $this->UserModel->selectMesFieulles($this->session->userdata('identity'), 3);
     }
     $this->data['page_title'] = 'Social-Coop - Backoffice';
     $this->data['compte_ex'] = $this->Crud_model->GetCompteExterneByPseudo($this->session->userdata('identity'));
