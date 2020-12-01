@@ -242,7 +242,8 @@ class Dashboard extends Backoffice_Controller
             $method = $this->input->post('compte');
             $code = substr(md5(rand(100000000, 20000000000)), 0, 15);
             $method_data = $this->Crud_model->getPaymentMethodById($method);
-            $API = $method_data->name;
+            $API = $method_data->api;
+            /*var_dump($API);die;*/
             if($API == 'Payeer')
             {
               $this->load->library('Payeer');
@@ -281,6 +282,11 @@ class Dashboard extends Backoffice_Controller
                 if($payAnswer != 'success'){
                     $payeer->submitForm(); 
                 }
+            }
+
+            if($API == 'CashMall')
+            {
+             
             }
           }
         }

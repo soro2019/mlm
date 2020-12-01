@@ -204,6 +204,7 @@ class Crud_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('payment_methods');
         $this->db->where('status =', 1);
+        $this->db->order_by('name', 'ASC');
         $query = $this->db->get();
         if($query->num_rows() > 0){
           return $query->result_array();
@@ -410,11 +411,70 @@ public function countReInvest($pseudo,$matrice){
         return $unread_message_counter;
     }
 
-    /*public function get_last_message_by_message_thread_code($message_thread_code) {
-        $this->db->order_by('message_id','desc');
-        $this->db->limit(1);
-        $this->db->where(array('message_thread_code' => $message_thread_code));
-        return $this->db->get('message');
-    }*/
+
+    public function getSettingsInfo()
+    {
+        $this->db->select('*');
+        $this->db->from('configuration');
+        $query = $this->db->get();
+        if ($query->num_rows()) {
+            foreach ($query->result_array() as $row) {
+            // Your data is coming from multiple rows, so need to loop on it.
+              $siteData[$row['type']] = $row['value'];
+            }
+          }
+          return $siteData;
+    }
+    
+   public function sendEmail($recipient, $subject, $content){
+        //load PHPMailer library
+        $this->load->library('phpmailer_lib');
+        
+        //Email settings
+        $companyInfo = $this->getSettingsInfo();
+            //PhpMailer object
+        $mail = $this->phpmailer_lib->load();
+
+        //SMTP configuration
+        if($companyInfo['SMTPProtocol'] == 'smtp'){
+          $mail->isSMTP();
+        } else if($companyInfo['SMTPProtocol'] == 'sendmail'){
+          $mail->isSendmail();
+        } else if($companyInfo['SMTPProtocol'] == 'mail'){
+          $mail->isMail();
+        }
+            $mail->Host = $companyInfo['SMTPHost'];
+            $mail->SMTPAuth = true;
+            $mail->Username = $companyInfo['SMTPUser'];
+            $mail->Password = $companyInfo['SMTPPass'];
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = $companyInfo['SMTPPort'];
+            
+            $mail->setFrom($companyInfo['SMTPUser'], $companyInfo['system_name']);
+            $mail->addReplyTo($companyInfo['SMTPUser'], 'Support');
+            //Add Recipient
+            $mail->addAddress($recipient);
+
+            //Email subject
+            $mail->Subject = $subject;
+
+            //Set email format to HTML
+            $mail->isHTML(true);
+
+            //Email body content
+            $mailContent = $content;
+
+            $mail->Body = $mailContent;
+
+            //Send email
+            if(!$mail->send()){
+                //echo 'Message Could not be sent.';
+          //echo 'Mailer error: '. $mail->ErrorInfo;
+          return FALSE;
+            }else{
+          //echo 'Message has been sent';
+          return TRUE;
+            }
+   }
 
 }
