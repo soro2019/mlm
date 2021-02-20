@@ -330,7 +330,7 @@ public function selectNiveauMax(){
   $this->db->select_max('niveau');
   $this->db->from('users');
   $this->db->where('id!=', 1);
-  $this->db->where('id!=', 2);
+  /*$this->db->where('id!=', 2);*/
   $query = $this->db->get();
   return $query->row_array()['niveau'];
 

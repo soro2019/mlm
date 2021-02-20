@@ -218,6 +218,61 @@
 	</script>
 <?php } ?> 
 
+
+<?php if($page_title=='Gestion des demandes | Administration'){ ?> 
+<script type="text/javascript">
+    var retraitTable;
+    $(document).ready(function() {
+        $("#languageNav").addClass('active');
+            
+        // initialize the datatable 
+        var base_url = "<?php echo base_url('admin/principal/');?>"; // You can use full url here but I prefer like this
+        retraitTable = $('#retraitTable').DataTable({
+
+
+          "bPaginate": true,
+          "bLengthChange": true,
+          'info'        : true,       
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            'ordering': true,
+            'info': true,
+            'responsive': true,
+            /* Processing indicator */
+            "processing": true,
+            "pageLength" : 10,
+            "serverSide": true,
+            "order": [],
+            "ajax":{
+              dataType: "JSON",
+              url :  base_url+'gestion_demandes_data',
+              type : 'POST',
+              beforeSend: function () {
+                jQuery('#render-list-of-order').html('<div class="text-center mrgA padA"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i></div>');
+             },
+              
+              data: function(data){
+               data.pseudodestinataire = $('#filter-pseudo').val();
+              }
+            },
+            
+
+        });
+
+       $('#filter-pseud').change(function(){
+          retraitTable.draw();
+       });
+
+       $('#filter-pseudo').keyup(function(){
+          retraitTable.draw();
+       });
+
+    });
+
+</script>
+<?php } ?> 
+
 <?php if($page_title=='Gestion membres | Administration' && $niveau==""){ ?> 
 <script type="text/javascript">
     var userTable;

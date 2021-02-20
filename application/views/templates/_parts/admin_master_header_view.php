@@ -208,13 +208,12 @@
                                 <li><a href="<?= site_url('admin/principal/gestion_membres/'.$j) ?>"><i class="fa fa-list"></i> Matrice <?= $j?></a></li>
                             <?php } ?>
                         </ul>
-
                     </li>
 
 
-                    <li <?php if($page_title=='Gestion membres | Administration' ) echo 'class="active"' ;?>>
-                        <a href="<?php echo site_url('admin/principal/gestion_investissement');?>">
-                            <i class="fa fa-users"></i> <span>Gestion des investissements</span>
+                    <li <?php if($page_title=='Gestion des demandes | Administration' ) echo 'class="active"' ;?>>
+                        <a href="<?php echo site_url('admin/principal/gestion_demandes');?>">
+                            <i class="fa fa-users"></i> <span>Gestion des démandes</span>
 
                         </a>
                     </li>

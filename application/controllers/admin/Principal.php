@@ -11,6 +11,7 @@ class Principal extends Admin_Controller
     $this->load->model('UserModel');
     $this->load->model('admin/MatriceModel','MatriceModel');
     $this->load->model('admin/MembresModel','MembresModel');
+     $this->load->model('admin/DemandeModel','DemandeModel');
     $this->load->library('ion_auth');  
     $this->load->model('FronteModel', 'fm');
   }
@@ -64,7 +65,6 @@ class Principal extends Admin_Controller
         $this->data['titre'] .=' | Matrice '.$niveau;
         $this->render('admin/gestion_membres_by_niveau_view');
       }    
-
   }
 
   public function gestion_membres_matrice_data($niveau)
@@ -107,9 +107,95 @@ class Principal extends Admin_Controller
     
     // Output to JSON format
     echo json_encode($output);
-  } 
-  
+  }
+
+
+  public function gestion_demandes()
+  {
+    $this->data['titre'] = 'Gestion des demandes de rétrait';
+    $this->data['page_title'] = 'Gestion des demandes | Administration';
+    $this->data['lien'] = 'Gestion des demandes';
+    $this->render('admin/gestion_demandes_view');
+  }
+
+  public function gestion_demandes_data()
+  {
+   
+    $data = array();
+
+    $demandesData = $this->DemandeModel->getRows();
+    
+    $i = isset($_POST['start'])?$_POST['start']:0;
+
+    //var_dump($demandesData);die;
+
+    foreach($demandesData as $demande){
+        $i++; 
+        $pseudo = $demande['pseudodestinataire']; 
+        $montant_retrait = (int) $demande['montant'];  
+        $montant_sur_compte = (int) $demande['montant_sur_compte'] + $montant_retrait;
+        $date_demande = $demande['date_demande'];
+        if($demande['typecompte']==1)
+        {
+          $compte = "Compte Matrice";
+        }elseif($demande['typecompte']==2)
+        {
+          $compte = "Compte Bonus";
+        }else
+        {
+          $compte = "Compte opération";
+        }
+
+        if($demande['status'] == 0)
+        {
+
+          $action = '<a class="btn btn-success btn-xs" href="javascript:validerM('.$demande['id'].');" title="Valider">Valider</a>
+          <a href="#" class="btn btn-danger btn-xs" data-backdrop="static" data-toggle="modal" data-target="#rejete" onclick="viewinventory('.$demande['id'].')">Rejeter</a>';
+        }elseif($demande['status'] == 1)
+        {
+          $action = '<span class="label label-success">Déjà validée</span>';
+        }else
+        {
+          $action = '<span class="label label-danger">Rejettée</span>';
+        }
+
         
+
+        $data[] = array($i,$pseudo,$compte,$montant_sur_compte,$montant_retrait,$date_demande,$action);
+    }
+
+    //var_dump($data);die;
+    
+    $output = array(
+        "draw" => isset($_POST['draw'])?$_POST['draw']:10,
+        "recordsTotal" => $this->DemandeModel->countAll(),
+        "recordsFiltered" => $this->DemandeModel->countFiltered($_POST),
+        "data" => $data
+    );
+    
+    // Output to JSON format
+    echo json_encode($output);
+  }
+
+
+  public function modalrejete()
+  {
+     $result = '<form class="form-horizontal" action="'.site_url('admin/principal/changesatus/'.$_POST['id']).'" method="POST">
+        <div class="modal-body">
+          <div class="row">
+              <div class="col-sm-12">
+                <label for="Title">Motif du rejet</label>
+                 <textarea class="form-control" name="motif" id="inputDescription" rows="10" placeholder="Motif"></textarea>
+              </div>
+          </div><br>
+        </div>
+        <div class="modal-footer">
+         <button type="submit" class="btn btn-success">Envoyer</button>
+        </div>
+      </form>';
+        echo json_encode($result);
+  }
+  
     
   public function gestion_membres_data()
   {
