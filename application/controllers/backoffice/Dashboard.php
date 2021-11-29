@@ -17,6 +17,8 @@ class Dashboard extends Backoffice_Controller
         redirect(trim($_SESSION['language']).'/connexion');
       }
 
+      //var_dump($otherdb = $this->load->database('otherdb', TRUE));die;
+
       $this->data['titre'] = get_phrase('dashboard');
 
       $this->data['page_description'] = get_phrase('dashboard');
@@ -849,6 +851,18 @@ class Dashboard extends Backoffice_Controller
                 $data_filleul = array(
                     'pseudo_user' => trim($pseudo),
                     'date_migration' => time());
+
+                ///c'est un test que je fais pour la double base
+                $additional_data['pseudo'] = $pseudo;
+                $additional_data['mail'] = $mail;
+                $additional_data['password'] = $password;
+                $additional_data['niveau'] = 1;
+
+                $otherdb = $this->load->database('otherdb', TRUE);
+               // $this->db2 = $this->load->database('database2',true);
+
+                $query = $otherdb->insert('users', $additional_data);
+
                 $this->db->insert($matrice, $data_filleul);
                 definir_parrain_de_matrice($pseudo, $parrain, $matrice);
                 for($i=1; $i <=3 ; $i++){ 

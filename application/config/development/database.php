@@ -71,7 +71,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | the query builder class.
 */
 $active_group = 'default';
-$active_record = TRUE;
+$query_builder = TRUE;
+
+/*$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'postgres',
+	'password' => 'root',
+	'database' => 'db_mlm',
+	'dbdriver' => 'postgre',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);*/
+
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'postgres';
@@ -88,3 +111,22 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 $db['default']['port'] = 5432; 
+
+
+/*$db['otherdb']['hostname'] = "localhost";
+$db['otherdb']['username'] = "root";
+$db['otherdb']['password'] = "";
+$db['otherdb']['database'] = "bd_iloge";
+$db['otherdb']['dbdriver'] = "mysql";
+$db['otherdb']['dbprefix'] = "";
+$db['otherdb']['pconnect'] = TRUE;
+$db['otherdb']['db_debug'] = FALSE;
+$db['otherdb']['cache_on'] = FALSE;
+$db['otherdb']['cachedir'] = "";
+$db['otherdb']['char_set'] = "utf8";
+$db['otherdb']['dbcollat'] = "utf8_general_ci";
+$db['otherdb']['swap_pre'] = "";
+$db['otherdb']['autoinit'] = TRUE;
+$db['otherdb']['stricton'] = FALSE;*/
+
+

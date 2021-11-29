@@ -136,6 +136,7 @@ if ( !function_exists('defineLanguage'))
     return trim($CI->session->userdata('language'));
   }
 }
+
 if(!function_exists('get_phrase'))
 {
   function get_phrase($phrase = '')
